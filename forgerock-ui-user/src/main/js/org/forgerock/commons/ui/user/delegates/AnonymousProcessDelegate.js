@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2015 ForgeRock AS.
+ * Copyright 2015-2016 ForgeRock AS.
  */
 
 /*global define */
@@ -61,6 +61,10 @@ define("org/forgerock/commons/ui/user/delegates/AnonymousProcessDelegate", [
             "errorsHandlers": {
                 "failed" : {
                     status: "400"
+                },
+                "internalServerError": {
+                    "status": "500",
+                    "message": "operationUnsuccessful"
                 }
             }
         }).then(

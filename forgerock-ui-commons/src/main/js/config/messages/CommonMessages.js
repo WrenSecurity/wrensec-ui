@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2011-2015 ForgeRock AS.
+ * Copyright 2011-2016 ForgeRock AS.
  */
 
 /*global define*/
@@ -98,6 +98,10 @@ define("config/messages/CommonMessages", [
             "securityDataChanged": {
                 msg: "config.messages.CommonMessages.securityDataChanged",
                 type: "info"
+            },
+            "operationUnsuccessful": {
+                msg: "config.messages.CommonMessages.operationUnsuccessful",
+                type: "error"
             }
     };
 

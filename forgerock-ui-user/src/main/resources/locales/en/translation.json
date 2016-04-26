@@ -22,7 +22,8 @@
                 "conflictError" : "Detected conflict in request.",
                 "incorrectRevisionError" : "Cannot update the record because the version is not the latest.",
                 "securityDataChanged" : "Security data has been changed",
-                "tokenNotFound" : "Token not found."
+                "tokenNotFound" : "Token not found.",
+                "operationUnsuccessful": "Unable to perform this operation, please contact the administrator."
             },
             "UserMessages" : {
                 "changedPassword" : "Password has been changed",
