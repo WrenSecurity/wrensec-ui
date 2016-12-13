@@ -1,0 +1,17 @@
+{{#if urls}}
+<ul class="dropdown-menu" role="menu">
+    {{#each urls}}
+        {{#if divider}}
+            <li role="separator" class="divider"></li>
+        {{else}}
+            {{#if header}}
+                <li class="dropdown-header ">{{headerTitle}}</li>
+            {{else}}
+                <li class="{{#if cssClass}}{{cssClass}}{{/if}} {{#if active}}active{{/if}}">
+                    {{> navigation/_NavigationLink }}
+                </li>
+            {{/if}}
+        {{/if}}
+    {{/each}}
+</ul>
+{{/if}}

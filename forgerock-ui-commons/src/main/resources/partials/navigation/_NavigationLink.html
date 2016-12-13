@@ -1,0 +1,13 @@
+<a  title="{{title}}"
+    href="{{#if hashurl}}{{hashurl}}{{else}}#{{/if}}"
+    class="{{#if event}}event-link{{/if}} {{#if urls}}dropdown-toggle{{/if}}"
+    {{#if event}}data-event="{{event}}"{{/if}}
+    {{#if urls}}data-toggle="dropdown" role="button" aria-expanded="false"{{/if}}
+>
+    {{#if icon}}<i class="{{icon}}"></i>{{/if}}
+    {{#if urls}}
+        <span class="hidden-sm">{{title}}</span> <span class="caret"></span>
+    {{else}}
+        {{title}}
+    {{/if}}
+</a>

@@ -37,6 +37,10 @@ define([
             } else {
                 return Configuration.loggedUser.id; //fallback option
             }
+        },
+
+        hasNavbarRight = function (data) {
+            return (data.userBar && data.userBar.length) || (data.navbarRight && data.navbarRight.length);
         };
 
     /*
@@ -97,6 +101,7 @@ define([
             icon - Icon to display with the navigation name
             url - Link location
             dropdown - Boolean that controls if a drop down element is used or a standard navigation element
+            navbarRight - Boolean. If set to true the navigation item will render on the right
 
             Example:
 
@@ -147,7 +152,10 @@ define([
             template: "templates/common/NavigationTemplate.html",
             noBaseTemplate: true,
             data: {},
-
+            partials: [
+                "partials/navigation/_NavigationDropdownMenu.html",
+                "partials/navigation/_NavigationLink.html"
+            ],
             events: {
                 "click .event-link": "fireEvent"
             },
@@ -206,20 +214,15 @@ define([
                             href: _.get(obj.configuration, "username.href")
                         };
 
-                        if (obj.configuration.helpLinks) {
-                            this.data.helpLinks = _.map(obj.configuration.helpLinks, function(helpLink) {
-                                helpLink.label = $.t(helpLink.label);
-                                return helpLink;
-                            });
-                        }
-
                         this.reload();
+                        this.data.showNavbarRight = hasNavbarRight(this.data);
                         this.parentRender(callback);
 
                     }, this));
 
                 } else {
                     this.reload();
+                    this.data.showNavbarRight = hasNavbarRight(this.data);
                     this.parentRender(callback);
                 }
 
@@ -235,7 +238,8 @@ define([
 
                 _.each(context.urls, function(navObj) {
                     var roles = _.intersection(Configuration.loggedUser.uiroles, navObj.visibleToRoles),
-                        userHasRole = roles.length > 0;
+                        userHasRole = roles.length > 0,
+                        navbar;
                     if(navObj.visibleToRoles && !userHasRole) {
                         return;
                     }
@@ -244,21 +248,8 @@ define([
                         || self.isCurrent(navObj.baseUrl)
                         || self.childIsCurrent(navObj.urls);
 
-                    self.data.topNav.push(self.buildNavElement(navObj, baseActive));
-
-                    // dropdown menus display as submenus and only render for the baseActive.
-                    if (navObj.dropdown !== true){
-
-                        if (baseActive && navObj.urls) {
-                            _.each(navObj.urls, function(subUrl) {
-                                self.data.subNav.push(self.buildNavElement(subUrl, self.isCurrent(subUrl.url)));
-                            });
-
-                            // Added to provide reference for responsive design submenus to appear in the correct
-                            // location.
-                            self.data.topNav[self.data.topNav.length - 1].subNav = self.data.subNav;
-                        }
-                    }
+                    navbar = navObj.navbarRight ? self.data.navbarRight : self.data.navbarLeft;
+                    navbar.push(self.buildNavElement(navObj, baseActive));
                 });
             },
 
@@ -329,13 +320,13 @@ define([
             },
 
             clear: function() {
-                this.data.topNav = [];
-                this.data.subNav = [];
+                this.data.navbarLeft = [];
+                this.data.navbarRight = [];
+                delete this.data.showNavbarRight;
             },
 
             reload: function() {
                 this.clear();
-
                 this.addLinksFromConfiguration(NavigationFilter.filter(obj.configuration.links));
             }
         });
