@@ -20,8 +20,9 @@ define([
     "org/forgerock/commons/ui/common/main/AbstractConfigurationAware",
     "org/forgerock/commons/ui/common/util/Constants",
     "org/forgerock/commons/ui/common/main/ErrorsHandler",
-    "org/forgerock/commons/ui/common/main/EventManager"
-], function($, _, AbstractConfigurationAware, Constants, ErrorsHandler, EventManager) {
+    "org/forgerock/commons/ui/common/main/EventManager",
+    "org/forgerock/commons/ui/common/main/i18nManager"
+], function($, _, AbstractConfigurationAware, Constants, ErrorsHandler, EventManager, i18nManager) {
     /**
      * @exports org/forgerock/commons/ui/common/main/ServiceInvoker
      */
@@ -157,6 +158,10 @@ define([
          */
         if (!_.has(options.headers, "Cache-Control")) {
             options.headers["Cache-Control"] = "no-cache";
+        }
+
+        if (!_.has(options.headers, "Accept-Language")) {
+            options.headers["Accept-Language"] = i18nManager.lang;
         }
 
         $.ajax(options).then(resolveHandler,rejectHandler);
