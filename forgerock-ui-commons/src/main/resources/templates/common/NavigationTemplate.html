@@ -12,7 +12,7 @@
             {{/if}}
             <ul class="nav list-unstyled {{#if admin}}navbar-admin{{/if}}">
                 <li id="navbarBrand">
-                    <a href="#" title="{{theme.settings.logo.title}}">
+                    <a href="{{ routeTo 'default' }}" title="{{theme.settings.logo.title}}">
                         <img style="{{#if theme.settings.logo.width}}width:{{theme.settings.logo.width}};{{/if}}{{#if theme.settings.logo.height}} height:{{theme.settings.logo.height}};{{/if}}"
                              src="{{theme.settings.logo.src}}"
                              alt="{{theme.settings.logo.alt}}" />
