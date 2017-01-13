@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2011-2016 ForgeRock AS.
+ * Copyright 2011-2017 ForgeRock AS.
  */
 
 define([
@@ -239,7 +239,6 @@ define([
             link = route.url;
         }
 
-        params.replace = false;
         obj.currentRoute = route;
         obj.router.navigate(link, params);
     };
