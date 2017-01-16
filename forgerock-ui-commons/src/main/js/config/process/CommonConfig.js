@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2011-2016 ForgeRock AS.
+ * Copyright 2011-2017 ForgeRock AS.
  */
 
 define([
@@ -399,11 +399,6 @@ define([
                     promise.resolve(user);
 
                 }, function (reason) {
-
-                    if (_.has(Configuration, "globalData.auth.urlParams.gotoOnFail")) {
-                        window.location.href = Configuration.globalData.auth.urlParams.gotoOnFail;
-                        return false;
-                    }
 
                     reason = reason ? reason : "authenticationFailed";
                     EventManager.sendEvent(Constants.EVENT_DISPLAY_MESSAGE_REQUEST, reason);
