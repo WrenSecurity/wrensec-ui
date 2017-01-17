@@ -11,9 +11,8 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2011-2016 ForgeRock AS.
+ * Copyright 2011-2017 ForgeRock AS.
  */
-
 define([
     "jquery",
     "underscore",
@@ -100,6 +99,14 @@ define([
             name - Name of the navigation element
             icon - Icon to display with the navigation name
             url - Link location
+            data - A list of data attribute objects with "type" and "value" kays
+                Example:
+
+                "data" : [{
+                    "type" : "toggle",
+                    "value" : "popover"
+                }]
+
             dropdown - Boolean that controls if a drop down element is used or a standard navigation element
             navbarRight - Boolean. If set to true the navigation item will render on the right
 
@@ -215,17 +222,45 @@ define([
                         };
 
                         this.reload();
+                        this.configureNotifications();
                         this.data.showNavbarRight = hasNavbarRight(this.data);
-                        this.parentRender(callback);
+                        this.parentRender(_.bind(function() {
+                            this.renderNotifications();
+
+                            if (callback) {
+                                callback();
+                            }
+                        },this));
 
                     }, this));
 
                 } else {
                     this.reload();
+                    this.configureNotifications();
                     this.data.showNavbarRight = hasNavbarRight(this.data);
-                    this.parentRender(callback);
+                    this.parentRender(_.bind(function() {
+                        this.renderNotifications();
+
+                        if (callback) {
+                            callback();
+                        }
+                    },this));
                 }
 
+            },
+
+            configureNotifications: function() {
+                if (obj.configuration.notifications) {
+                    this.data.navbarRight.push(obj.configuration.notifications);
+                }
+            },
+
+            renderNotifications: function () {
+                if (obj.configuration.notifications) {
+                    require([obj.configuration.notifications.view], function(NavigationNotificationsView) {
+                        NavigationNotificationsView.render({el: ".fr-notifications-content"});
+                    });
+                }
             },
 
             addLinksFromConfiguration: function(context) {
