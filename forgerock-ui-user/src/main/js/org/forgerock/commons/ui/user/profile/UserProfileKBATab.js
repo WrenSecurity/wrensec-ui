@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2015-2016 ForgeRock AS.
+ * Copyright 2015-2017 ForgeRock AS.
  */
 
 define([
@@ -41,6 +41,8 @@ define([
         template : "templates/user/UserProfileKBATab.html",
         events: _.extend({
             "change .kba-pair :input": "checkChanges",
+            "keyup .kba-pair :input": "checkChanges",
+            "mouseup .kba-pair select": "checkChanges",
             "click #provideAnother": "addKBAQuestion",
             "click .delete-KBA-question": "deleteKBAQuestion"
         }, AbstractUserProfileTab.prototype.events),
@@ -69,27 +71,30 @@ define([
                     isNew: true
                 }))
             );
-            // below event trigger will result in checkChanges to run for this new question
-            this.$el.find(".kba-pair[index="+newIndex+"] :input:first").trigger("change");
+
+            ValidatorsManager.bindValidators(this.$el.find("form"),
+                Configuration.loggedUser.baseEntity,
+                _.bind(function() {
+                    ValidatorsManager.validateAllFields(this.$el.find("form"));
+                }, this)
+            );
         },
 
         deleteKBAQuestion: function (e) {
             var target = $(e.target),
                 form = target.closest("form"),
-                kbaPair = target.closest(".kba-pair"),
-                changesPending;
+                kbaPair = target.closest(".kba-pair");
 
             e.preventDefault();
+
             if (kbaPair.attr("isNew") === "true") {
                 kbaPair.parent("li").remove();
             } else {
                 kbaPair.hide();
             }
             this.changesPendingWidget.makeChanges({ subform: this.getFormContent() });
-            changesPending = this.changesPendingWidget.isChanged();
 
-            $(form).find("input[type='reset']").prop("disabled", changesPending);
-            $(form).find("input[type='submit']").prop("disabled", changesPending);
+            ValidatorsManager.validateAllFields(form);
         },
 
         checkChanges: function (e) {
