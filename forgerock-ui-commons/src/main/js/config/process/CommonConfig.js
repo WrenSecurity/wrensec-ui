@@ -369,8 +369,8 @@ define([
                     EventManager.sendEvent(Constants.EVENT_AUTHENTICATION_DATA_CHANGED, { anonymousMode: false});
 
                     if (!Configuration.backgroundLogin) {
-                        if (_.has(Configuration, "globalData.auth.urlParams.goto")) {
-                            window.location.href = decodeURIComponent(Configuration.globalData.auth.urlParams.goto);
+                        if (_.has(Configuration, "globalData.auth.validatedGoto")) {
+                            window.location.href = decodeURIComponent(Configuration.globalData.auth.validatedGoto);
                             return false;
                         }
 
