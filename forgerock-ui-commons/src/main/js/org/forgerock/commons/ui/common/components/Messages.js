@@ -74,7 +74,7 @@ define([
                     return;
                 }
             }
-            if (msg.escape === true) {
+            if (msg.escape !== false) {
                 msg.message = _.escape(msg.message);
             }
             console.info(msg.type + ":", msg.message, msg);
