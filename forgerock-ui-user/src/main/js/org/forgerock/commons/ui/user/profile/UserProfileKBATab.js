@@ -63,6 +63,7 @@ define([
         addKBAQuestion: function (e) {
             e.preventDefault();
             var kbaItems = this.$el.find("#kbaItems"),
+                form = $(e.target).closest("form"),
                 newIndex = kbaItems.find(">li").length;
             kbaItems.append(
                 $("<li>").html(Handlebars.compile("{{> profile/_kbaItem}}")({
@@ -78,6 +79,8 @@ define([
                     ValidatorsManager.validateAllFields(this.$el.find("form"));
                 }, this)
             );
+
+            $(form).find("input[type='reset']").prop("disabled", false);
         },
 
         deleteKBAQuestion: function (e) {
@@ -94,7 +97,11 @@ define([
             }
             this.changesPendingWidget.makeChanges({ subform: this.getFormContent() });
 
-            ValidatorsManager.validateAllFields(form);
+            ValidatorsManager.bindValidators(form, Configuration.loggedUser.baseEntity, function () {
+                ValidatorsManager.validateAllFields(form);
+            });
+
+            $(form).find("input[type='reset']").prop("disabled", false);
         },
 
         checkChanges: function (e) {
