@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2011-2016 ForgeRock AS.
+ * Copyright 2011-2017 ForgeRock AS.
  */
 
 define([
@@ -22,10 +22,11 @@ define([
     "i18next",
     "ThemeManager",
     "org/forgerock/commons/ui/common/main/AbstractConfigurationAware",
-    "org/forgerock/commons/ui/common/util/ModuleLoader",
-    "org/forgerock/commons/ui/common/main/Router"
-], function ($, _, require, Handlebars, i18next, ThemeManager, AbstractConfigurationAware, ModuleLoader, Router) {
-
+    "org/forgerock/commons/ui/common/main/Router",
+    "org/forgerock/commons/ui/common/util/detectiOS",
+    "org/forgerock/commons/ui/common/util/ModuleLoader"
+], function ($, _, require, Handlebars, i18next, ThemeManager, AbstractConfigurationAware, Router, detectiOS,
+             ModuleLoader) {
     /**
      * @exports org/forgerock/commons/ui/common/util/UIUtils
      */
@@ -34,7 +35,12 @@ define([
     obj.templates = {};
 
     function fetchTemplate(url) {
-        return $.ajax({ type: "GET", url: require.toUrl(url), dataType: "html" });
+        return $.ajax({
+            async: !_.inRange(detectiOS(), 9, 10), // Avoids WebKit bug. See OPENAM-9610
+            dataType: "html",
+            type: "GET",
+            url: require.toUrl(url)
+        });
     }
 
     function fetchAndSaveTemplate(urlToFetch, urlToSave) {
