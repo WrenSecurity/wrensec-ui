@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2015-2016 ForgeRock AS.
+ * Copyright 2015-2017 ForgeRock AS.
  */
 
 define([
@@ -263,13 +263,17 @@ define([
                     incompleteAndGroup = !(
                         // check all direct filter-value fields for content
                         _.reduce($(">.form-group>.filter-value", this), function (state, field) {
-                            return state && field.value.length > 0;
+                            var hasValue = field.value.length > 0;
+                            $(field).attr("data-validation-status", hasValue ? "ok" : "error");
+                            return state && hasValue;
                         }, true) &&
                         // check all direct sub-groups for content
                         _.reduce($(">.filter-group", this), function (state, subGroup) {
                             return walkTreeForFilterStrings(subGroup).length > 0;
                         }, true)
                     );
+                } else {
+                    $(">.form-group>.filter-value", this).attr("data-validation-status", "ok");
                 }
             });
 
