@@ -3,6 +3,7 @@
   ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
   ~
   ~ Copyright (c) 2011-2016 ForgeRock AS. All Rights Reserved
+  ~ Portions Copyright 2017-2018 Wren Security.
   ~
   ~ The contents of this file are subject to the terms
   ~ of the Common Development and Distribution License
@@ -24,6 +25,7 @@
   -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.forgerock.commons.ui</groupId>
         <artifactId>forgerock-ui</artifactId>
@@ -31,7 +33,7 @@
     </parent>
 
     <artifactId>forgerock-ui-commons</artifactId>
-    <name>Forgerock Web UI Commons</name>
+    <name>Wren Security UI - Commons</name>
     <packaging>pom</packaging>
 
     <build>
@@ -39,6 +41,7 @@
             <resource>
                 <directory>${basedir}/src/main/js</directory>
             </resource>
+
             <resource>
                 <directory>${basedir}/src/main/resources</directory>
             </resource>
@@ -47,6 +50,7 @@
             <testResource>
                 <directory>${basedir}/src/test/js</directory>
             </testResource>
+
             <testResource>
                 <directory>${basedir}/src/test/resources</directory>
             </testResource>
@@ -57,11 +61,14 @@
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
             </plugin>
+
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
+
                 <executions>
                     <execution>
                         <phase>package</phase>
+
                         <goals>
                             <goal>resources</goal>
                             <goal>testResources</goal>
@@ -69,13 +76,16 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
+
                 <configuration>
                     <descriptors>
                         <descriptor>src/main/assembly/zip.xml</descriptor>
                     </descriptors>
                 </configuration>
+
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -96,8 +106,10 @@
                         <goals>
                             <goal>unpack</goal>
                         </goals>
+
                         <configuration>
                             <outputDirectory>${project.build.directory}</outputDirectory>
+
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>org.forgerock.commons.ui.libs</groupId>
@@ -109,7 +121,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 
@@ -121,41 +132,48 @@
             <type>js</type>
             <classifier>min</classifier>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>moment</artifactId>
             <type>js</type>
             <classifier>min</classifier>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>handlebars</artifactId>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>i18next</artifactId>
             <type>js</type>
             <classifier>min</classifier>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>requirejs</artifactId>
             <type>js</type>
             <classifier>min</classifier>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>backbone</artifactId>
             <type>js</type>
             <classifier>min</classifier>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>backbone.paginator.min</artifactId>
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>backbone-relational</artifactId>
@@ -169,6 +187,7 @@
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>backgrid.min</artifactId>
@@ -181,6 +200,7 @@
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>backgrid-paginator.min</artifactId>
@@ -193,6 +213,7 @@
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>backgrid-filter.min</artifactId>
@@ -213,51 +234,60 @@
             <type>js</type>
             <classifier>min</classifier>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>lodash</artifactId>
             <type>js</type>
             <classifier>min</classifier>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>spin</artifactId>
             <type>js</type>
             <classifier>min</classifier>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>xdate</artifactId>
             <type>js</type>
             <classifier>min</classifier>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>js2form</artifactId>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>form2js</artifactId>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>jquery.placeholder</artifactId>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>bootstrap</artifactId>
             <classifier>custom</classifier>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>bootstrap</artifactId>
             <classifier>custom</classifier>
             <type>css</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>titatoggle</artifactId>
@@ -265,6 +295,7 @@
             <classifier>min</classifier>
             <type>css</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>selectize</artifactId>
@@ -277,24 +308,28 @@
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>selectize</artifactId>
             <classifier>bootstrap3</classifier>
             <type>css</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>bootstrap-dialog</artifactId>
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>bootstrap-dialog</artifactId>
             <classifier>min</classifier>
             <type>css</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>font-awesome</artifactId>
