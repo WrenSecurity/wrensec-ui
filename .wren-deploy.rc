@@ -1,0 +1,14 @@
+export MAVEN_PACKAGE="forgerock-ui"
+export BINTRAY_PACKAGE="wrensec-ui"
+export JFROG_PACKAGE="org/forgerock/commons/ui"
+
+package_accept_release_tag() {
+  local tag_name="${1}"
+
+  if [ "${tag_name}" != "8.6.0" ]; then
+    echo "Skipping ${tag_name} since we only want to build 8.6.0 right now."
+    return -1
+  else
+    return 0
+  fi
+}
