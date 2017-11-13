@@ -179,7 +179,7 @@
 
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
-                <artifactId>backbone.paginator.min</artifactId>
+                <artifactId>backbone.paginator</artifactId>
                 <version>2.0.2</version>
                 <classifier>min</classifier>
                 <type>js</type>
@@ -314,7 +314,7 @@
             <!-- Libraries for grid support -->
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
-                <artifactId>backgrid.min</artifactId>
+                <artifactId>backgrid</artifactId>
                 <version>0.3.5</version>
                 <classifier>min</classifier>
                 <type>js</type>
@@ -322,29 +322,15 @@
 
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
-                <artifactId>backgrid.min</artifactId>
-                <version>0.3.5</version>
-                <type>less</type>
-            </dependency>
-
-            <dependency>
-                <groupId>org.forgerock.commons.ui.libs</groupId>
-                <artifactId>backgrid-paginator.min</artifactId>
+                <artifactId>backgrid</artifactId>
                 <version>0.3.5</version>
                 <classifier>min</classifier>
-                <type>js</type>
-            </dependency>
-
-            <dependency>
-                <groupId>org.forgerock.commons.ui.libs</groupId>
-                <artifactId>backgrid-paginator.min</artifactId>
-                <version>0.3.5</version>
                 <type>css</type>
             </dependency>
 
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
-                <artifactId>backgrid-filter.min</artifactId>
+                <artifactId>backgrid-paginator</artifactId>
                 <version>0.3.5</version>
                 <classifier>min</classifier>
                 <type>js</type>
@@ -352,8 +338,25 @@
 
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
-                <artifactId>backgrid-filter.min</artifactId>
+                <artifactId>backgrid-paginator</artifactId>
                 <version>0.3.5</version>
+                <classifier>min</classifier>
+                <type>css</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.forgerock.commons.ui.libs</groupId>
+                <artifactId>backgrid-filter</artifactId>
+                <version>0.3.5</version>
+                <classifier>min</classifier>
+                <type>js</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.forgerock.commons.ui.libs</groupId>
+                <artifactId>backgrid-filter</artifactId>
+                <version>0.3.5</version>
+                <classifier>min</classifier>
                 <type>css</type>
             </dependency>
 
