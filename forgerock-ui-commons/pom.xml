@@ -168,7 +168,7 @@
 
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>backbone.paginator.min</artifactId>
+            <artifactId>backbone.paginator</artifactId>
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
@@ -182,40 +182,43 @@
 
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>backgrid.min</artifactId>
+            <artifactId>backgrid</artifactId>
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
 
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>backgrid.min</artifactId>
-            <type>less</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>backgrid-paginator.min</artifactId>
+            <artifactId>backgrid</artifactId>
             <classifier>min</classifier>
-            <type>js</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>backgrid-paginator.min</artifactId>
             <type>css</type>
         </dependency>
 
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>backgrid-filter.min</artifactId>
+            <artifactId>backgrid-paginator</artifactId>
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
 
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>backgrid-filter.min</artifactId>
+            <artifactId>backgrid-paginator</artifactId>
+            <classifier>min</classifier>
+            <type>css</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.forgerock.commons.ui.libs</groupId>
+            <artifactId>backgrid-filter</artifactId>
+            <classifier>min</classifier>
+            <type>js</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.forgerock.commons.ui.libs</groupId>
+            <artifactId>backgrid-filter</artifactId>
+            <classifier>min</classifier>
             <type>css</type>
         </dependency>
 
