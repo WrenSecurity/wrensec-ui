@@ -347,7 +347,7 @@
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
                 <artifactId>backgrid-filter</artifactId>
-                <version>0.3.5</version>
+                <version>0.3.7</version>
                 <classifier>min</classifier>
                 <type>js</type>
             </dependency>
@@ -355,7 +355,7 @@
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
                 <artifactId>backgrid-filter</artifactId>
-                <version>0.3.5</version>
+                <version>0.3.7</version>
                 <classifier>min</classifier>
                 <type>css</type>
             </dependency>
