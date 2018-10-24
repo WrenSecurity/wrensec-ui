@@ -2,7 +2,8 @@
 <!--
   ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
   ~
-  ~ Copyright (c) 2011-2016 ForgeRock AS. All Rights Reserved
+  ~ Copyright (c) 2011-2016 ForgeRock AS. All Rights Reserved.
+  ~ Portions Copyright 2017-2018 Wren Security.
   ~
   ~ The contents of this file are subject to the terms
   ~ of the Common Development and Distribution License
@@ -25,9 +26,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.forgerock</groupId>
-        <artifactId>forgerock-parent</artifactId>
-        <version>2.0.15</version>
+        <groupId>org.wrensecurity</groupId>
+        <artifactId>wrensec-parent</artifactId>
+        <version>2.3.0-SNAPSHOT</version>
     </parent>
 
     <properties>
@@ -38,43 +39,44 @@
     <groupId>org.forgerock.commons.ui</groupId>
     <artifactId>forgerock-ui</artifactId>
     <version>22.0.0-SNAPSHOT</version>
-    <name>Forgerock Web UI</name>
-    <description>Common modern ForgeRock Web UI</description>
+    <name>Wren Security UI</name>
+    <description>Common modern Web UI components for Wren Security projects.</description>
     <packaging>pom</packaging>
 
-    <inceptionYear>2012</inceptionYear>
+    <inceptionYear>2017</inceptionYear>
+
     <scm>
-        <connection>scm:git:ssh://git@stash.forgerock.org:7999/commons/forgerock-ui.git</connection>
-        <developerConnection>scm:git:ssh://git@stash.forgerock.org:7999/commons/forgerock-ui.git</developerConnection>
-        <url>http://stash.forgerock.org/projects/COMMONS/repos/forgerock-ui/browse</url>
-      <tag>HEAD</tag>
-  </scm>
-    <distributionManagement>
-        <site>
-            <id>community.internal.forgerock.com</id>
-            <name>ForgeRock Community Server</name>
-            <url>scp://community.internal.forgerock.com/var/www/vhosts/commons.forgerock.org/httpdocs/forgerock-ui</url>
-        </site>
-    </distributionManagement>
+        <url>https://github.com/WrenSecurity/wrensec-ui</url>
+        <connection>scm:git:git://github.com/WrenSecurity/wrensec-ui.git</connection>
+        <developerConnection>scm:git:git@github.com:WrenSecurity/wrensec-ui.git</developerConnection>
+    </scm>
+
     <repositories>
+        <!-- Needed to retrieve parent POM -->
         <repository>
-            <id>forgerock-internal-releases</id>
-            <name>ForgeRock Internal Releases Repository</name>
-            <url>http://maven.forgerock.org/repo/internal-releases</url>
+            <id>wrensecurity-releases</id>
+            <name>Wren Security Release Repository</name>
+            <url>https://wrensecurity.jfrog.io/wrensecurity/releases</url>
+
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
+
             <releases>
                 <enabled>true</enabled>
             </releases>
         </repository>
+
+        <!-- Needed to retrieve parent POM -->
         <repository>
-            <id>forgerock-internal-snapshots</id>
-            <name>ForgeRock Internal Snapshots Repository</name>
-            <url>http://maven.forgerock.org/repo/internal-snapshots</url>
+            <id>wrensecurity-snapshots</id>
+            <name>Wren Security Snapshot Repository</name>
+            <url>https://wrensecurity.jfrog.io/wrensecurity/snapshots</url>
+
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
+
             <releases>
                 <enabled>false</enabled>
             </releases>
@@ -122,6 +124,7 @@
                                 <npmDownloadRoot>http://maven.forgerock.org/repo/api/npm/npm-virtual/npm/-/</npmDownloadRoot>
                             </configuration>
                         </execution>
+
                         <execution>
                             <id>npm-install</id>
                             <goals>
@@ -132,6 +135,7 @@
                                 <arguments>install</arguments>
                             </configuration>
                         </execution>
+
                         <execution>
                             <id>grunt</id>
                             <goals>
@@ -158,6 +162,7 @@
                 <type>js</type>
                 <classifier>min</classifier>
             </dependency>
+
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
                 <artifactId>lodash</artifactId>
@@ -165,12 +170,14 @@
                 <type>js</type>
                 <classifier>min</classifier>
             </dependency>
+
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
                 <artifactId>handlebars</artifactId>
                 <version>4.0.5</version>
                 <type>js</type>
             </dependency>
+
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
                 <artifactId>requirejs</artifactId>
@@ -178,6 +185,7 @@
                 <classifier>min</classifier>
                 <type>js</type>
             </dependency>
+
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
                 <artifactId>backbone</artifactId>
@@ -185,13 +193,15 @@
                 <type>js</type>
                 <classifier>min</classifier>
             </dependency>
+
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
-                <artifactId>backbone.paginator.min</artifactId>
+                <artifactId>backbone.paginator</artifactId>
                 <version>2.0.2</version>
                 <classifier>min</classifier>
                 <type>js</type>
             </dependency>
+
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
                 <artifactId>i18next</artifactId>
@@ -199,6 +209,7 @@
                 <type>js</type>
                 <classifier>min</classifier>
             </dependency>
+
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
                 <artifactId>react</artifactId>
@@ -206,6 +217,7 @@
                 <classifier>min</classifier>
                 <type>js</type>
             </dependency>
+
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
                 <artifactId>react-dom</artifactId>
@@ -213,7 +225,6 @@
                 <classifier>min</classifier>
                 <type>js</type>
             </dependency>
-
 
             <!-- Bootstrap, widgets and related theming -->
             <dependency>
@@ -223,6 +234,7 @@
                 <classifier>custom</classifier>
                 <type>js</type>
             </dependency>
+
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
                 <artifactId>bootstrap</artifactId>
@@ -230,6 +242,7 @@
                 <classifier>custom</classifier>
                 <type>css</type>
             </dependency>
+
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
                 <artifactId>bootstrap-dialog</artifactId>
@@ -237,6 +250,7 @@
                 <classifier>min</classifier>
                 <type>js</type>
             </dependency>
+
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
                 <artifactId>bootstrap-dialog</artifactId>
@@ -259,6 +273,7 @@
                 <classifier>min</classifier>
                 <type>js</type>
             </dependency>
+
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
                 <artifactId>selectize</artifactId>
@@ -266,6 +281,7 @@
                 <classifier>bootstrap3</classifier>
                 <type>css</type>
             </dependency>
+
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
                 <artifactId>dragula</artifactId>
@@ -282,6 +298,7 @@
                 <type>js</type>
                 <classifier>min</classifier>
             </dependency>
+
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
                 <artifactId>moment</artifactId>
@@ -290,7 +307,6 @@
                 <classifier>min</classifier>
             </dependency>
 
-
             <!-- basic form helpers -->
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
@@ -298,18 +314,21 @@
                 <type>js</type>
                 <version>2.0-769718a</version>
             </dependency>
+
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
                 <artifactId>form2js</artifactId>
                 <type>js</type>
                 <version>2.0-769718a</version>
             </dependency>
+
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
                 <artifactId>jquery.placeholder</artifactId>
                 <version>2.0.8</version>
                 <type>js</type>
             </dependency>
+
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
                 <artifactId>spin</artifactId>
@@ -317,6 +336,7 @@
                 <type>js</type>
                 <classifier>min</classifier>
             </dependency>
+
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
                 <artifactId>jquery.ba-dotimeout</artifactId>
@@ -328,43 +348,49 @@
             <!-- Libraries for grid support -->
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
-                <artifactId>backgrid.min</artifactId>
+                <artifactId>backgrid</artifactId>
                 <version>0.3.5</version>
                 <classifier>min</classifier>
                 <type>js</type>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.commons.ui.libs</groupId>
-                <artifactId>backgrid.min</artifactId>
-                <version>0.3.5</version>
-                <type>less</type>
             </dependency>
 
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
-                <artifactId>backgrid-paginator.min</artifactId>
+                <artifactId>backgrid</artifactId>
                 <version>0.3.5</version>
                 <classifier>min</classifier>
-                <type>js</type>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.commons.ui.libs</groupId>
-                <artifactId>backgrid-paginator.min</artifactId>
-                <version>0.3.5</version>
                 <type>css</type>
             </dependency>
 
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
-                <artifactId>backgrid-filter.min</artifactId>
+                <artifactId>backgrid-paginator</artifactId>
                 <version>0.3.5</version>
                 <classifier>min</classifier>
                 <type>js</type>
             </dependency>
+
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
-                <artifactId>backgrid-filter.min</artifactId>
+                <artifactId>backgrid-paginator</artifactId>
                 <version>0.3.5</version>
+                <classifier>min</classifier>
+                <type>css</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.forgerock.commons.ui.libs</groupId>
+                <artifactId>backgrid-filter</artifactId>
+                <version>0.3.7</version>
+                <classifier>min</classifier>
+                <type>js</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.forgerock.commons.ui.libs</groupId>
+                <artifactId>backgrid-filter</artifactId>
+                <version>0.3.7</version>
+                <classifier>min</classifier>
                 <type>css</type>
             </dependency>
 
@@ -384,7 +410,6 @@
                 <type>js</type>
             </dependency>
 
-
             <!-- testing and mocks -->
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
@@ -392,6 +417,7 @@
                 <version>1.15.4</version>
                 <type>js</type>
             </dependency>
+
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
                 <artifactId>qunit</artifactId>
@@ -399,6 +425,7 @@
                 <type>js</type>
                 <scope>test</scope>
             </dependency>
+
             <dependency>
                 <groupId>org.forgerock.commons.ui.libs</groupId>
                 <artifactId>qunit</artifactId>
@@ -406,8 +433,6 @@
                 <version>1.15.0</version>
                 <scope>test</scope>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
-
 </project>

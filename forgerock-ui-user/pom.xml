@@ -3,6 +3,7 @@
   ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
   ~
   ~ Copyright (c) 2011-2016 ForgeRock AS. All Rights Reserved
+  ~ Portions Copyright 2017-2018 Wren Security.
   ~
   ~ The contents of this file are subject to the terms
   ~ of the Common Development and Distribution License
@@ -24,6 +25,7 @@
   -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.forgerock.commons.ui</groupId>
         <artifactId>forgerock-ui</artifactId>
@@ -31,7 +33,7 @@
     </parent>
 
     <artifactId>forgerock-ui-user</artifactId>
-    <name>Forgerock Web UI User</name>
+    <name>Wren Security UI - User</name>
     <packaging>pom</packaging>
 
     <dependencies>
@@ -49,14 +51,17 @@
             <resource>
                 <directory>${basedir}/src/main/js</directory>
             </resource>
+
             <resource>
                 <directory>${basedir}/src/main/resources</directory>
             </resource>
         </resources>
+
         <testResources>
             <testResource>
                 <directory>${basedir}/src/test/js</directory>
             </testResource>
+
             <testResource>
                 <directory>${basedir}/src/test/resources</directory>
             </testResource>
@@ -67,6 +72,7 @@
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
             </plugin>
+
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
@@ -91,13 +97,13 @@
                     </goals>
                     <configuration>
                         <artifactItems>
-                        <artifactItem>
-                            <groupId>org.forgerock.commons.ui</groupId>
-                            <artifactId>forgerock-ui-commons</artifactId>
-                            <version>${project.version}</version>
-                            <type>zip</type>
-                            <classifier>www</classifier>
-                        </artifactItem>
+                            <artifactItem>
+                                <groupId>org.forgerock.commons.ui</groupId>
+                                <artifactId>forgerock-ui-commons</artifactId>
+                                <version>${project.version}</version>
+                                <type>zip</type>
+                                <classifier>www</classifier>
+                            </artifactItem>
                         </artifactItems>
                     </configuration>
                     </execution>
@@ -106,14 +112,17 @@
 
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
+
                 <configuration>
                     <descriptors>
                         <descriptor>src/main/assembly/zip.xml</descriptor>
                     </descriptors>
                 </configuration>
+
                 <executions>
                     <execution>
                         <phase>package</phase>
+
                         <goals>
                             <goal>single</goal>
                         </goals>
