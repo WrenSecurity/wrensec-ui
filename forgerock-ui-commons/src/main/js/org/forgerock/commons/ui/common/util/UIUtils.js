@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2011-2016 ForgeRock AS.
+ * Copyright 2011-2017 ForgeRock AS.
  */
 
 define([
@@ -22,10 +22,11 @@ define([
     "i18next",
     "ThemeManager",
     "org/forgerock/commons/ui/common/main/AbstractConfigurationAware",
-    "org/forgerock/commons/ui/common/util/ModuleLoader",
-    "org/forgerock/commons/ui/common/main/Router"
-], function ($, _, require, Handlebars, i18next, ThemeManager, AbstractConfigurationAware, ModuleLoader, Router) {
-
+    "org/forgerock/commons/ui/common/main/Router",
+    "org/forgerock/commons/ui/common/util/detectiOS",
+    "org/forgerock/commons/ui/common/util/ModuleLoader"
+], function ($, _, require, Handlebars, i18next, ThemeManager, AbstractConfigurationAware, Router, detectiOS,
+             ModuleLoader) {
     /**
      * @exports org/forgerock/commons/ui/common/util/UIUtils
      */
@@ -34,7 +35,12 @@ define([
     obj.templates = {};
 
     function fetchTemplate(url) {
-        return $.ajax({ type: "GET", url: require.toUrl(url), dataType: "html" });
+        return $.ajax({
+            async: !_.inRange(detectiOS(), 9, 10), // Avoids WebKit bug. See OPENAM-9610
+            dataType: "html",
+            type: "GET",
+            url: require.toUrl(url)
+        });
     }
 
     function fetchAndSaveTemplate(urlToFetch, urlToSave) {
@@ -521,20 +527,37 @@ define([
     /**
      * @param {string} message The text provided in the main body of the dialog
      * @param {string} type The type of dialog to display
-     * @param {Function} confirmCallback Fired when the confirm button is clicked
      * default
      * info
      * primary
      * success
      * warning
      * danger
+     * @param {Function} confirmCallback Fired when the confirm button is clicked
+     * @param {object} overrides object containing overrides for dialog title, button names, and cancel button callback
+     * example : {
+     *     title : "Save Changes?",
+     *     okText : "Save Changes",
+     *     cancelText : "Discard",
+     *     cancelCallback: () => {
+     *        //cool stuff
+     *     }
+     * }
      *
      * @example
      *  UIUtils.confirmDialog($.t("templates.admin.ResourceEdit.confirmDelete"), "danger",s _.bind(function(){
-     *      //Useful stuff here
-     *  }, this));
+     *          //Useful stuff here
+     *      }, this),
+     *      { title: "Some Title Text",
+     *        okText: "Text for OK button",
+     *        cancelText: "Text for Cancel button",
+     *        cancelCallback : function () { console.log("Cancelled"; }
+     *      }
+     *  });
      */
-    obj.confirmDialog = function(message, type, confirmCallback){
+    obj.confirmDialog = function(message, type, confirmCallback, overrides){
+        overrides = overrides || {};
+
         ModuleLoader.load("bootstrap-dialog").then(function (BootstrapDialog) {
             var btnType = "btn-" +type;
 
@@ -543,20 +566,23 @@ define([
             }
 
             BootstrapDialog.show({
-                title: $.t('common.form.confirm'),
+                title: overrides.title || $.t('common.form.confirm'),
                 type: "type-" +type,
                 message: message,
                 id: "frConfirmationDialog",
                 buttons: [
                     {
-                        label: $.t('common.form.cancel'),
+                        label: overrides.cancelText || $.t('common.form.cancel'),
                         id: "frConfirmationDialogBtnClose",
                         action: function(dialog){
+                            if (overrides.cancelCallback) {
+                                overrides.cancelCallback();
+                            }
                             dialog.close();
                         }
                     },
                     {
-                        label: $.t('common.form.ok'),
+                        label: overrides.okText || $.t('common.form.ok'),
                         cssClass: btnType,
                         id: "frConfirmationDialogBtnOk",
                         action: function(dialog) {

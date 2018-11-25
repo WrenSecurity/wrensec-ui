@@ -3,7 +3,7 @@
   ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
   ~
   ~ Copyright (c) 2014 ForgeRock AS. All Rights Reserved
-  ~ Portions Copyright 2017 Wren Security.
+  ~ Portions Copyright 2017-2018 Wren Security.
   ~
   ~ The contents of this file are subject to the terms
   ~ of the Common Development and Distribution License
@@ -29,7 +29,7 @@
     <parent>
         <groupId>org.forgerock.commons.ui</groupId>
         <artifactId>forgerock-ui</artifactId>
-        <version>16.0.1-SNAPSHOT</version>
+        <version>22.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>forgerock-ui-mock</artifactId>

@@ -31,7 +31,7 @@ define([
     AnonymousProcessDelegate.prototype.constructor = AnonymousProcessDelegate;
 
     AnonymousProcessDelegate.prototype.start = function () {
-        if (!this.token || !this.lastResponse) {
+        if (!this.lastResponse) {
             return this.serviceCall({
                 "type": "GET",
                 "url" : ""

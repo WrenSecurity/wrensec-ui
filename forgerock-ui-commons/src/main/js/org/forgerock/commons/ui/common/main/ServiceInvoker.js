@@ -11,17 +11,19 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2011-2016 ForgeRock AS.
+ * Copyright 2011-2017 ForgeRock AS.
  */
 
 define([
     "jquery",
     "underscore",
     "org/forgerock/commons/ui/common/main/AbstractConfigurationAware",
-    "org/forgerock/commons/ui/common/util/Constants",
     "org/forgerock/commons/ui/common/main/ErrorsHandler",
-    "org/forgerock/commons/ui/common/main/EventManager"
-], function($, _, AbstractConfigurationAware, Constants, ErrorsHandler, EventManager) {
+    "org/forgerock/commons/ui/common/main/EventManager",
+    "org/forgerock/commons/ui/common/main/i18nManager",
+    "org/forgerock/commons/ui/common/util/Constants",
+    "org/forgerock/commons/ui/common/util/detectiOS"
+], function($, _, AbstractConfigurationAware, ErrorsHandler, EventManager, i18nManager, Constants, detectiOS) {
     /**
      * @exports org/forgerock/commons/ui/common/main/ServiceInvoker
      */
@@ -157,6 +159,15 @@ define([
          */
         if (!_.has(options.headers, "Cache-Control")) {
             options.headers["Cache-Control"] = "no-cache";
+        }
+
+        if (!_.has(options.headers, "Accept-Language")) {
+            options.headers["Accept-Language"] = i18nManager.lang;
+        }
+
+        // Avoids WebKit bug. See OPENAM-9610
+        if (_.inRange(detectiOS(), 9, 10)) {
+            options.async = false;
         }
 
         $.ajax(options).then(resolveHandler,rejectHandler);
