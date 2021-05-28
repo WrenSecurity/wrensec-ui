@@ -33,20 +33,6 @@
         <format>dir</format>
         <format>zip</format>
     </formats>
-    <dependencySets>
-        <dependencySet>
-            <includes>
-                <include>org.forgerock.commons.ui.libs:*:js</include>
-            </includes>
-            <outputDirectory>/libs</outputDirectory>
-        </dependencySet>
-        <dependencySet>
-            <includes>
-                <include>org.forgerock.commons.ui.libs:*:css</include>
-            </includes>
-            <outputDirectory>/css</outputDirectory>
-        </dependencySet>
-    </dependencySets>
 
     <fileSets>
         <fileSet>
@@ -54,27 +40,8 @@
             <outputDirectory>/</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>${project.build.directory}/font-awesome-4.5.0</directory>
-            <outputDirectory>/css/fontawesome</outputDirectory>
-            <includes>
-              <include>css/font-awesome.min.css</include>
-            </includes>
-            <fileMode>0640</fileMode>
-        </fileSet>
-        <fileSet>
-            <directory>${project.build.directory}/font-awesome-4.5.0</directory>
-            <outputDirectory>/css/fontawesome</outputDirectory>
-            <includes>
-              <include>fonts/*</include>
-            </includes>
-            <fileMode>0640</fileMode>
-        </fileSet>
-        <fileSet>
-            <directory>${project.build.directory}/font-awesome-4.5.0</directory>
-            <outputDirectory>/css/fontawesome</outputDirectory>
-            <includes>
-              <include>less/variables.less</include>
-            </includes>
+            <directory>${project.basedir}/dist</directory>
+            <outputDirectory>/</outputDirectory>
             <fileMode>0640</fileMode>
         </fileSet>
     </fileSets>
