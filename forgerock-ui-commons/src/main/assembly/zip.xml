@@ -40,7 +40,7 @@
             <outputDirectory>/</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>${project.basedir}/dist</directory>
+            <directory>${basedir}/dist</directory>
             <outputDirectory>/</outputDirectory>
             <fileMode>0640</fileMode>
         </fileSet>

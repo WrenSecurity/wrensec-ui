@@ -105,41 +105,6 @@
                     </execution>
 
                     <execution>
-                        <id>copy-dependencies-js</id>
-                        <phase>process-resources</phase>
-
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-
-                        <configuration>
-                            <includeGroupIds>org.forgerock.commons.ui.libs</includeGroupIds>
-                            <includeTypes>js</includeTypes>
-                            <outputDirectory>${project.build.directory}/www/libs</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-dependencies-css</id>
-                        <phase>process-resources</phase>
-
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-
-                        <configuration>
-                            <includeGroupIds>org.forgerock.commons.ui.libs</includeGroupIds>
-                            <includeTypes>css</includeTypes>
-                            <outputDirectory>${project.build.directory}/www/css</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
-                    </execution>
-
-                    <execution>
                         <id>copy-dependencies-less</id>
                         <phase>process-resources</phase>
 
