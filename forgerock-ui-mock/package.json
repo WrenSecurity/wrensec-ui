@@ -2,19 +2,28 @@
   "name": "forgerock-ui-mock",
   "description": "ForgeRock UI Demonstration",
   "private": true,
+  "scripts": {
+    "build": "grunt build"
+  },
   "devDependencies": {
     "eslint": "1.5.1",
     "eslint-config-forgerock": "^1.0.0",
     "eslint-formatter-warning-summary": "^1.0.1",
     "grunt": "0.4.5",
     "grunt-cli": "0.1.13",
+    "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-less": "1.0.1",
-    "grunt-contrib-qunit": "0.4.0",
+    "grunt-contrib-qunit": "^4.0.0",
     "grunt-contrib-requirejs": "0.4.4",
     "grunt-contrib-watch": "0.6.1",
     "grunt-eslint": "17.3.1",
     "grunt-notify": "0.4.3",
-    "grunt-sync": "0.4.1",
+    "grunt-sync": "0.8.2",
     "less-plugin-clean-css": "1.5.1"
+  },
+  "dependencies": {
+    "codemirror": "^4.10.0",
+    "qunit": "^2.15.0",
+    "sinon": "^1.15.4"
   }
 }

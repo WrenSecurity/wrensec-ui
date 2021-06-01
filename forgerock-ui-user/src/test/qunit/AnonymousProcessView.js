@@ -21,7 +21,8 @@ define([
 ], function ($, AnonymousProcessView, UIUtils) {
     QUnit.module('AnonymousProcessView Functions');
 
-    QUnit.asyncTest("buildQueryFilter", function () {
+    QUnit.test("buildQueryFilter", function(assert) {
+        var ready = assert.async();
         var el = $("#qunit-fixture #wrapper");
 
         UIUtils.renderTemplate(
@@ -31,7 +32,7 @@ define([
             function () {
                 el.find(":input[name=userName]").val("bjensen");
 
-                QUnit.equal(
+                assert.equal(
                     AnonymousProcessView.prototype.walkTreeForFilterStrings(el.find("#filterContainer")),
                     'userName eq "bjensen"',
                     "Simple query filter generated from template matches expected input"
@@ -42,13 +43,13 @@ define([
                 el.find(":input[name=givenName]").val("Barbara");
                 el.find(":input[name=sn]").val("Jensen");
 
-                QUnit.equal(
+                assert.equal(
                     AnonymousProcessView.prototype.walkTreeForFilterStrings(el.find("#filterContainer")),
                     '(userName eq "bjensen" OR mail eq "bjensen@example.com" OR (givenName eq "Barbara" AND sn eq "Jensen"))',
                     "Complex query filter generated from template matches expected input"
                 );
 
-                QUnit.start();
+                ready();
             }
         );
     });
