@@ -28,7 +28,7 @@
     <parent>
         <groupId>org.wrensecurity</groupId>
         <artifactId>wrensec-parent</artifactId>
-        <version>3.0.0-M2</version>
+        <version>3.2.1-SNAPSHOT</version>
     </parent>
 
     <properties>
@@ -38,7 +38,7 @@
 
     <groupId>org.forgerock.commons.ui</groupId>
     <artifactId>forgerock-ui</artifactId>
-    <version>22.0.0-SNAPSHOT</version>
+    <version>22.1.0-SNAPSHOT</version>
     <name>Wren Security UI</name>
     <description>Common modern Web UI components for Wren Security projects.</description>
     <packaging>pom</packaging>

@@ -6,4 +6,6 @@ node/
 target
 .idea
 *.iml
+.project
+.settings/
 .vscode/
