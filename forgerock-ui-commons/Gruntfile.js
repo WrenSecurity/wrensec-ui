@@ -49,7 +49,6 @@ module.exports = function (grunt) {
                     { src: "node_modules/jquery/dist/jquery.min.js", dest: "dist/libs/jquery-2.1.1-min.js" },
                     { src: "node_modules/moment/min/moment.min.js", dest: "dist/libs/moment-2.8.1-min.js" },
                     { src: "node_modules/requirejs/require.js", dest: "dist/libs/requirejs-2.1.14-min.js" }, // Not actually minified
-                    { src: "node_modules/selectize/dist/js/selectize.min.js", dest: "dist/libs/selectize-0.12.1-min.js" },
                     { src: "node_modules/spin.js/spin.js", dest: "dist/libs/spin-2.0.1-min.js" }, // Not actually minified
                     { src: "node_modules/xdate/src/xdate.js", dest: "dist/libs/xdate-0.8-min.js" }, // Not actually minified
                     { src: "node_modules/react/dist/react.min.js", dest: "dist/libs/react-15.2.1-min.js" },
@@ -64,17 +63,18 @@ module.exports = function (grunt) {
                     { src: "libs/js/jquery.placeholder-2.0.8.js", dest: "dist/libs/jquery.placeholder-2.0.8.js" },
                     { src: "libs/js/js2form-2.0-769718a.js", dest: "dist/libs/js2form-2.0-769718a.js" },
                     { src: "libs/js/lodash-3.10.1-min.js", dest: "dist/libs/lodash-3.10.1-min.js" },
+                    { src: "libs/js/selectize-0.12.1-min.js", dest: "dist/libs/selectize-0.12.1-min.js" },
 
                     // CSS - npm
                     { src: "node_modules/backgrid/lib/backgrid.min.css", dest: "dist/css/backgrid-0.3.5-min.css" },
                     { src: "node_modules/backgrid-filter/backgrid-filter.css", dest: "dist/css/backgrid-filter-0.3.7-min.css" },
                     { src: "node_modules/backgrid-paginator/backgrid-paginator.min.css", dest: "dist/css/backgrid-paginator-0.3.5-min.css" },
-                    { src: "node_modules/selectize/dist/css/selectize.bootstrap3.css", dest: "dist/css/selectize-0.12.1-bootstrap3.css" },
                     { src: "node_modules/titatoggle/dist/titatoggle-dist-min.css", dest: "dist/css/titatoggle-1.2.6-min.css" }, // Actually 1.2.15
 
                     // CSS - custom
                     { src: "libs/css/bootstrap-3.3.5-custom.css", dest: "dist/css/bootstrap-3.3.5-custom.css" },
                     { src: "libs/css/bootstrap-dialog-1.34.4-min.css", dest: "dist/css/bootstrap-dialog-1.34.4-min.css" },
+                    { src: "libs/css/selectize-0.12.1-bootstrap3.css", dest: "dist/css/selectize-0.12.1-bootstrap3.css" },
 
                     // Fontawesome
                     { src: "node_modules/font-awesome/css/font-awesome.min.css", dest: "dist/css/fontawesome/css/font-awesome.min.css" },
