@@ -40,7 +40,7 @@
             <outputDirectory>/</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>${basedir}/dist</directory>
+            <directory>${basedir}/target/frontend-libs</directory>
             <outputDirectory>/</outputDirectory>
             <fileMode>0640</fileMode>
         </fileSet>
