@@ -13,7 +13,7 @@
    information: "Portions copyright [year] [name of copyright owner]".
 
    Copyright (c) 2011-2016 ForgeRock AS. All Rights Reserved.
-   Portions Copyright 2017-2021 Wren Security.
+   Portions Copyright 2017-2023 Wren Security.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -21,15 +21,16 @@
     <parent>
         <groupId>org.wrensecurity</groupId>
         <artifactId>wrensec-parent</artifactId>
-        <version>3.2.1</version>
+        <version>4.0.0</version>
     </parent>
 
-    <groupId>org.forgerock.commons.ui</groupId>
-    <artifactId>forgerock-ui</artifactId>
-    <version>22.1.3-SNAPSHOT</version>
-    <name>Wren Security UI</name>
-    <description>Common modern Web UI components for Wren Security projects.</description>
+    <groupId>org.wrensecurity.commons.ui</groupId>
+    <artifactId>wrensec-ui</artifactId>
+    <version>22.2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+
+    <name>Wren Security UI</name>
+    <description>Common Web UI components for Wren Security projects.</description>
 
     <properties>
         <node.install.directory>${project.parent.basedir}</node.install.directory>
@@ -39,11 +40,10 @@
         <url>https://github.com/WrenSecurity/wrensec-ui</url>
         <connection>scm:git:git://github.com/WrenSecurity/wrensec-ui.git</connection>
         <developerConnection>scm:git:git@github.com:WrenSecurity/wrensec-ui.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <repositories>
-        <!-- Needed to retrieve parent POM -->
         <repository>
             <id>wrensecurity-releases</id>
             <name>Wren Security Release Repository</name>
@@ -58,7 +58,6 @@
             </releases>
         </repository>
 
-        <!-- Needed to retrieve parent POM -->
         <repository>
             <id>wrensecurity-snapshots</id>
             <name>Wren Security Snapshot Repository</name>
@@ -86,20 +85,24 @@
                 <plugin>
                     <groupId>com.github.eirslett</groupId>
                     <artifactId>frontend-maven-plugin</artifactId>
-                    <version>1.12.0</version>
+                    <version>1.14.2</version>
+
                     <configuration>
                         <installDirectory>${node.install.directory}</installDirectory>
                     </configuration>
+
                     <executions>
                         <execution>
                             <id>install-node-and-npm</id>
+                            <phase>initialize</phase>
+
                             <goals>
                                 <goal>install-node-and-npm</goal>
                             </goals>
-                            <phase>initialize</phase>
+
                             <configuration>
-                                <nodeVersion>v14.17.0</nodeVersion>
-                                <npmVersion>6.14.13</npmVersion>
+                                <nodeVersion>v20.9.0</nodeVersion>
+                                <npmVersion>10.1.0</npmVersion>
                                 <downloadRoot>https://nodejs.org/dist/</downloadRoot>
                                 <npmDownloadRoot>https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/npm/-/</npmDownloadRoot>
                             </configuration>
@@ -107,21 +110,52 @@
 
                         <execution>
                             <id>npm-install</id>
+                            <phase>initialize</phase>
+
                             <goals>
                                 <goal>npm</goal>
                             </goals>
-                            <phase>initialize</phase>
+
+                            <configuration>
+                                <arguments>install</arguments>
+                            </configuration>
                         </execution>
 
                         <execution>
                             <id>grunt</id>
+                            <phase>compile</phase>
+
                             <goals>
                                 <goal>grunt</goal>
                             </goals>
-                            <phase>compile</phase>
+
                             <configuration>
                                 <arguments>build --debug --verbose</arguments>
                             </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+
+                    <executions>
+                        <execution>
+                            <id>default-resources</id>
+                            <phase>generate-resources</phase>
+
+                            <goals>
+                              <goal>resources</goal>
+                            </goals>
+                        </execution>
+
+                        <execution>
+                            <id>default-testResources</id>
+                            <phase>generate-test-resources</phase>
+
+                            <goals>
+                              <goal>testResources</goal>
+                            </goals>
                         </execution>
                     </executions>
                 </plugin>

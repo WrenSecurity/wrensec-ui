@@ -13,7 +13,7 @@
     "grunt-cli": "0.1.13",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-less": "1.0.1",
-    "grunt-contrib-qunit": "^4.0.0",
+    "grunt-contrib-qunit": "^8.0.1",
     "grunt-contrib-requirejs": "0.4.4",
     "grunt-contrib-watch": "0.6.1",
     "grunt-eslint": "17.3.1",
@@ -22,8 +22,8 @@
     "less-plugin-clean-css": "1.5.1"
   },
   "dependencies": {
-    "codemirror": "^4.10.0",
-    "qunit": "^2.15.0",
-    "sinon": "^1.15.4"
+    "codemirror": "^6.0.1",
+    "qunit": "^2.20.0",
+    "sinon": "^17.0.1"
   }
 }

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security.
  */
 
 module.exports = function (grunt) {
@@ -81,10 +82,9 @@ module.exports = function (grunt) {
             all: [testTargetDirectory + "/index.html"],
             options: {
                 puppeteer: {
-                    ignoreDefaultArgs: true,
                     args: [
-                        "--headless",
-                        "--allow-file-access-from-files"
+                        "--allow-file-access-from-files",
+                        "--no-sandbox"
                     ]
                 }
             }

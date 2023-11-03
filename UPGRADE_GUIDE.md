@@ -1,7 +1,14 @@
 # Upgrade Guide
 
+## 21.x -> 22.x
+
+* Build dependencies were upgraded (wrensec-parent, NodeJS, NPM, ...)
+
+
 ## 14.x -> 15.x
+
 ### React Support!
+
 * ViewManager can now handle being passed either a Backbone or a React view.
 
 * `react` and `react-dom` are bundled with commons, ensure you update your product license file(s). e.g. in OpenAM...
@@ -12,6 +19,7 @@ org.forgerock.commons.ui.libs--react-dom--15.2.1=BSD
 ```
 
 #### `withRouter`
+
 * `org/forgerock/commons/ui/common/components/hoc/withRouter`
 
 * React views are *not* passed parameters from the router as Backbone views are. This is intentional as not all view may need router parameters.
@@ -22,6 +30,7 @@ import withRouter from "org/forgerock/commons/ui/common/components/hoc/withRoute
 class MyReactComponent extends Component { ... }
 export default withRouter(MyReactComponent)
 ```
+
 
 ## 13.x -> 14.x
 
@@ -45,6 +54,7 @@ In 14.x, the reference to the whole view no longer needs to be replaced. Instead
         });
     }
 
+
 ## 12.x -> 13.x
 
 The entries for form2js and js2form must be adjusted to match the new version. Previously it was listed like so:
@@ -57,6 +67,7 @@ Now they must be specified like so:
     js2form: "libs/js2form-2.0-769718a",
     form2js: "libs/form2js-2.0-769718a",
 
+
 ## 11.x -> 12.x
 
 * There is a new parameter attached to the event for EVENT_SHOW_LOGIN_DIALOG : "authenticatedCallback". This is a function which is expected to be called when the inline login dialog has successfully re-authenticated the user. Since there is an expectation that the EVENT_SHOW_LOGIN_DIALOG could be invoked multiple times, it is recommended that each callback function be stored in a queue (such as the new org/forgerock/commons/ui/common/util/Queue facility) so that they all get called and in the order received. If the implementing product is making use of the default EVENT_SHOW_LOGIN_DIALOG implementation, then nothing needs to be changed in the product to work properly.
@@ -65,11 +76,13 @@ Now they must be specified like so:
 
 The path to the new version of handlebars (4.0.5) will need to be adjusted in the root main.js.
 
+
 ## 9.x -> 10.x
 
 * Ability to provide project-specific `KBADelegate`
 
 Both OpenAM and OpenIDM need to provide a path to a `KBADelegate`, which can be either a project-specific or the commons one.
+
 
 ## 8.x -> 9.x
 
