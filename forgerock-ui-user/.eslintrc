@@ -18,9 +18,6 @@
             "FunctionDeclaration": {
                 "parameters": 2
             },
-            "FunctionExpression":  {
-                "parameters": 2
-            },
             "SwitchCase": 1,
             "VariableDeclarator": 1
         }],

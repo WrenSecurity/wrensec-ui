@@ -34,15 +34,15 @@ define([
             "url": "user/" + Configuration.loggedUser.id,
             "data": JSON.stringify(
                 _(user)
-                 .map(function (value, key) {
-                     return {
-                         "operation": "replace",
-                         "field": "/" + key,
-                         // replace the whole value, rather than just the parts that have changed,
-                         // since there is no consistent way to target items in a set across the stack
-                         "value": value
-                     };
-                 })
+                    .map(function (value, key) {
+                        return {
+                            "operation": "replace",
+                            "field": "/" + key,
+                            // replace the whole value, rather than just the parts that have changed,
+                            // since there is no consistent way to target items in a set across the stack
+                            "value": value
+                        };
+                    })
             )
         }).then(function (updatedUser) {
             return Configuration.loggedUser.save(updatedUser, {"silent": true});

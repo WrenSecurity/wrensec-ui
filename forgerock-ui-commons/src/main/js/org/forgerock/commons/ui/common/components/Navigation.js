@@ -25,7 +25,7 @@ define([
     "org/forgerock/commons/ui/common/main/Router",
     "NavigationFilter"
 ], function($, _, Backbone, AbstractConfigurationAware, AbstractView, Configuration, EventManager, ModuleLoader,
-            Router, NavigationFilter) {
+        Router, NavigationFilter) {
     var obj = new AbstractConfigurationAware(),
 
         getUserName = function () {
@@ -275,7 +275,7 @@ define([
                     var roles = _.intersection(Configuration.loggedUser.uiroles, navObj.visibleToRoles),
                         userHasRole = roles.length > 0,
                         navbar;
-                    if(navObj.visibleToRoles && !userHasRole) {
+                    if (navObj.visibleToRoles && !userHasRole) {
                         return;
                     }
 
@@ -371,7 +371,7 @@ define([
     };
 
     obj.reload = function() {
-        if(obj.navigation) {
+        if (obj.navigation) {
             obj.navigation.render();
         }
     };

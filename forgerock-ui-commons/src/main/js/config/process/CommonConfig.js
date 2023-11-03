@@ -33,7 +33,7 @@ define([
                 "org/forgerock/commons/ui/common/main/i18nManager"
             ],
             processDescription: function(event, Router, Configuration, UIUtils, CookieHelper, SessionManager,
-                                         i18nManager) {
+                    i18nManager) {
                 var postSessionCheck = function () {
                     UIUtils.preloadInitialTemplates();
                     UIUtils.preloadInitialPartials();
@@ -108,7 +108,7 @@ define([
         {
             startEvent: Constants.EVENT_UNAUTHORIZED,
             description: "",
-            dependencies: [ ],
+            dependencies: [],
             processDescription: function() {
                 EventManager.sendEvent(Constants.EVENT_DISPLAY_MESSAGE_REQUEST, "unauthorized");
             }
@@ -145,7 +145,7 @@ define([
             ],
             processDescription: function(event, Configuration, ModuleLoader, Navigation, Router, ViewManager) {
                 ViewManager.currentDialog = null;
-                if(Configuration.baseView) {
+                if (Configuration.baseView) {
                     ModuleLoader.load(Router.configuration.routes[Configuration.baseView].view).then(function (view) {
                         view.rebind();
                         Router.navigate(Router.getLink(Router.configuration.routes[Configuration.baseView],
@@ -202,7 +202,7 @@ define([
                 "org/forgerock/commons/ui/common/main/ViewManager"
             ],
             processDescription: function(event, Configuration, ModuleLoader, Navigation, Router, SiteConfigurator,
-                                         SpinnerManager, ViewManager) {
+                    SpinnerManager, ViewManager) {
                 var route = event.route,
                     params = event.args,
                     callback = event.callback,

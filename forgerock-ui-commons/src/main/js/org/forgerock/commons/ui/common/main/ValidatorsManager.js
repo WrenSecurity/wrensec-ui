@@ -149,8 +149,8 @@ define([
         var deferred = $.Deferred(),
             validatorConfig = this.configuration.validators[validatorName],
             parameters = [
-                container,  // the element containing the element as well as any related elements
-                element,    // the specific input within the form being validated
+                container, // the element containing the element as well as any related elements
+                element, // the specific input within the form being validated
                 _.bind(deferred.resolve, deferred) // resolve the deferred object with the validator callback response
             ];
 

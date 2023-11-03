@@ -24,12 +24,12 @@ define([
     "selectize",
     "org/forgerock/commons/ui/common/main/AbstractView"
 ], function($, _,
-            CodeMirror,
-            xmlmode,
-            jsmode,
-            bootstrap,
-            selectize,
-            AbstractView) {
+        CodeMirror,
+        xmlmode,
+        jsmode,
+        bootstrap,
+        selectize,
+        AbstractView) {
 
     var ExamplesView = AbstractView.extend({
         template: "templates/mock/ExamplesTemplate.html",
@@ -95,7 +95,7 @@ define([
                     target: '#rightCol'
                 });
 
-                if(callback){
+                if (callback){
                     callback();
                 }
             }, this));
@@ -108,7 +108,7 @@ define([
 
             var target = $(event.target);
 
-            target =  $(target.attr("href"));
+            target = $(target.attr("href"));
 
             if (target.length) {
                 $('html,body').animate({

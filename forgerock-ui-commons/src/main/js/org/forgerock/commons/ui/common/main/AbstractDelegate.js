@@ -58,7 +58,7 @@ define([
 
 
         if (id !== null && id !== undefined) {
-            if(objectParam._rev) {
+            if (objectParam._rev) {
                 headers["If-None-Match"] = '"' + objectParam._rev + '"';
             } else {
                 headers["If-None-Match"] = '"' + "*" + '"';
@@ -85,7 +85,7 @@ define([
         var current = this;
         return this.readEntity(id, null, errorCallback).then(function(data) {
             var callParams = {url: "/" + id, type: "DELETE", success: successCallback, error: errorCallback };
-            if(data._rev) {
+            if (data._rev) {
                 callParams.headers = [];
                 callParams.headers["If-Match"] = '"' + data._rev + '"';
             }
@@ -101,7 +101,7 @@ define([
     obj.prototype.updateEntity = function(id, objectParam, successCallback, errorCallback) {
         var headers = {};
 
-        if(objectParam._rev) {
+        if (objectParam._rev) {
             headers["If-Match"] = '"' + objectParam._rev + '"';
         } else {
             headers["If-Match"] = '"' + "*" + '"';
@@ -120,11 +120,11 @@ define([
      * Discovers differences between new and old object and invokes patch action only on attributes which are not equal.
      */
     obj.prototype.patchEntityDifferences = function(queryParameters, oldObject, newObject, successCallback,
-                                                    errorCallback, noChangesCallback, errorsHandlers) {
+            errorCallback, noChangesCallback, errorsHandlers) {
 
         var differences = this.getDifferences(oldObject, newObject);
-        if(!differences.length){
-            if(noChangesCallback){
+        if (!differences.length){
+            if (noChangesCallback){
                 noChangesCallback();
             }
             return;
@@ -138,10 +138,10 @@ define([
      * object {"operation": "replace", "field": "fieldname", value: "value" }
      */
     obj.prototype.patchEntity = function(queryParameters, patchDefinition, successCallback, errorCallback,
-                                         noChangesCallback, errorsHandlers) {
+            noChangesCallback, errorsHandlers) {
         //simple transformation
         var i;
-        for(i = 0; i < patchDefinition.length; i++) {
+        for (i = 0; i < patchDefinition.length; i++) {
             if (typeof patchDefinition[i].field === "string" && _.indexOf(patchDefinition[i].field, "/") !== 0) {
                 patchDefinition[i].field = "/" + patchDefinition[i].field;
             }
@@ -162,7 +162,7 @@ define([
      *  Patches single attribute
      */
     obj.prototype.patchEntityAttribute = function(queryParameters, attributeName, newValue, successCallback,
-                                                  errorCallback, noChangesCallback) {
+            errorCallback, noChangesCallback) {
         return this.patchEntity(queryParameters, [{operation: "replace", field: attributeName, value: newValue}],
             successCallback, errorCallback, noChangesCallback);
     };

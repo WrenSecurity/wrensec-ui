@@ -22,7 +22,7 @@ define([
     var obj = {};
 
     obj.showSpinner = function(priority) {
-        if(obj.spinner) {
+        if (obj.spinner) {
             obj.hideSpinner();
         }
 
@@ -41,7 +41,7 @@ define([
     };
 
     obj.hideSpinner = function(priority) {
-        if(obj.spinner && (!obj.priority || (priority && priority >= obj.priority))) {
+        if (obj.spinner && (!obj.priority || (priority && priority >= obj.priority))) {
             obj.spinner.stop();
             delete obj.priority;
         }

@@ -27,7 +27,7 @@ define([
     Handlebars.registerHelper('date', function(unformattedDate, datePattern) {
         var date = obj.parseDateString(unformattedDate), formattedDate;
 
-        if(!obj.isDateValid(date)) {
+        if (!obj.isDateValid(date)) {
             return "";
         }
 

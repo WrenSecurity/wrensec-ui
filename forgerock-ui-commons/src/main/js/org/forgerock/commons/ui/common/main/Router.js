@@ -164,11 +164,11 @@ define([
     };
 
     obj.checkRole = function (route) {
-        if(route.role) {
+        if (route.role) {
             if (!conf.loggedUser) {
                 EventManager.sendEvent(constants.EVENT_UNAUTHENTICATED, { fromRouter: true });
                 return false;
-            } else if(!_.find(route.role.split(','), function(role) {
+            } else if (!_.find(route.role.split(','), function(role) {
                 return conf.loggedUser.uiroles.indexOf(role) !== -1;
             })) {
                 EventManager.sendEvent(constants.EVENT_UNAUTHORIZED, { fromRouter: true });
@@ -177,7 +177,7 @@ define([
         }
 
         if (route.excludedRole) {
-            if(conf.loggedUser && conf.loggedUser.uiroles.indexOf(route.excludedRole) !== -1) {
+            if (conf.loggedUser && conf.loggedUser.uiroles.indexOf(route.excludedRole) !== -1) {
                 EventManager.sendEvent(constants.EVENT_UNAUTHORIZED, { fromRouter: true });
                 return false;
             }
@@ -212,13 +212,13 @@ define([
 
                 obj.currentRoute = route;
 
-                if(route.event) {
+                if (route.event) {
                     EventManager.sendEvent(route.event, {route: route, args: args});
-                } else if(route.dialog) {
+                } else if (route.dialog) {
                     route.baseView = obj.configuration.routes[route.base];
 
                     EventManager.sendEvent(constants.EVENT_SHOW_DIALOG, {route: route, args: args, base: route.base});
-                } else if(route.view) {
+                } else if (route.view) {
                     EventManager.sendEvent(constants.EVENT_CHANGE_VIEW, {route: route, args: args, fromRouter: true});
                 }
             }

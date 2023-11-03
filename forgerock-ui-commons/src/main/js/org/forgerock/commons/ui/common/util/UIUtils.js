@@ -26,7 +26,7 @@ define([
     "org/forgerock/commons/ui/common/util/detectiOS",
     "org/forgerock/commons/ui/common/util/ModuleLoader"
 ], function ($, _, require, Handlebars, i18next, ThemeManager, AbstractConfigurationAware, Router, detectiOS,
-             ModuleLoader) {
+        ModuleLoader) {
     /**
      * @exports org/forgerock/commons/ui/common/util/UIUtils
      */
@@ -93,7 +93,7 @@ define([
         });
     };
 
-     /**
+    /**
       * @deprecated
       * @see Use {@link module:org/forgerock/commons/ui/common/util/UIUtils.compileTemplate}
       */
@@ -217,7 +217,7 @@ define([
         return this.emptySelect().each(function() {
             if (this.tagName === "SELECT") {
                 var i, option, selectElement = this;
-                for(i = 0; i < optionsDataArray.length; i++){
+                for (i = 0; i < optionsDataArray.length; i++){
                     option = new Option(optionsDataArray[i].value, optionsDataArray[i].key);
                     selectElement.options[selectElement.options.length] = option;
                 }
@@ -255,11 +255,11 @@ define([
             prePart += ' name="' + elementName + '"';
         }
 
-        if(multiple) {
+        if (multiple) {
             prePart += ' multiple="multiple"';
         }
 
-        if(height) {
+        if (height) {
             prePart += ' style="height: '+ height +'px"';
         }
 
@@ -320,7 +320,7 @@ define([
 
         if (elementName && _.isString(elementName)) {
             prePart = '<select name="' + elementName + '" ' + additionalParams + '>';
-        } else{
+        } else {
             prePart = '<select>';
         }
 
@@ -384,11 +384,11 @@ define([
     Handlebars.registerHelper('checkbox', function(map, name) {
         var ret = "<div class='checkboxList' id='"+name+"'><ol>", idx,
             sortedMap = _.chain(map)
-                            .pairs()
-                            .sortBy(function (arr) { return arr[1]; })
-                            .value();
+                .pairs()
+                .sortBy(function (arr) { return arr[1]; })
+                .value();
 
-        for(idx=0;idx<sortedMap.length;idx++) {
+        for (idx=0;idx<sortedMap.length;idx++) {
             ret += '<li><input type="checkbox" name="'+ name +'" value="'+ sortedMap[idx][0] +'" id="'+ name +'_'
                 + encodeURIComponent(sortedMap[idx][0]) +'"><label for="'+ name +'_'
                 + encodeURIComponent(sortedMap[idx][0]) +'">' + sortedMap[idx][1] + '</label></li>';
@@ -402,7 +402,7 @@ define([
     Handlebars.registerHelper('siteImages', function(images) {
         var ret = "", i;
 
-        for(i = 0; i < images.length; i++) {
+        for (i = 0; i < images.length; i++) {
             ret += '<img class="item" src="'
                 + encodeURI(images[i]) +'" data-site-image="'
                 + encodeURI(images[i]) +'" />';
@@ -453,7 +453,7 @@ define([
     });
 
     Handlebars.registerHelper('ifObject', function(item, options) {
-        if(typeof item === 'object') {
+        if (typeof item === 'object') {
             return options.fn(this);
         } else {
             return options.inverse(this);
@@ -496,7 +496,7 @@ define([
     Handlebars.registerHelper("partial", function(name, context) {
         var partial = Handlebars.partials[name];
 
-        if(!partial) {
+        if (!partial) {
             console.error("Handlebars \"partial\" helper unable to find partial \"" + name + "\"");
         } else {
             return new Handlebars.SafeString(partial(context));
@@ -504,7 +504,7 @@ define([
     });
 
     obj.loadSelectOptions = function(data, el, empty, callback) {
-        if( empty === undefined || empty === true ) {
+        if ( empty === undefined || empty === true ) {
             data = [{
                 "key" : "",
                 "value" : $.t("common.form.pleaseSelect")
@@ -513,7 +513,7 @@ define([
 
         el.loadSelect(data);
 
-        if(callback) {
+        if (callback) {
             callback(data);
         }
     };
@@ -561,7 +561,7 @@ define([
         ModuleLoader.load("bootstrap-dialog").then(function (BootstrapDialog) {
             var btnType = "btn-" +type;
 
-            if(type === "default") {
+            if (type === "default") {
                 btnType = "btn-primary";
             }
 
@@ -586,7 +586,7 @@ define([
                         cssClass: btnType,
                         id: "frConfirmationDialogBtnOk",
                         action: function(dialog) {
-                            if(confirmCallback) {
+                            if (confirmCallback) {
                                 confirmCallback();
                             }
                             dialog.close();

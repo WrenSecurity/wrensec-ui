@@ -26,7 +26,7 @@ define([
     obj.handleError = function(error, handlers) {
         var handler;
 
-        if(error.error && !error.status) {
+        if (error.error && !error.status) {
             error.status = error.error;
         }
 
@@ -36,17 +36,17 @@ define([
             } catch (parseErr) { /* Must not be JSON */ }
         }
 
-        if(handlers) {
+        if (handlers) {
             //find match in handlers
             handler = obj.matchError(error, handlers);
         }
 
-        if(!handler) {
+        if (!handler) {
             //find match in default handlers
             handler = obj.matchError(error, obj.configuration.defaultHandlers);
         }
 
-        if(handler) {
+        if (handler) {
             // conditional check needed here until calls to authentication?_action=reauthenticate and
             // OpenAM authentication no longer produce 403 status
             if (error.hasOwnProperty("responseObj") && error.responseObj !== null &&
@@ -70,12 +70,12 @@ define([
                         )
                     )
                 )
-               ) {
-                if(handler.event) {
+            ) {
+                if (handler.event) {
                     eventManager.sendEvent(handler.event, {handler: handler, error: error});
                 }
 
-                if(handler.message) {
+                if (handler.message) {
                     eventManager.sendEvent(constants.EVENT_DISPLAY_MESSAGE_REQUEST, handler.message);
                 }
             }
@@ -108,17 +108,17 @@ define([
     obj.matchError = function(error, handlers) {
         var handler, handlerName;
 
-        for(handlerName in handlers) {
+        for (handlerName in handlers) {
             handler = handlers[handlerName];
 
             if (!_.isUndefined(handler.field)) {
-                if(error[handler.field] === handler.value) {
+                if (error[handler.field] === handler.value) {
                     return handler;
                 }
             }
 
-            if(handler.status) {
-                if(parseInt(error.status, 0) === parseInt(handler.status, 0)) {
+            if (handler.status) {
+                if (parseInt(error.status, 10) === parseInt(handler.status, 10)) {
                     return handler;
                 }
             }

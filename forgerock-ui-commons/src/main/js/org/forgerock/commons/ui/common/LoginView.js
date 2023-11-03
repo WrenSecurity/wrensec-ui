@@ -39,7 +39,7 @@ define([
 
         formSubmit: function(event) {
             event.preventDefault();
-            if(this.$el.find("[name=loginRemember]:checked").length !== 0) {
+            if (this.$el.find("[name=loginRemember]:checked").length !== 0) {
                 var expire = new Date();
                 expire.setDate(expire.getDate() + 365*20);
                 cookieHelper.setCookie("login", this.$el.find("input[name=login]").val(), expire);

@@ -26,7 +26,7 @@ define([
     "org/forgerock/commons/ui/common/main/ViewManager",
     "org/forgerock/commons/ui/common/main/AbstractView"
 ], function( $, _, BootstrapDialog, UIUtils, Configuration, Constants, EventManager, SessionManager, ViewManager,
-             AbstractView) {
+        AbstractView) {
     var LoginDialog = AbstractView.extend({
         template: "templates/common/LoginDialog.html",
         element: "#dialogs",
@@ -49,7 +49,7 @@ define([
                         this.$el,
                         _.extend({}, Configuration.globalData, this.data),
                         _.noop,
-                    "replace");
+                        "replace");
                 }, this),
                 buttons: [{
                     id: "loginDialogSubmitButton",

@@ -26,12 +26,12 @@ define([
     "org/forgerock/commons/ui/common/backgrid/extension/ThemeableServerSideFilter"
 
 ], function ($, _,
-             Backgrid,
-             DateUtil,
-             UIUtils,
-             AutoScroll,
-             moment,
-             dragula) {
+        Backgrid,
+        DateUtil,
+        UIUtils,
+        AutoScroll,
+        moment,
+        dragula) {
     /**
      * @exports org/forgerock/commons/ui/common/util/BackgridUtils
      */

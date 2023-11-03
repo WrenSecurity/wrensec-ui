@@ -55,7 +55,7 @@ define([
         var fragment = obj.getCurrentFragment(),
             queryString = '';
 
-        if(fragment.indexOf('&') > -1) {
+        if (fragment.indexOf('&') > -1) {
             queryString = fragment.substring(fragment.indexOf('&') + 1);
         }
 

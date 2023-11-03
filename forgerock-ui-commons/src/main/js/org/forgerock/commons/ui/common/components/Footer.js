@@ -34,7 +34,7 @@ define([
 
             this.data = {};
 
-            if(this.showVersion()) {
+            if (this.showVersion()) {
                 this.getVersion().then(function(version) {
                     self.data.version = version;
                 }).always(

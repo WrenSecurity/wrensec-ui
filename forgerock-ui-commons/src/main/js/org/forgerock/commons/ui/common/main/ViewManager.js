@@ -42,8 +42,8 @@ define([
     obj.changeView = function(viewPath, args, callback, forceUpdate) {
         var decodedArgs = decodeArgs(args);
 
-        if(obj.currentView !== viewPath || forceUpdate || !_.isEqual(obj.currentViewArgs, args)) {
-            if(obj.currentDialog !== null) {
+        if (obj.currentView !== viewPath || forceUpdate || !_.isEqual(obj.currentViewArgs, args)) {
+            if (obj.currentDialog !== null) {
                 ModuleLoader.load(obj.currentDialog).then(function (dialog) {
                     dialog.close();
                 });
@@ -84,7 +84,7 @@ define([
             ModuleLoader.load(obj.currentView).then(function (view) {
                 view.rebind();
 
-                if(callback) {
+                if (callback) {
                     callback();
                 }
             });
@@ -97,14 +97,14 @@ define([
     obj.showDialog = function(dialogPath, args, callback) {
         var decodedArgs = decodeArgs(args);
 
-        if(obj.currentDialog !== dialogPath || !_.isEqual(obj.currentDialogArgs, decodedArgs)) {
+        if (obj.currentDialog !== dialogPath || !_.isEqual(obj.currentDialogArgs, decodedArgs)) {
             msg.messages.hideMessages();
             ModuleLoader.load(dialogPath).then(function (dialog) {
                 dialog.render(decodedArgs, callback);
             });
         }
 
-        if(obj.currentDialog !== null) {
+        if (obj.currentDialog !== null) {
             ModuleLoader.load(obj.currentDialog).then(function (dialog) {
                 dialog.close();
             });
