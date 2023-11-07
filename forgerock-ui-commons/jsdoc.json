@@ -1,6 +1,6 @@
 {
     "opts": {
-        "destination": "jsdoc",
+        "destination": "target/jsdoc",
         "recurse": true
     },
     "source": {

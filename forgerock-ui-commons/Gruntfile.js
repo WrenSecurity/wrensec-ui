@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /**
  * The contents of this file are subject to the terms of the Common Development and
  * Distribution License (the License). You may not use this file except in compliance with the
@@ -20,17 +21,11 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         eslint: {
-            /**
-             * Check the JavaScript source code for common mistakes and style issues.
-             */
             lint: {
                 src: [
                     "src/main/js/**/*.js"
                     //"src/test/js/**/*.js"
-                ],
-                options: {
-                    format: require.resolve("eslint-formatter-warning-summary")
-                }
+                ]
             }
         },
         copy: {
@@ -80,9 +75,9 @@ module.exports = function (grunt) {
                     { src: "node_modules/font-awesome/css/font-awesome.min.css", dest: "target/frontend-libs/css/fontawesome/css/font-awesome.min.css" },
                     { src: "node_modules/font-awesome/less/variables.less", dest: "target/frontend-libs/css/fontawesome/less/variables.less" },
                     { expand: true, flatten: true, src: "node_modules/font-awesome/fonts/*", dest: "target/frontend-libs/css/fontawesome/fonts/" },
-                ],
-            },
-        },
+                ]
+            }
+        }
     });
 
     grunt.registerTask("build", ["eslint", "copy"]);

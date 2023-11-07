@@ -126,11 +126,11 @@
                             <phase>compile</phase>
 
                             <goals>
-                                <goal>grunt</goal>
+                                <goal>npx</goal>
                             </goals>
 
                             <configuration>
-                                <arguments>build --debug --verbose</arguments>
+                                <arguments>grunt build</arguments>
                             </configuration>
                         </execution>
                     </executions>

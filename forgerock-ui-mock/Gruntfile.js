@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /**
  * The contents of this file are subject to the terms of the Common Development and
  * Distribution License (the License). You may not use this file except in compliance with the
@@ -12,7 +13,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
- * Portions Copyright 2023 Wren Security.
+ * Portions Copyright 2017-2023 Wren Security.
  */
 
 module.exports = function (grunt) {
@@ -22,7 +23,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-requirejs");
     grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks("grunt-eslint");
-    grunt.loadNpmTasks('grunt-notify');
     grunt.loadNpmTasks("grunt-sync");
 
     var targetDirectory = "target/www",
@@ -44,23 +44,14 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         eslint: {
-            /**
-             * Check the JavaScript source code for common mistakes and style issues.
-             */
             lint: {
                 src: [
                     "src/main/js/**/*.js"
                     //"src/test/js/**/*.js"
-                ],
-                options: {
-                    format: require.resolve("eslint-formatter-warning-summary")
-                }
+                ]
             }
         },
         less: {
-            /**
-             * Compile LESS source code into minified CSS files.
-             */
             compile: {
                 files: [{
                     src: targetDirectory + "/css/structure.less",
@@ -112,12 +103,6 @@ module.exports = function (grunt) {
                         "sinon"
                     ]
                 }
-            }
-        },
-        notify_hooks: {
-            options: {
-                enabled: true,
-                title: "ForgeRock UI QUnit Tests"
             }
         },
         /**
@@ -181,10 +166,10 @@ module.exports = function (grunt) {
                     { src: "node_modules/qunit/qunit/qunit.css", dest: "target/www/css/qunit-1.15.0.css" }, // Actually 2.15.0
 
                     // Codemirror
-                    { expand: true, cwd: "node_modules/codemirror", src: "**", dest: "target/www/libs/codemirror-4.10/" },
-                ],
-            },
-        },
+                    { expand: true, cwd: "node_modules/codemirror", src: "**", dest: "target/www/libs/codemirror-4.10/" }
+                ]
+            }
+        }
     });
 
     grunt.registerTask("build", ["copy", "eslint", "less", "requirejs", "sync:test", "qunit"]);

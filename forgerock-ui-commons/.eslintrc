@@ -1,6 +1,6 @@
 {
     "root": true,
-    "extends": "forgerock",
+    "extends": "@wrensecurity/eslint-config",
     "env": {
         "amd": true,
         "browser": true,
@@ -15,29 +15,35 @@
          * --------------------------------------------------------------------------------
          */
 
-        "array-bracket-spacing": [2, "never"],
-        "indent": [2, 4, {
+        "array-bracket-spacing": ["error", "never"],
+        "indent": ["error", 4, {
+            "FunctionDeclaration": {
+                "parameters": 2
+            },
+            "FunctionExpression":  {
+                "parameters": 2
+            },
             "SwitchCase": 1,
             "VariableDeclarator": 1
         }],
-        "max-len": [2, 120, 4],
-        "new-parens": 2,
-        "no-alert": 2,
-        "no-catch-shadow": 2,
-        "no-duplicate-case": 2,
-        "no-empty-character-class": 2,
-        "no-extend-native": 2,
-        "no-invalid-regexp": 2,
-        "no-irregular-whitespace": 2,
-        "no-labels": 2,
-        "no-lonely-if": 2,
-        "no-mixed-spaces-and-tabs": 2,
-        "no-multiple-empty-lines": 2,
-        "no-multi-str": 2,
-        "no-native-reassign": 2,
-        "no-trailing-spaces": 2,
-        "no-unused-vars": 2,
-        "no-void": 2,
+        "max-len": ["error", 120, 4],
+        "new-parens": "error",
+        "no-alert": "error",
+        "no-catch-shadow": "error",
+        "no-duplicate-case": "error",
+        "no-empty-character-class": "error",
+        "no-extend-native": "error",
+        "no-invalid-regexp": "error",
+        "no-irregular-whitespace": "error",
+        "no-labels": "error",
+        "no-lonely-if": "error",
+        "no-mixed-spaces-and-tabs": "error",
+        "no-multiple-empty-lines": "error",
+        "no-multi-str": "error",
+        "no-native-reassign": "error",
+        "no-trailing-spaces": "error",
+        "no-unused-vars": "error",
+        "no-void": "error",
         /**
 
         /*
@@ -57,7 +63,7 @@
          *
          * var f = new Foo(); # good
          */
-        "new-cap": [1, {
+        "new-cap": ["warn", {
             "capIsNew": false
         }],
         /**
@@ -67,11 +73,11 @@
          *
          * var fruit·=·"apples" # good
          */
-        "no-multi-spaces": 1,
+        "no-multi-spaces": "warn",
 
         /**
          * Allow the use of eval!
          */
-        "no-eval": 1
+        "no-eval": "warn"
     }
 }

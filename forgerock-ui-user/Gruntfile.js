@@ -19,17 +19,11 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         eslint: {
-            /**
-             * Check the JavaScript source code for common mistakes and style issues.
-             */
             lint: {
                 src: [
                     "src/main/js/**/*.js"
                     //"src/test/js/**/*.js"
-                ],
-                options: {
-                    format: require.resolve("eslint-formatter-warning-summary")
-                }
+                ]
             }
         }
     });
