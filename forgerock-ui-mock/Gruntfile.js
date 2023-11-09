@@ -16,6 +16,8 @@
  * Portions Copyright 2017-2023 Wren Security.
  */
 
+const { rollup } = require("rollup");
+
 module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-babel");
     grunt.loadNpmTasks("grunt-contrib-copy");
@@ -49,8 +51,10 @@ module.exports = function (grunt) {
                 sourceMap: true,
                 presets: ['@babel/preset-env']
             },
-            patchRJS: {
-                files: { "target/www/libs/sinon.js": "node_modules/sinon/pkg/sinon.js" }
+            transpile: {
+                files: {
+                    "target/www/libs/sinon.js": "node_modules/sinon/pkg/sinon.js"
+                }
             }
         },
         eslint: {
@@ -172,17 +176,28 @@ module.exports = function (grunt) {
                     { src: "node_modules/qunit/qunit/qunit.js", dest: "target/www/libs/qunit.js" },
 
                     // CSS - npm
-                    { src: "node_modules/qunit/qunit/qunit.css", dest: "target/www/css/qunit.css" },
-
-                    // Codemirror
-                    { expand: true, cwd: "node_modules/codemirror", src: "**", dest: "target/www/libs/codemirror/" }
+                    { src: "node_modules/qunit/qunit/qunit.css", dest: "target/www/css/qunit.css" }
                 ]
             }
         }
     });
 
-    grunt.registerTask("build", ["babel", "copy", "eslint", "less", "requirejs", "sync:test", "qunit"]);
-    grunt.registerTask("build-dev", ["less", "sync", "qunit"]);
+    grunt.registerTask("build-cm", function() {
+        var done = this.async();
+        rollup({
+            input: "src/main/js/org/forgerock/mock/ui/examples/CodeMirror.mjs",
+            plugins: [require("@rollup/plugin-node-resolve").nodeResolve()]
+        }).then(bundle => bundle.write({
+            format: "amd",
+            amd: {
+                id: "org/forgerock/mock/ui/examples/CodeMirror"
+            },
+            file: "target/www/org/forgerock/mock/ui/examples/CodeMirror.js"
+        })).then(done);
+    });
+
+    grunt.registerTask("build", ["babel", "copy", "eslint", "less", "build-cm", "requirejs", "sync:test", "qunit"]);
+    grunt.registerTask("build-dev", ["build-cm", "less", "sync", "qunit"]);
     grunt.registerTask("dev", ["build-dev", "watch"]);
     grunt.registerTask("default", "dev");
 };

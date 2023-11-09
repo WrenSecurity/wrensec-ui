@@ -7,7 +7,11 @@
   },
   "devDependencies": {
     "@babel/preset-env": "^7.23.3",
+    "@codemirror/lang-javascript": "^6.2.1",
+    "@codemirror/lang-xml": "^6.0.2",
+    "@rollup/plugin-node-resolve": "^15.2.3",
     "@wrensecurity/eslint-config": "^0.2.0",
+    "codemirror": "^6.0.1",
     "eslint": "^8.52.0",
     "grunt": "^1.6.1",
     "grunt-babel": "^8.0.0",
@@ -18,10 +22,10 @@
     "grunt-contrib-watch": "1.1.0",
     "grunt-eslint": "^24.3.0",
     "grunt-sync": "0.8.2",
-    "less-plugin-clean-css": "1.5.1"
+    "less-plugin-clean-css": "1.5.1",
+    "rollup": "^4.3.0"
   },
   "dependencies": {
-    "codemirror": "^6.0.1",
     "qunit": "^2.20.0",
     "requirejs": "^2.3.6",
     "sinon": "^17.0.1"

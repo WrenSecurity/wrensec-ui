@@ -75,7 +75,7 @@ module.exports = function (grunt) {
                     // Fontawesome
                     { src: "node_modules/font-awesome/css/font-awesome.min.css", dest: "target/frontend-libs/css/fontawesome/css/font-awesome.css" },
                     { src: "node_modules/font-awesome/less/variables.less", dest: "target/frontend-libs/css/fontawesome/less/variables.less" },
-                    { expand: true, flatten: true, src: "node_modules/font-awesome/fonts/*", dest: "target/frontend-libs/css/fontawesome/fonts/" },
+                    { expand: true, flatten: true, src: "node_modules/font-awesome/fonts/*", dest: "target/frontend-libs/css/fontawesome/fonts/" }
                 ]
             }
         }

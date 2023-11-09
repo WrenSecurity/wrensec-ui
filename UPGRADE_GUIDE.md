@@ -4,6 +4,8 @@
 
 * Library files no longer contain version number in their name. Adding content hash or version
   suffix to prevent caching is responsibility of downstream projects.
+* CodeMirror now requires custom ESM build step and styling is no longer being made through
+  custom CSS (see example in the Mock module).
 
 
 ## 21.x -> 22.1.x

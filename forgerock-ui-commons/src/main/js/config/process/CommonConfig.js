@@ -97,7 +97,7 @@ define([
                 } else {
                     serviceInvokerConfig.defaultHeaders[Constants.HEADER_PARAM_PASSWORD] = Constants.ANONYMOUS_PASSWORD;
                     serviceInvokerConfig.defaultHeaders[Constants.HEADER_PARAM_USERNAME] = Constants.ANONYMOUS_USERNAME;
-                    serviceInvokerConfig.defaultHeaders[Constants.HEADER_PARAM_NO_SESSION]= true;
+                    serviceInvokerConfig.defaultHeaders[Constants.HEADER_PARAM_NO_SESSION] = "true";
 
                     Configuration.setProperty("loggedUser", null);
                     Navigation.reload();
