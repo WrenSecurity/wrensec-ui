@@ -6,9 +6,11 @@
     "build": "grunt build"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.23.3",
     "@wrensecurity/eslint-config": "^0.2.0",
     "eslint": "^8.52.0",
     "grunt": "^1.6.1",
+    "grunt-babel": "^8.0.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-less": "3.0.0",
     "grunt-contrib-qunit": "^8.0.1",
@@ -21,6 +23,7 @@
   "dependencies": {
     "codemirror": "^6.0.1",
     "qunit": "^2.20.0",
+    "requirejs": "^2.3.6",
     "sinon": "^17.0.1"
   }
 }

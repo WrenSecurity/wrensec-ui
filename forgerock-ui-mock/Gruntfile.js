@@ -17,6 +17,7 @@
  */
 
 module.exports = function (grunt) {
+    grunt.loadNpmTasks("grunt-babel");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-less");
     grunt.loadNpmTasks('grunt-contrib-qunit');
@@ -43,6 +44,15 @@ module.exports = function (grunt) {
         };
 
     grunt.initConfig({
+        babel: {
+            options: {
+                sourceMap: true,
+                presets: ['@babel/preset-env']
+            },
+            patchRJS: {
+                files: { "target/www/libs/sinon.js": "node_modules/sinon/pkg/sinon.js" }
+            }
+        },
         eslint: {
             lint: {
                 src: [
@@ -159,20 +169,19 @@ module.exports = function (grunt) {
             main: {
                 files: [
                     // JS - npm
-                    { src: "node_modules/qunit/qunit/qunit.js", dest: "target/www/libs/qunit-1.15.0.js" }, // Actually 2.15.0
-                    { src: "node_modules/sinon/pkg/sinon-1.15.4.js", dest: "target/www/libs/sinon-1.15.4.js" },
+                    { src: "node_modules/qunit/qunit/qunit.js", dest: "target/www/libs/qunit.js" },
 
                     // CSS - npm
-                    { src: "node_modules/qunit/qunit/qunit.css", dest: "target/www/css/qunit-1.15.0.css" }, // Actually 2.15.0
+                    { src: "node_modules/qunit/qunit/qunit.css", dest: "target/www/css/qunit.css" },
 
                     // Codemirror
-                    { expand: true, cwd: "node_modules/codemirror", src: "**", dest: "target/www/libs/codemirror-4.10/" }
+                    { expand: true, cwd: "node_modules/codemirror", src: "**", dest: "target/www/libs/codemirror/" }
                 ]
             }
         }
     });
 
-    grunt.registerTask("build", ["copy", "eslint", "less", "requirejs", "sync:test", "qunit"]);
+    grunt.registerTask("build", ["babel", "copy", "eslint", "less", "requirejs", "sync:test", "qunit"]);
     grunt.registerTask("build-dev", ["less", "sync", "qunit"]);
     grunt.registerTask("dev", ["build-dev", "watch"]);
     grunt.registerTask("default", "dev");

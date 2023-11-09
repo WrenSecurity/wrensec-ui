@@ -29,7 +29,7 @@ define([
 
         testCollection.url = "/crestResource?_queryFilter=true";
 
-        sinon.stub(ServiceInvoker, "restCall", function (options) {
+        sinon.stub(ServiceInvoker, "restCall").callsFake(function (options) {
             var response = {
                 "result": [{
                     "_id": 1,

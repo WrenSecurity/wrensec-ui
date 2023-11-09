@@ -1,6 +1,12 @@
 # Upgrade Guide
 
-## 21.x -> 22.x
+## 22.1.x -> 22.2.x
+
+* Library files no longer contain version number in their name. Adding content hash or version
+  suffix to prevent caching is responsibility of downstream projects.
+
+
+## 21.x -> 22.1.x
 
 * Build dependencies were upgraded (wrensec-parent, NodeJS, NPM, ...)
 
