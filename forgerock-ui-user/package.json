@@ -2,10 +2,13 @@
   "name": "forgerock-ui-user",
   "description": "ForgeRock UI Commons User",
   "private": true,
+  "scripts": {
+    "build": "gulp"
+  },
   "devDependencies": {
     "@wrensecurity/eslint-config": "^0.2.0",
     "eslint": "^8.52.0",
-    "grunt": "^1.6.1",
-    "grunt-eslint": "^24.3.0"
+    "gulp": "^4.0.2",
+    "gulp-eslint-new": "^1.8.4"
   }
 }

@@ -7,6 +7,14 @@
         "es6": true,
         "qunit": true
     },
+    "overrides": [
+        {
+            "files": ["gulpfile.js"],
+            "parserOptions": {
+                "ecmaVersion": 2021
+            }
+        }
+    ],
     "rules": {
         /*
          * --------------------------------------------------------------------------------

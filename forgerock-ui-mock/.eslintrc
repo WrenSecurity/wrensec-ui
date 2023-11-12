@@ -8,9 +8,15 @@
     },
     "overrides": [
         {
-            "files": ["**/*.mjs", "Gruntfile.js"],
+            "files": [
+                "gulpfile.js",
+                "karma.conf.js"
+            ],
+            "env": {
+                "node": true,
+                "commonjs": true
+            },
             "parserOptions": {
-                "sourceType": "module",
                 "ecmaVersion": 2021
             }
         }
