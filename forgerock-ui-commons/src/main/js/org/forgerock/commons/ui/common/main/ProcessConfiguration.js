@@ -51,26 +51,26 @@ define([
             .then(function () {
 
                 $.when.apply($, _.map(obj.configuration.processConfigurationFiles, ModuleLoader.load))
-                .then(function () {
+                    .then(function () {
 
-                    var // all processes
-                        processArray = _.flatten(_.toArray(arguments)),
-                        // processes which override the default of the same name
-                        overrideArray = _.filter(processArray, function (process) {
-                            return !!process.override;
+                        var // all processes
+                            processArray = _.flatten(_.toArray(arguments)),
+                            // processes which override the default of the same name
+                            overrideArray = _.filter(processArray, function (process) {
+                                return !!process.override;
+                            });
+
+                        // remove those processes which have been overridden
+                        processArray = _.reject(processArray, function (process) {
+                            return !process.override && _.find(overrideArray, function (override) {
+                                return override.startEvent === process.startEvent && !!override.override;
+                            });
                         });
 
-                    // remove those processes which have been overridden
-                    processArray = _.reject(processArray, function (process) {
-                        return !process.override && _.find(overrideArray, function (override) {
-                            return override.startEvent === process.startEvent && !!override.override;
-                        });
+                        _.map(processArray, obj.callRegisterListenerFromConfig);
+
+                        eventManager.sendEvent(constants.EVENT_READ_CONFIGURATION_REQUEST);
                     });
-
-                    _.map(processArray, obj.callRegisterListenerFromConfig);
-
-                    eventManager.sendEvent(constants.EVENT_READ_CONFIGURATION_REQUEST);
-                });
 
             });
     };
@@ -78,11 +78,11 @@ define([
     obj.callService = function(serviceId, methodName, params) {
         ModuleLoader.load(serviceId).then(
             function (service) {
-                if(service) {
+                if (service) {
                     service[methodName].apply(service, params || []);
                 }
             }, function (exception) {
-                if(params) {
+                if (params) {
                     params = JSON.stringify(params);
                 }
                 console.warn("Unable to invoke serviceId=" + serviceId + " method=" + methodName

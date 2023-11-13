@@ -22,10 +22,10 @@ define([
 ], function($, _, Backbone, AbstractConfigurationAware) {
     var obj = new AbstractConfigurationAware(), Messages;
 
-    obj.TYPE_SUCCESS =  "success";
-    obj.TYPE_INFO =     "info";
-    obj.TYPE_WARNING =  "warning";
-    obj.TYPE_DANGER =   "error";
+    obj.TYPE_SUCCESS = "success";
+    obj.TYPE_INFO = "info";
+    obj.TYPE_WARNING = "warning";
+    obj.TYPE_DANGER = "error";
 
     Messages = Backbone.View.extend({
 
@@ -64,12 +64,12 @@ define([
          */
         addMessage: function(msg) {
             var i, _this = obj.messages;
-            if(!msg.message && msg.response && typeof msg.response.responseJSON === "object"
+            if (!msg.message && msg.response && typeof msg.response.responseJSON === "object"
                 && typeof msg.response.responseJSON.message === "string"){
                 msg.message = msg.response.responseJSON.message;
             }
-            for(i = 0; i < _this.list.length; i++) {
-                if(_this.list[i].message === msg.message) {
+            for (i = 0; i < _this.list.length; i++) {
+                if (_this.list[i].message === msg.message) {
                     console.log("duplicated message");
                     return;
                 }

@@ -225,14 +225,14 @@ define([
                         };
                     if (_.isArray(newValueAtFinalPath) && _.isArray(oldValueAtFinalPath)) {
                         return setToPatchOperation(
-                                obj.findItemsNotInSet(newValueAtFinalPath, oldValueAtFinalPath),
-                                "add",
-                                finalPathToAdd + "/-" // add to set syntax
-                            ).concat(setToPatchOperation(
-                                obj.findItemsNotInSet(oldValueAtFinalPath, newValueAtFinalPath),
-                                "remove",
-                                finalPathToAdd
-                            ));
+                            obj.findItemsNotInSet(newValueAtFinalPath, oldValueAtFinalPath),
+                            "add",
+                            finalPathToAdd + "/-" // add to set syntax
+                        ).concat(setToPatchOperation(
+                            obj.findItemsNotInSet(oldValueAtFinalPath, newValueAtFinalPath),
+                            "remove",
+                            finalPathToAdd
+                        ));
                     } else if (newValueAtFinalPath === null) {
                         return {
                             "operation": "remove",

@@ -34,7 +34,7 @@ define([
     //NOT in use. NOT tested
     obj.appendToModuleConfigurationPropertyArray = function(moduleClassName, propertyName, propertyValue) {
         var moduleConf = obj.getModuleConfiguration(moduleClassName);
-        if(!moduleConf[propertyName]) {
+        if (!moduleConf[propertyName]) {
             moduleConf[propertyName] = [propertyValue];
         } else {
             moduleConf[propertyName].push(propertyValue);
@@ -42,7 +42,7 @@ define([
     };
 
 
-    if(obj.appConfiguration.loggerLevel !== 'debug') {
+    if (obj.appConfiguration.loggerLevel !== 'debug') {
         console.log = function() {};
         console.debug = function() {};
         console.info = function() {};
@@ -52,15 +52,15 @@ define([
 
     obj.sendConfigurationChangeInfo = function() {
         var i;
-        for(i = 0; i < obj.appConfiguration.moduleDefinition.length; i++) {
+        for (i = 0; i < obj.appConfiguration.moduleDefinition.length; i++) {
             eventManager.sendEvent(constants.EVENT_CONFIGURATION_CHANGED, obj.appConfiguration.moduleDefinition[i]);
         }
     };
 
     obj.sendSingleModuleConfigurationChangeInfo = function(moduleClassName) {
         var i;
-        for(i = 0; i < obj.appConfiguration.moduleDefinition.length; i++) {
-            if(moduleClassName === obj.appConfiguration.moduleDefinition[i].moduleClass) {
+        for (i = 0; i < obj.appConfiguration.moduleDefinition.length; i++) {
+            if (moduleClassName === obj.appConfiguration.moduleDefinition[i].moduleClass) {
                 eventManager.sendEvent(constants.EVENT_CONFIGURATION_CHANGED, obj.appConfiguration.moduleDefinition[i]);
                 return;
             }
@@ -70,8 +70,8 @@ define([
 
     obj.getModuleConfiguration = function(moduleClass) {
         var i;
-        for(i = 0; i < obj.appConfiguration.moduleDefinition.length; i++) {
-            if(obj.appConfiguration.moduleDefinition[i].moduleClass === moduleClass) {
+        for (i = 0; i < obj.appConfiguration.moduleDefinition.length; i++) {
+            if (obj.appConfiguration.moduleDefinition[i].moduleClass === moduleClass) {
                 return obj.appConfiguration.moduleDefinition[i].configuration;
             }
         }

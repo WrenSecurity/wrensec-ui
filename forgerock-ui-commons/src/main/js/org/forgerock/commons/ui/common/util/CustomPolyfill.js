@@ -44,13 +44,13 @@ define([
 
 
     //this is here to catch the issue IE 8 has with getPrototypeOf method
-    if(typeof Object.getPrototypeOf !== "function"){
+    if (typeof Object.getPrototypeOf !== "function"){
         if (typeof "internet_explorer"[proto] === "object"){
             Object.getPrototypeOf = function(o){
                 return o[proto];
             };
         }
-        else{
+        else {
             Object.getPrototypeOf = function(o){
                 return o.constructor.prototype;
             };

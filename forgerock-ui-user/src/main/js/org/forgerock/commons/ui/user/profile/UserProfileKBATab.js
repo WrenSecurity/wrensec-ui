@@ -243,21 +243,21 @@ define([
             js2form(form,
                 // use the form structure to find out which fields are defined for the kba form...
                 _(form2js(form, ".", false))
-                 .map(function (value, key) {
-                     // omit the "answer" property from any array found there...
-                     if (_.isArray(this.data.user[key])) {
-                         return [
-                             key,
-                             _.map(this.data.user[key], function (kbaPair) {
-                                 return _.omit(kbaPair, "answer");
-                             })
-                         ];
-                     } else {
-                         return [key, this.data.user[key]];
-                     }
-                 }, this)
-                 .object()
-                 .value()
+                    .map(function (value, key) {
+                        // omit the "answer" property from any array found there...
+                        if (_.isArray(this.data.user[key])) {
+                            return [
+                                key,
+                                _.map(this.data.user[key], function (kbaPair) {
+                                    return _.omit(kbaPair, "answer");
+                                })
+                            ];
+                        } else {
+                            return [key, this.data.user[key]];
+                        }
+                    }, this)
+                    .object()
+                    .value()
             );
 
             _.each($(".kba-questions", form), function (kbaSelect) {

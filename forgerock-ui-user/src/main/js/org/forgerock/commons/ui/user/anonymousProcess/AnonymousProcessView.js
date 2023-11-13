@@ -54,11 +54,11 @@ define([
             return node.attr('name') + ' eq "' + node.val().replace('"', '\\"') + '"';
         } else if (node.hasClass("filter-group")) {
             groupValues = _.chain(node.find(">.form-group>.filter-value, >.filter-group"))
-                           .map(walkTreeForFilterStrings)
-                           .filter(function (value) {
-                               return value.length > 0;
-                           })
-                           .value();
+                .map(walkTreeForFilterStrings)
+                .filter(function (value) {
+                    return value.length > 0;
+                })
+                .value();
 
             if (groupValues.length === 0) {
                 return "";
@@ -195,17 +195,17 @@ define([
                 + "/" + response.type + "-" + response.tag + ".html";
 
             UIUtils.compileTemplate(templateUrl, stateData)
-            .then(function (renderedTemplate) {
-                processStatePromise.resolve(renderedTemplate);
-            }, _.bind(function () {
-                this.loadGenericTemplate(stateData, baseTemplateUrl, response, processStatePromise);
-            }, this));
+                .then(function (renderedTemplate) {
+                    processStatePromise.resolve(renderedTemplate);
+                }, _.bind(function () {
+                    this.loadGenericTemplate(stateData, baseTemplateUrl, response, processStatePromise);
+                }, this));
         },
 
         loadGenericTemplate: function (stateData, baseTemplateUrl, response, processStatePromise) {
             UIUtils.compileTemplate(
                 baseTemplateUrl + (_.has(response, "requirements")
-                ? "GenericInputForm.html" : "GenericEndPage.html"),
+                    ? "GenericInputForm.html" : "GenericEndPage.html"),
                 stateData
             ).then(processStatePromise.resolve);
         },

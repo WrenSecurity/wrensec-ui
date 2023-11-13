@@ -1,3 +1,0 @@
-export MAVEN_PACKAGE="forgerock-ui"
-export BINTRAY_PACKAGE="wrensec-ui"
-export JFROG_PACKAGE="org/forgerock/commons/ui"

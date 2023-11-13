@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /**
  * The contents of this file are subject to the terms of the Common Development and
  * Distribution License (the License). You may not use this file except in compliance with the
@@ -12,16 +13,19 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2017-2023 Wren Security.
  */
 
+const { rollup } = require("rollup");
+
 module.exports = function (grunt) {
+    grunt.loadNpmTasks("grunt-babel");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-less");
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks("grunt-contrib-requirejs");
     grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks("grunt-eslint");
-    grunt.loadNpmTasks('grunt-notify');
     grunt.loadNpmTasks("grunt-sync");
 
     var targetDirectory = "target/www",
@@ -42,24 +46,26 @@ module.exports = function (grunt) {
         };
 
     grunt.initConfig({
+        babel: {
+            options: {
+                sourceMap: true,
+                presets: ['@babel/preset-env']
+            },
+            transpile: {
+                files: {
+                    "target/www/libs/sinon.js": "node_modules/sinon/pkg/sinon.js"
+                }
+            }
+        },
         eslint: {
-            /**
-             * Check the JavaScript source code for common mistakes and style issues.
-             */
             lint: {
                 src: [
                     "src/main/js/**/*.js"
                     //"src/test/js/**/*.js"
-                ],
-                options: {
-                    format: require.resolve("eslint-formatter-warning-summary")
-                }
+                ]
             }
         },
         less: {
-            /**
-             * Compile LESS source code into minified CSS files.
-             */
             compile: {
                 files: [{
                     src: targetDirectory + "/css/structure.less",
@@ -81,10 +87,9 @@ module.exports = function (grunt) {
             all: [testTargetDirectory + "/index.html"],
             options: {
                 puppeteer: {
-                    ignoreDefaultArgs: true,
                     args: [
-                        "--headless",
-                        "--allow-file-access-from-files"
+                        "--allow-file-access-from-files",
+                        "--no-sandbox"
                     ]
                 }
             }
@@ -112,12 +117,6 @@ module.exports = function (grunt) {
                         "sinon"
                     ]
                 }
-            }
-        },
-        notify_hooks: {
-            options: {
-                enabled: true,
-                title: "ForgeRock UI QUnit Tests"
             }
         },
         /**
@@ -174,21 +173,31 @@ module.exports = function (grunt) {
             main: {
                 files: [
                     // JS - npm
-                    { src: "node_modules/qunit/qunit/qunit.js", dest: "target/www/libs/qunit-1.15.0.js" }, // Actually 2.15.0
-                    { src: "node_modules/sinon/pkg/sinon-1.15.4.js", dest: "target/www/libs/sinon-1.15.4.js" },
+                    { src: "node_modules/qunit/qunit/qunit.js", dest: "target/www/libs/qunit.js" },
 
                     // CSS - npm
-                    { src: "node_modules/qunit/qunit/qunit.css", dest: "target/www/css/qunit-1.15.0.css" }, // Actually 2.15.0
-
-                    // Codemirror
-                    { expand: true, cwd: "node_modules/codemirror", src: "**", dest: "target/www/libs/codemirror-4.10/" },
-                ],
-            },
-        },
+                    { src: "node_modules/qunit/qunit/qunit.css", dest: "target/www/css/qunit.css" }
+                ]
+            }
+        }
     });
 
-    grunt.registerTask("build", ["copy", "eslint", "less", "requirejs", "sync:test", "qunit"]);
-    grunt.registerTask("build-dev", ["less", "sync", "qunit"]);
+    grunt.registerTask("build-cm", function() {
+        var done = this.async();
+        rollup({
+            input: "src/main/js/org/forgerock/mock/ui/examples/CodeMirror.mjs",
+            plugins: [require("@rollup/plugin-node-resolve").nodeResolve()]
+        }).then(bundle => bundle.write({
+            format: "amd",
+            amd: {
+                id: "org/forgerock/mock/ui/examples/CodeMirror"
+            },
+            file: "target/www/org/forgerock/mock/ui/examples/CodeMirror.js"
+        })).then(done);
+    });
+
+    grunt.registerTask("build", ["babel", "copy", "eslint", "less", "build-cm", "requirejs", "sync:test", "qunit"]);
+    grunt.registerTask("build-dev", ["build-cm", "less", "sync", "qunit"]);
     grunt.registerTask("dev", ["build-dev", "watch"]);
     grunt.registerTask("default", "dev");
 };

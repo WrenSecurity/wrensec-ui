@@ -44,7 +44,7 @@ define([
 
             path = window.location.href.match(/#([a-zA-Z\/_.@]+)/);
 
-            if(path === null) {
+            if (path === null) {
                 document.title = this.baseTitle;
             } else {
                 path = path[1];
@@ -55,7 +55,7 @@ define([
                 url = "#";
 
                 this.clear();
-                for(i = 0; i < parts.length - 1; i++) {
+                for (i = 0; i < parts.length - 1; i++) {
                     url += parts[i] + "/";
                     this.push(humanized[i], url);
                 }
@@ -78,7 +78,7 @@ define([
         },
 
         clear: function() {
-            while(this.size > 0) {
+            while (this.size > 0) {
                 this.pop();
             }
         },
@@ -102,7 +102,7 @@ define([
         },
 
         pop: function() {
-            if($("#nav-content").find("a").length > 1) {
+            if ($("#nav-content").find("a").length > 1) {
                 $(this.element).find("a:last").remove();
                 $(this.element).find("img:last").remove();
                 $(this.element).find("span:last").remove();

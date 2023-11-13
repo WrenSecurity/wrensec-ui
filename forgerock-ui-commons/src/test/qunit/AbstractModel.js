@@ -32,7 +32,7 @@ define([
 
         testModel.url = "/crestResource";
 
-        sinon.stub(ServiceInvoker, "restCall", function (opts) {
+        sinon.stub(ServiceInvoker, "restCall").callsFake(function (opts) {
             return $.Deferred().resolve(_.extend(JSON.parse(opts.data), {
                 "_id": 1,
                 "_rev": 1
@@ -60,7 +60,7 @@ define([
         testModel.url = "/crestResource";
         testModel.id = "myCustomId";
 
-        sinon.stub(ServiceInvoker, "restCall", function (opts) {
+        sinon.stub(ServiceInvoker, "restCall").callsFake(function (opts) {
             return $.Deferred().resolve(_.extend(JSON.parse(opts.data), {
                 "_rev": 1
             }));
@@ -84,7 +84,7 @@ define([
         testModel.url = "/crestResource";
         testModel.id = 1;
 
-        sinon.stub(ServiceInvoker, "restCall", function () {
+        sinon.stub(ServiceInvoker, "restCall").callsFake(function () {
             return $.Deferred().resolve({
                 "_id": 1,
                 "_rev": 1,
@@ -128,7 +128,7 @@ define([
 
         testModel.url = "/crestResource";
 
-        sinon.stub(ServiceInvoker, "restCall", function (opts) {
+        sinon.stub(ServiceInvoker, "restCall").callsFake(function (opts) {
             return $.Deferred().resolve(_.extend(JSON.parse(opts.data), {
                 "_rev": 2
             }));
@@ -156,7 +156,7 @@ define([
 
         testModel.url = "/crestResource";
 
-        sinon.stub(ServiceInvoker, "restCall", function (opts) {
+        sinon.stub(ServiceInvoker, "restCall").callsFake(function (opts) {
             return $.Deferred().resolve();
         });
 
@@ -180,7 +180,7 @@ define([
 
         testModel.url = "/crestResource";
 
-        sinon.stub(ServiceInvoker, "restCall", function (opts) {
+        sinon.stub(ServiceInvoker, "restCall").callsFake(function (opts) {
             return $.Deferred().resolve();
         });
 

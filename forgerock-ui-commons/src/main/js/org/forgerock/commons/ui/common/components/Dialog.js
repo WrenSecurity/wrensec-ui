@@ -114,7 +114,7 @@ define([
         },
 
         addAction: function(name, type) {
-            if(!this.getAction(name)) {
+            if (!this.getAction(name)) {
                 this.actions.push({
                     "name" : name,
                     "type" : type

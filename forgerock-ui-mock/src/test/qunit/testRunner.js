@@ -43,7 +43,7 @@
             "org/forgerock/commons/ui/common/main/i18nManager",
             "ThemeManager"
         ], function ($, sinon, i18nManager, ThemeManager) {
-            sinon.stub(ThemeManager, "getTheme", function () {
+            sinon.stub(ThemeManager, "getTheme").callsFake(function () {
                 return $.Deferred().resolve({path:""});
             });
             i18nManager.init({

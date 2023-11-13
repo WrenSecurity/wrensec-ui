@@ -27,12 +27,12 @@ define([
     "org/forgerock/commons/ui/common/util/UIUtils",
     "org/forgerock/commons/ui/common/main/ValidatorsManager"
 ], function($, _, Backbone, Configuration, Constants, EventManager, ModuleLoader, Router, ThemeManager, UIUtils,
-            ValidatorsManager) {
+        ValidatorsManager) {
     /**
      * @exports org/forgerock/commons/ui/common/main/AbstractView
      */
 
-     /**
+    /**
        Internal helper method shared by the default implementations of
        validationSuccessful and validationFailed
      */
@@ -177,14 +177,14 @@ define([
          */
         validationSuccessful: function (event) {
             validationStarted(event)
-            .then(function (input) {
-                if (input.data()["bs.popover"]) {
-                    input.popover('destroy');
-                }
-                input.parents(".form-group").removeClass('has-feedback has-error');
-                return input.closest("form");
-            })
-            .then(validationCompleted);
+                .then(function (input) {
+                    if (input.data()["bs.popover"]) {
+                        input.popover('destroy');
+                    }
+                    input.parents(".form-group").removeClass('has-feedback has-error');
+                    return input.closest("form");
+                })
+                .then(validationCompleted);
         },
 
         /**
@@ -197,31 +197,31 @@ define([
          */
         validationFailed: function (event, details) {
             validationStarted(event)
-            .then(function (input) {
-                input.parents(".form-group").addClass('has-feedback has-error');
-                if (input.data()["bs.popover"]) {
-                    input.data('bs.popover').options.content = '<i class="fa fa-exclamation-circle"></i> '
+                .then(function (input) {
+                    input.parents(".form-group").addClass('has-feedback has-error');
+                    if (input.data()["bs.popover"]) {
+                        input.data('bs.popover').options.content = '<i class="fa fa-exclamation-circle"></i> '
                         + details.failures.join('<br><i class="fa fa-exclamation-circle"></i> ');
-                } else {
-                    input.popover({
-                        validationMessage: details.failures,
-                        animation: false,
-                        content: '<i class="fa fa-exclamation-circle"></i> '
+                    } else {
+                        input.popover({
+                            validationMessage: details.failures,
+                            animation: false,
+                            content: '<i class="fa fa-exclamation-circle"></i> '
                         + details.failures.join('<br><i class="fa fa-exclamation-circle"></i> '),
-                        trigger:'focus hover',
-                        placement:'top',
-                        html: 'true',
-                        template: '<div class="popover popover-error help-block" role="tooltip">' +
+                            trigger:'focus hover',
+                            placement:'top',
+                            html: 'true',
+                            template: '<div class="popover popover-error help-block" role="tooltip">' +
                             '<div class="arrow"></div><h3 class="popover-title"></h3>' +
                             '<div class="popover-content"></div></div>'
-                    });
-                }
-                if (input.is(":focus")) {
-                    input.popover("show");
-                }
-                return input.closest("form");
-            })
-            .then(validationCompleted);
+                        });
+                    }
+                    if (input.is(":focus")) {
+                        input.popover("show");
+                    }
+                    return input.closest("form");
+                })
+                .then(validationCompleted);
         },
 
         // legacy; needed here to prevent breakage of views which have an event registered for this function

@@ -24,7 +24,7 @@ define([
             this.setElement($('<div id="CommonConfirmationDialog"></div>'));
             this.title = title;
             this.message = msg;
-            this.actions =  [
+            this.actions = [
                 {
                     label: $.t("common.form.cancel"),
                     action: function (dialogRef) {

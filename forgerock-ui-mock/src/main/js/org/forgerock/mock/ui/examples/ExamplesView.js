@@ -17,19 +17,15 @@
 define([
     "jquery",
     "underscore",
-    "libs/codemirror-4.10/lib/codemirror",
-    "libs/codemirror-4.10/mode/xml/xml",
-    "libs/codemirror-4.10/mode/javascript/javascript",
+    "org/forgerock/mock/ui/examples/CodeMirror",
     "bootstrap",
     "selectize",
     "org/forgerock/commons/ui/common/main/AbstractView"
 ], function($, _,
-            CodeMirror,
-            xmlmode,
-            jsmode,
-            bootstrap,
-            selectize,
-            AbstractView) {
+        CodeMirror,
+        bootstrap,
+        selectize,
+        AbstractView) {
 
     var ExamplesView = AbstractView.extend({
         template: "templates/mock/ExamplesTemplate.html",
@@ -95,7 +91,7 @@ define([
                     target: '#rightCol'
                 });
 
-                if(callback){
+                if (callback){
                     callback();
                 }
             }, this));
@@ -108,7 +104,7 @@ define([
 
             var target = $(event.target);
 
-            target =  $(target.attr("href"));
+            target = $(target.attr("href"));
 
             if (target.length) {
                 $('html,body').animate({

@@ -80,11 +80,11 @@ define([
                         errorThrown: errorThrown,
                         errorsHandlers: options.errorsHandlers
                     });
-                    if(errorCallback) { errorCallback(jqXHR); }
+                    if (errorCallback) { errorCallback(jqXHR); }
                     promise.reject.apply(promise, arguments);
                 }
             } else {
-                if(errorCallback) { errorCallback(jqXHR); }
+                if (errorCallback) { errorCallback(jqXHR); }
                 promise.reject.apply(promise, arguments);
             }
 
@@ -109,7 +109,7 @@ define([
         }
 
         options.success = function (data, textStatus, jqXHR) {
-            if(data && data.error) {
+            if (data && data.error) {
                 if (!options.suppressEvents) {
                     EventManager.sendEvent(Constants.EVENT_REST_CALL_ERROR, {
                         data: $.extend({}, data, {type: this.type}),
@@ -119,7 +119,7 @@ define([
                     });
                 }
 
-                if(errorCallback) { errorCallback(data); }
+                if (errorCallback) { errorCallback(data); }
             } else {
                 if (!options.suppressEvents) {
                     EventManager.sendEvent(Constants.EVENT_END_REST_CALL, {
@@ -129,7 +129,7 @@ define([
                     });
                 }
 
-                if(successCallback) { successCallback(data, jqXHR); }
+                if (successCallback) { successCallback(data, jqXHR); }
             }
         };
 
@@ -185,13 +185,13 @@ define([
     obj.applyDefaultHeadersIfNecessary = function(options, defaultHeaders) {
         var oneHeaderName;
 
-        if(!defaultHeaders) { return; }
+        if (!defaultHeaders) { return; }
 
-        if(!options.headers) {
+        if (!options.headers) {
             options.headers = defaultHeaders;
         } else {
-            for(oneHeaderName in defaultHeaders) {
-                if(options.headers[oneHeaderName] === undefined) {
+            for (oneHeaderName in defaultHeaders) {
+                if (options.headers[oneHeaderName] === undefined) {
                     options.headers[oneHeaderName] = defaultHeaders[oneHeaderName];
                 }
             }
