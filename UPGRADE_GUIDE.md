@@ -6,6 +6,8 @@
   suffix to prevent caching is responsibility of downstream projects.
 * CodeMirror now requires custom ESM build step and styling is no longer being made through
   custom CSS (see example in the Mock module).
+* Changed task runner from Grunt to Gulp. See individual gulpfiles for inspiration how to perform
+  the same change in downstream projects.
 
 
 ## 21.x -> 22.1.x

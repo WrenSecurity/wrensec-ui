@@ -5,6 +5,14 @@
         "amd": true,
         "browser": true
     },
+    "overrides": [
+        {
+            "files": ["gulpfile.js"],
+            "parserOptions": {
+                "ecmaVersion": 2021
+            }
+        }
+    ],
     "rules": {
         /*
          * --------------------------------------------------------------------------------

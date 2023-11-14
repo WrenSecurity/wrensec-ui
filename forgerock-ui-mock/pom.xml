@@ -29,20 +29,6 @@
     <packaging>pom</packaging>
 
     <build>
-        <resources>
-            <resource>
-                <directory>${basedir}/src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-
-            <resource>
-                <directory>${basedir}/src/main/js</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-
-        <outputDirectory>${project.build.directory}/www</outputDirectory>
-
         <plugins>
             <plugin>
                 <groupId>com.github.eirslett</groupId>
@@ -56,7 +42,8 @@
                 <executions>
                     <execution>
                         <id>unpack</id>
-                        <phase>process-resources</phase>
+                        <!-- This needs to run before maven-frontend-plugin -->
+                        <phase>generate-sources</phase>
 
                         <goals>
                             <goal>unpack</goal>
@@ -77,10 +64,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

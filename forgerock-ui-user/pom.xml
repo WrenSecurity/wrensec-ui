@@ -39,26 +39,6 @@
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>${basedir}/src/main/js</directory>
-            </resource>
-
-            <resource>
-                <directory>${basedir}/src/main/resources</directory>
-            </resource>
-        </resources>
-
-        <testResources>
-            <testResource>
-                <directory>${basedir}/src/test/js</directory>
-            </testResource>
-
-            <testResource>
-                <directory>${basedir}/src/test/resources</directory>
-            </testResource>
-        </testResources>
-
         <plugins>
             <plugin>
                 <groupId>com.github.eirslett</groupId>
@@ -92,7 +72,8 @@
                 <executions>
                     <execution>
                         <id>unpack</id>
-                        <phase>process-resources</phase>
+                        <!-- This needs to run before maven-frontend-plugin -->
+                        <phase>generate-sources</phase>
 
                         <goals>
                             <goal>unpack</goal>
@@ -108,13 +89,11 @@
                                     <classifier>www</classifier>
                                 </artifactItem>
                             </artifactItems>
+
+                            <outputDirectory>${project.build.directory}/www</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
