@@ -1,0 +1,16 @@
+{
+  "name": "@wrensecurity/commons-ui-user",
+  "version": "0.0.0",
+  "description": "Wren Security UI Commons - User",
+  "private": true,
+  "scripts": {
+    "build": "gulp",
+    "clean": "rimraf dist"
+  },
+  "devDependencies": {
+    "@wrensecurity/eslint-config": "^0.2.0",
+    "eslint": "^8.52.0",
+    "gulp": "^4.0.2",
+    "gulp-eslint-new": "^1.8.4"
+  }
+}
