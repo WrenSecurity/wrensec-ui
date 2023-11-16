@@ -26,6 +26,7 @@
     "backgrid-paginator": "^0.3.5",
     "backgrid-select-all": "^0.3.5",
     "bootstrap": "^3.3.5",
+    "bootstrap-dialog": "^1.34.6",
     "dragula": "^3.6.7",
     "font-awesome": "^4.5.0",
     "handlebars": "^4.0.5",

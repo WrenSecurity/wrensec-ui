@@ -33,6 +33,8 @@ const MODULE_RESOURCES = {
     "backgrid/lib/backgrid.min.css": "css/backgrid.css",
     "backgrid/lib/backgrid.min.js": "libs/backgrid.js",
     "bootstrap/dist/js/bootstrap.min.js": "libs/bootstrap.js",
+    "bootstrap-dialog/dist/css/bootstrap-dialog.min.css": "css/bootstrap-dialog.css",
+    "bootstrap-dialog/dist/js/bootstrap-dialog.min.js": "libs/bootstrap-dialog.js",
     "dragula/dist/dragula.min.js": "libs/dragula.js",
     "font-awesome/css/font-awesome.min.css": "css/fontawesome/css/font-awesome.css",
     "font-awesome/fonts/fontawesome-webfont.eot": "css/fontawesome/fonts/fontawesome-webfont.eot",
@@ -55,9 +57,7 @@ const MODULE_RESOURCES = {
 };
 
 const LOCAL_RESOURCES = {
-    "css/bootstrap-dialog-1.34.4-min.css": "css/bootstrap-dialog.css",
     "css/selectize-0.12.1-bootstrap3.css": "css/selectize.css",
-    "js/bootstrap-dialog-1.34.4-min.js": "libs/bootstrap-dialog.js",
     "js/form2js-2.0-769718a.js": "libs/form2js.js",
     "js/jquery.ba-dotimeout-1.0-min.js": "libs/jquery.ba-dotimeout.js",
     "js/jquery.placeholder-2.0.8.js": "libs/jquery.placeholder.js",
