@@ -51,19 +51,19 @@ const MODULE_RESOURCES = {
     "react-dom/dist/react-dom.min.js": "libs/react-dom.js",
     "react/dist/react.min.js": "libs/react.js",
     "requirejs/require.js": "libs/requirejs.js",
+    "@selectize/selectize/dist/css/selectize.bootstrap3.css": "css/selectize.css",
+    "@selectize/selectize/dist/js/selectize.min.js": "libs/selectize.js",
     "spin.js/spin.js": "libs/spin.js",
     "titatoggle/dist/titatoggle-dist-min.css": "css/titatoggle.css",
     "xdate/src/xdate.js": "libs/xdate.js"
 };
 
 const LOCAL_RESOURCES = {
-    "css/selectize-0.12.1-bootstrap3.css": "css/selectize.css",
     "js/form2js-2.0-769718a.js": "libs/form2js.js",
     "js/jquery.ba-dotimeout-1.0-min.js": "libs/jquery.ba-dotimeout.js",
     "js/jquery.placeholder-2.0.8.js": "libs/jquery.placeholder.js",
     "js/js2form-2.0-769718a.js": "libs/js2form.js",
-    "js/lodash-3.10.1-min.js": "libs/lodash.js",
-    "js/selectize-0.12.1-min.js": "libs/selectize.js"
+    "js/lodash-3.10.1-min.js": "libs/lodash.js"
 };
 
 gulp.task("eslint", () => gulp.src("src/scripts/**/*.js")
