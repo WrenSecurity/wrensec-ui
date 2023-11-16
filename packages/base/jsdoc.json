@@ -1,0 +1,12 @@
+{
+    "opts": {
+        "destination": "build/jsdoc",
+        "recurse": true
+    },
+    "source": {
+        "include": [
+            "src/scripts"
+        ],
+        "includePattern": "\\.(js|jsm|jsx)$"
+    }
+}

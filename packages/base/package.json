@@ -1,0 +1,41 @@
+{
+  "name": "@wrensecurity/commons-ui-base",
+  "version": "0.0.0",
+  "description": "Wren Security UI Commons - Base",
+  "private": true,
+  "scripts": {
+    "build": "gulp",
+    "clean": "rimraf dist build",
+    "jsdoc": "jsdoc --configure jsdoc.json"
+  },
+  "devDependencies": {
+    "@wrensecurity/eslint-config": "^0.2.0",
+    "eslint": "^8.52.0",
+    "gulp": "^4.0.2",
+    "gulp-eslint-new": "^1.8.4",
+    "jsdoc": "4.0.2",
+    "rimraf": "^5.0.5"
+  },
+  "dependencies": {
+    "backbone": "1.1.2",
+    "backbone-relational": "0.9.0",
+    "backbone.paginator": "2.0.2",
+    "backgrid": "^0.3.5",
+    "backgrid-filter": "^0.3.7",
+    "backgrid-paginator": "^0.3.5",
+    "backgrid-select-all": "^0.3.5",
+    "dragula": "^3.6.7",
+    "font-awesome": "^4.5.0",
+    "handlebars": "^4.0.5",
+    "i18next": "~1.7.3",
+    "jquery": "^3.7.1",
+    "moment": "^2.8.1",
+    "react": "^15.2.1",
+    "react-dom": "^15.2.1",
+    "requirejs": "^2.1.14",
+    "selectize": "^0.12.1",
+    "spin.js": "^2.0.1",
+    "titatoggle": "^1.2.15",
+    "xdate": "^0.8.2"
+  }
+}
