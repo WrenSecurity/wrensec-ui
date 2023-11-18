@@ -14,6 +14,7 @@
     "gulp": "^4.0.2",
     "gulp-eslint-new": "^1.8.4",
     "jsdoc": "4.0.2",
+    "less": "^4.2.0",
     "rimraf": "^5.0.5"
   },
   "dependencies": {
@@ -24,6 +25,8 @@
     "backgrid-filter": "^0.3.7",
     "backgrid-paginator": "^0.3.5",
     "backgrid-select-all": "^0.3.5",
+    "bootstrap": "^3.3.5",
+    "bootstrap-dialog": "^1.34.6",
     "dragula": "^3.6.7",
     "font-awesome": "^4.5.0",
     "handlebars": "^4.0.5",
@@ -33,7 +36,7 @@
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
     "requirejs": "^2.1.14",
-    "selectize": "^0.12.1",
+    "@selectize/selectize": "~0.14.0",
     "spin.js": "^2.0.1",
     "titatoggle": "^1.2.15",
     "xdate": "^0.8.2"
