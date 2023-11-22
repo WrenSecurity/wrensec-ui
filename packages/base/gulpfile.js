@@ -22,6 +22,9 @@ const less = require("less");
 const TARGET_PATH = "dist";
 
 const MODULE_RESOURCES = {
+    "@mstyk/jquery-placeholder": "libs/jquery.placeholder.js",
+    "@selectize/selectize/dist/css/selectize.bootstrap3.css": "css/selectize.css",
+    "@selectize/selectize/dist/js/selectize.min.js": "libs/selectize.js",
     "backbone-relational/backbone-relational.js": "libs/backbone-relational.js",
     "backbone.paginator/lib/backbone.paginator.min.js": "libs/backbone.paginator.js",
     "backbone/backbone-min.js": "libs/backbone.js",
@@ -32,9 +35,9 @@ const MODULE_RESOURCES = {
     "backgrid-select-all/backgrid-select-all.min.js": "libs/backgrid-select-all.js",
     "backgrid/lib/backgrid.min.css": "css/backgrid.css",
     "backgrid/lib/backgrid.min.js": "libs/backgrid.js",
-    "bootstrap/dist/js/bootstrap.min.js": "libs/bootstrap.js",
     "bootstrap-dialog/dist/css/bootstrap-dialog.min.css": "css/bootstrap-dialog.css",
     "bootstrap-dialog/dist/js/bootstrap-dialog.min.js": "libs/bootstrap-dialog.js",
+    "bootstrap/dist/js/bootstrap.min.js": "libs/bootstrap.js",
     "dragula/dist/dragula.min.js": "libs/dragula.js",
     "font-awesome/css/font-awesome.min.css": "css/fontawesome/css/font-awesome.css",
     "font-awesome/fonts/fontawesome-webfont.eot": "css/fontawesome/fonts/fontawesome-webfont.eot",
@@ -44,26 +47,23 @@ const MODULE_RESOURCES = {
     "font-awesome/fonts/fontawesome-webfont.woff2": "css/fontawesome/fonts/fontawesome-webfont.woff2",
     "font-awesome/fonts/FontAwesome.otf": "css/fontawesome/fonts/FontAwesome.otf",
     "font-awesome/less/variables.less": "css/fontawesome/less/variables.less",
+    "form2js/src/form2js.js": "libs/form2js.js",
+    "form2js/src/js2form.js": "libs/js2form.js",
     "handlebars/dist/handlebars.js": "libs/handlebars.js",
     "i18next/lib/dep/i18next.min.js": "libs/i18next.js",
     "jquery/dist/jquery.min.js": "libs/jquery.js",
+    "lodash": "libs/lodash.js",
     "moment/min/moment.min.js": "libs/moment.js",
     "react-dom/dist/react-dom.min.js": "libs/react-dom.js",
     "react/dist/react.min.js": "libs/react.js",
     "requirejs/require.js": "libs/requirejs.js",
-    "@selectize/selectize/dist/css/selectize.bootstrap3.css": "css/selectize.css",
-    "@selectize/selectize/dist/js/selectize.min.js": "libs/selectize.js",
     "spin.js/spin.js": "libs/spin.js",
     "titatoggle/dist/titatoggle-dist-min.css": "css/titatoggle.css",
     "xdate/src/xdate.js": "libs/xdate.js"
 };
 
 const LOCAL_RESOURCES = {
-    "js/form2js-2.0-769718a.js": "libs/form2js.js",
-    "js/jquery.ba-dotimeout-1.0-min.js": "libs/jquery.ba-dotimeout.js",
-    "js/jquery.placeholder-2.0.8.js": "libs/jquery.placeholder.js",
-    "js/js2form-2.0-769718a.js": "libs/js2form.js",
-    "js/lodash-3.10.1-min.js": "libs/lodash.js"
+    "js/jquery.ba-dotimeout-1.0-min.js": "libs/jquery.ba-dotimeout.js"
 };
 
 gulp.task("eslint", () => gulp.src("src/scripts/**/*.js")
