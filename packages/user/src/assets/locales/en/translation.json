@@ -112,7 +112,7 @@
             "actions" : "Actions",
             "complete" : "Complete",
             "reset" : "Reset",
-            "copyright" : "Copyright (c) 2010-15 ForgeRock, all rights reserved.",
+            "copyright" : "© Wren Security",
             "sessionExpired" : "Session Expired",
             "enableCookies" : "Cookies must be enabled to login",
             "reloadGrid" : "Reload Grid",

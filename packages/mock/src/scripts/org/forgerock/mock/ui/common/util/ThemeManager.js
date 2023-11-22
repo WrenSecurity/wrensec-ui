@@ -63,18 +63,16 @@ define([
                 "settings": {
                     "logo": {
                         "src": "images/logo-horizontal.png",
-                        "title": "ForgeRock",
-                        "alt": "ForgeRock"
+                        "title": "Wren Security",
+                        "alt": "Wren Security"
                     },
                     "loginLogo": {
                         "src": "images/login-logo.png",
-                        "title": "ForgeRock",
-                        "alt": "ForgeRock",
-                        "height": "104px",
-                        "width": "210px"
+                        "title": "Wren Security",
+                        "alt": "Wren Security"
                     },
                     "footer": {
-                        "mailto": "info@forgerock.com"
+                        "mailto": "info@wrensecurity.org"
                     }
                 }
             });
