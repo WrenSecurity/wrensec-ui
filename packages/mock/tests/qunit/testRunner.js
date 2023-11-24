@@ -29,7 +29,7 @@
     stashedRequire.original.config({
         baseUrl: '../www',
         paths: {
-            sinon: "libs/sinon-1.15.4"
+            sinon: "libs/sinon"
         }
     });
 
