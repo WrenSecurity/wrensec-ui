@@ -13,13 +13,13 @@
  *
  * Copyright 2023 Wren Security.
  */
+const {
+    useEslint,
+    useLessStyles,
+    useLocalResources,
+    useModuleResources
+} = require("@wrensecurity/commons-ui-build");
 const gulp = require("gulp");
-const eslint = require("gulp-eslint-new");
-const { cp, mkdir, readFile, writeFile } = require("fs/promises");
-const { join, basename, dirname } = require("path");
-const less = require("less");
-
-const TARGET_PATH = "dist";
 
 const MODULE_RESOURCES = {
     "@mstyk/jquery-placeholder": "libs/jquery.placeholder.js",
@@ -66,40 +66,20 @@ const LOCAL_RESOURCES = {
     "js/jquery.ba-dotimeout-1.0-min.js": "libs/jquery.ba-dotimeout.js"
 };
 
-gulp.task("eslint", () => gulp.src("src/scripts/**/*.js")
-    .pipe(eslint())
-    .pipe(eslint.format())
-    .pipe(eslint.failAfterError()));
+gulp.task("eslint", useEslint());
 
-gulp.task("build:assets", () => gulp.src("src/assets/**")
-    .pipe(gulp.dest(TARGET_PATH)) );
+gulp.task("build:assets", useLocalResources({ "src/assets/**": "" }));
 
-gulp.task("build:scripts", () => gulp.src("src/scripts/**")
-    .pipe(gulp.dest(TARGET_PATH)));
+gulp.task("build:scripts", useLocalResources({ "src/scripts/**": "" }));
 
 gulp.task("build:libs", async () => {
-    for (const parent of ["libs", "css", "css/fontawesome"]) {
-        mkdir(join(TARGET_PATH, parent), { recursive: true });
-    }
-    for (const [module, target] of Object.entries(MODULE_RESOURCES)) {
-        await cp(require.resolve(module), join(TARGET_PATH, target));
-    }
-    for (const [source, target] of Object.entries(LOCAL_RESOURCES)) {
-        await cp(join("libs", source), join(TARGET_PATH, target));
-    }
+    await useModuleResources(MODULE_RESOURCES, { path: __filename })();
+    await useLocalResources(LOCAL_RESOURCES, { base: "libs" })();
 });
 
-// XXX Add postprocessing previously done by less-plugin-clean-css.
-// XXX Consider going for postcss processing.
-gulp.task("build:styles", async () => {
-    for (const filename of ["bootstrap/bootstrap.less"]) {
-        const source = join(TARGET_PATH, "css", filename);
-        const target = join(TARGET_PATH, "css", `${basename(filename, ".less")}.css`);
-        const output = await less.render(await readFile(source, "utf-8"));
-        await mkdir(dirname(target), { recursive: true });
-        await writeFile(target, output.css);
-    }
-});
+gulp.task("build:styles", useLessStyles({
+    "dist/css/bootstrap/bootstrap.less": "css/bootstrap.css"
+}));
 
 gulp.task("build", gulp.series(
     gulp.parallel(
@@ -107,7 +87,7 @@ gulp.task("build", gulp.series(
         "build:scripts",
         "build:libs"
     ),
-    ["build:styles"]
+    "build:styles"
 ));
 
-gulp.task("default", gulp.series("build"));
+gulp.task("default", gulp.series("eslint", "build"));

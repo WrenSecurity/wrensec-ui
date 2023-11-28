@@ -1,0 +1,32 @@
+{
+  "name": "@wrensecurity/commons-ui-build",
+  "version": "0.0.0",
+  "description": "Wren Security UI Commons - Build",
+  "private": true,
+  "main": "./dist/index.cjs",
+  "module": "./src/index.mjs",
+  "files": [
+    "dist/index.cjs",
+    "src/index.mjs"
+  ],
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "node ./scripts/build.mjs"
+  },
+  "dependencies": {
+    "@babel/core": "^7.23.3",
+    "@babel/preset-env": "^7.23.3",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@wrensecurity/eslint-config": "^0.2.0",
+    "eslint": "^8.52.0",
+    "gulp": "^4.0.2",
+    "gulp-eslint-new": "^1.8.4",
+    "jsdoc": "4.0.2",
+    "less": "^4.2.0",
+    "postcss": "^8.4.31",
+    "postcss-minify": "^1.1.0",
+    "requirejs": "^2.3.6",
+    "rimraf": "^5.0.5",
+    "rollup": "^4.6.0"
+  }
+}

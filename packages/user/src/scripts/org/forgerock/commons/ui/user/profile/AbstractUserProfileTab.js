@@ -28,13 +28,13 @@ define([
     "org/forgerock/commons/ui/common/main/EventManager",
     "org/forgerock/commons/ui/common/main/ValidatorsManager"
 ], function($, _, form2js, js2form, Handlebars,
-    AbstractView,
-    ChangesPending,
-    Configuration,
-    ConfirmPasswordDialog,
-    Constants,
-    EventManager,
-    ValidatorsManager) {
+        AbstractView,
+        ChangesPending,
+        Configuration,
+        ConfirmPasswordDialog,
+        Constants,
+        EventManager,
+        ValidatorsManager) {
 
     /**
      * Provides base functionality for all tabs within UserProfileView

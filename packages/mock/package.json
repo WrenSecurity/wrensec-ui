@@ -8,17 +8,12 @@
     "clean": "rimraf build"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.3",
-    "@babel/preset-env": "^7.23.3",
     "@codemirror/lang-javascript": "^6.2.1",
     "@codemirror/lang-xml": "^6.0.2",
-    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@wrensecurity/commons-ui-build": "^0.0.0",
     "@wrensecurity/eslint-config": "^0.2.0",
     "codemirror": "^6.0.1",
     "eslint": "^8.54.0",
-    "gulp": "^4.0.2",
-    "gulp-eslint-new": "^1.8.4",
-    "less": "^4.2.0",
     "node-qunit-puppeteer": "^2.1.2",
     "rollup": "^4.5.1",
     "rollup-plugin-amd": "^4.0.0"

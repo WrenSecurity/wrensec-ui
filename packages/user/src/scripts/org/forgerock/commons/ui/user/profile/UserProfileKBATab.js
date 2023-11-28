@@ -26,11 +26,11 @@ define([
     "org/forgerock/commons/ui/common/util/UIUtils",
     "org/forgerock/commons/ui/common/main/ValidatorsManager"
 ], function($, _, form2js, js2form, Handlebars,
-    AbstractUserProfileTab,
-    Configuration,
-    KBADelegate,
-    UIUtils,
-    ValidatorsManager) {
+        AbstractUserProfileTab,
+        Configuration,
+        KBADelegate,
+        UIUtils,
+        ValidatorsManager) {
 
     /**
      * An instance of AbstractUserProfileTab, to be used with the UserProfileView when

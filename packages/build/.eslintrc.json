@@ -1,0 +1,13 @@
+
+{
+    "root": true,
+    "extends": "@wrensecurity/eslint-config",
+    "env": {
+        "es6": true,
+        "node": true
+    },
+    "parserOptions": {
+        "sourceType": "module",
+        "ecmaVersion": 2022
+    }
+}

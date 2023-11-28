@@ -5,6 +5,7 @@
   "private": true,
   "type": "module",
   "workspaces": [
+    "packages/build",
     "packages/base",
     "packages/user",
     "packages/mock"

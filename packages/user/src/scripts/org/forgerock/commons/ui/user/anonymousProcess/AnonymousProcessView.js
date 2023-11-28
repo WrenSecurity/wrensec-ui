@@ -27,14 +27,14 @@ define([
     "org/forgerock/commons/ui/common/util/URIUtils",
     "org/forgerock/commons/ui/common/main/ValidatorsManager"
 ], function($, _, form2js,
-    AbstractView,
-    AnonymousProcessDelegate,
-    Constants,
-    EventManager,
-    Router,
-    UIUtils,
-    URIUtils,
-    ValidatorsManager) {
+        AbstractView,
+        AnonymousProcessDelegate,
+        Constants,
+        EventManager,
+        Router,
+        UIUtils,
+        URIUtils,
+        ValidatorsManager) {
 
     function getCurrentFragmentParamString () {
         var params = URIUtils.getCurrentFragmentQueryString();

@@ -8,8 +8,9 @@
   projects.
 * CodeMirror now requires custom ESM build step and styling is no longer being made through
   custom CSS (see example in the Mock module).
-* Changed task runner from Grunt to Gulp. See individual gulpfiles for inspiration how to perform
-  the same change in downstream projects.
+* Changed task runner from Grunt to Gulp and introduced new module `@wrensecurity/commons-ui-build`
+  with shared Gulp task implementation. See individual gulpfiles for inspiration how to switch
+  to Gulp in downstream projects.
 * Project structure has been migrated from multimodule Maven to single Maven module with NPM
   workspaces. Maven artifact coordinates has to be migrated to the new artifact ID with separate
   workspace-specific classifier:

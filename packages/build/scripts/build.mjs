@@ -13,17 +13,24 @@
  *
  * Copyright 2023 Wren Security.
  */
-const { useEslint, useLocalResources } = require("@wrensecurity/commons-ui-build");
-const gulp = require("gulp");
+import { nodeResolve } from "@rollup/plugin-node-resolve";
+import { spawn } from "child_process";
+import { mkdir } from "fs/promises";
+import { join } from "path";
+import { rollup } from "rollup";
+import { fileURLToPath } from "url";
 
-gulp.task("eslint", useEslint());
+const TARGET_PATH = fileURLToPath(new URL("../dist", import.meta.url));
+await mkdir(TARGET_PATH, { recursive: true });
 
-gulp.task("build:assets", useLocalResources({ "src/assets/**": "" }));
+const bundle = await rollup({
+    input: "src/index.mjs",
+    plugins: [nodeResolve()],
+    external: /node_modules/
+});
+await bundle.write({
+    format: "cjs",
+    file: join(TARGET_PATH, "index.cjs")
+});
 
-gulp.task("build:scripts", useLocalResources({ "src/scripts/**": "" }));
-
-gulp.task("build:compose", useLocalResources({ "../base/dist/**": "" }));
-
-gulp.task("build", gulp.parallel("build:assets", "build:scripts", "build:compose"));
-
-gulp.task("default", gulp.series("eslint", "build"));
+spawn("npm", ["pack", "--pack-destination", TARGET_PATH]);
