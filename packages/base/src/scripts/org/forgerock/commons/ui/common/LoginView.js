@@ -15,7 +15,7 @@
  */
 
 define([
-    "underscore",
+    "lodash",
     "placeholder",
     "org/forgerock/commons/ui/common/main/AbstractView",
     "org/forgerock/commons/ui/common/util/ModuleLoader",

@@ -15,7 +15,7 @@
  */
 define([
     "jquery",
-    "underscore",
+    "lodash",
     "backbone",
     "org/forgerock/commons/ui/common/main/AbstractConfigurationAware",
     "org/forgerock/commons/ui/common/main/AbstractView",
@@ -192,7 +192,7 @@ define([
                             return;
                         }
 
-                        this.data.admin = _.contains(Configuration.loggedUser.uiroles, "ui-admin");
+                        this.data.admin = _.includes(Configuration.loggedUser.uiroles, "ui-admin");
 
                         this.data.userBar = _.chain(obj.configuration.userBar)
                             .map(function (link) {
@@ -323,9 +323,9 @@ define([
                 if (navObj.dropdown === true) {
                     navElement.dropdown = true;
 
-                    _.each(navObj.urls, function(obj){
+                    _.each(navObj.urls, _.bind(function(obj){
                         subs.push(self.buildNavElement(obj, this.isCurrent(obj.url)));
-                    }, this);
+                    }, this));
 
                     navElement.urls = subs;
                 }

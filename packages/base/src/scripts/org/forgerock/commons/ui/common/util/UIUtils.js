@@ -16,7 +16,7 @@
 
 define([
     "jquery",
-    "underscore",
+    "lodash",
     "require",
     "handlebars",
     "i18next",
@@ -384,7 +384,7 @@ define([
     Handlebars.registerHelper('checkbox', function(map, name) {
         var ret = "<div class='checkboxList' id='"+name+"'><ol>", idx,
             sortedMap = _.chain(map)
-                .pairs()
+                .toPairs()
                 .sortBy(function (arr) { return arr[1]; })
                 .value();
 
@@ -632,7 +632,7 @@ define([
          */
         "findByValues": function(collection, property, values) {
             return _.filter(collection, function(item) {
-                return _.contains(values, item[property]);
+                return _.includes(values, item[property]);
             });
         },
 
@@ -652,7 +652,7 @@ define([
          */
         "removeByValues": function(collection, property, values) {
             return _.reject(collection, function(item) {
-                return _.contains(values, item[property]);
+                return _.includes(values, item[property]);
             });
         },
 

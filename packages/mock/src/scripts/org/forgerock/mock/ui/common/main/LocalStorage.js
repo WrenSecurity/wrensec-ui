@@ -18,7 +18,7 @@
  * Local storage helper.
  */
 define([
-    "underscore"
+    "lodash"
 ], function (_) {
     var mockPrefix = 'forgerock-mock-';
 

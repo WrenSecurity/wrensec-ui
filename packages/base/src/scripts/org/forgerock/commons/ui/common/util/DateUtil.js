@@ -15,7 +15,7 @@
  */
 
 define([
-    "underscore",
+    "lodash",
     "handlebars",
     "xdate",
     "moment"

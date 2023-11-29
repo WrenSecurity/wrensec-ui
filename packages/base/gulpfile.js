@@ -59,6 +59,7 @@ const MODULE_RESOURCES = {
     "requirejs/require.js": "libs/requirejs.js",
     "spin.js/spin.js": "libs/spin.js",
     "titatoggle/dist/titatoggle-dist-min.css": "css/titatoggle.css",
+    "underscore/underscore-umd.js": "libs/underscore.js",
     "xdate/src/xdate.js": "libs/xdate.js"
 };
 

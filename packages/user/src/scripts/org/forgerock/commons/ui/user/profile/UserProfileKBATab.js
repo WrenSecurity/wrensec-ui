@@ -178,12 +178,12 @@ define([
             // cannot rely upon a particular named field in the form content,
             // so apply the logic to all fields found in the form
             return _(formContent)
-                .map(function (value, key) {
+                .map(_.bind(function (value, key) {
                     if (_.isArray(value)) {
                         return [
                             key,
                             _(value)
-                                .map(function (kbaPair, index) {
+                                .map(_.bind(function (kbaPair, index) {
                                     var newPair = {};
 
                                     // deleted pairs will be hidden
@@ -205,15 +205,15 @@ define([
                                         newPair.questionId = kbaPair.questionId;
                                     }
                                     return newPair;
-                                }, this)
+                                }, this))
                                 .compact()
                                 .value()
                         ];
                     } else {
                         return [key, value];
                     }
-                }, this)
-                .object()
+                }, this))
+                .fromPairs()
                 .value();
         },
 
@@ -243,7 +243,7 @@ define([
             js2form(form,
                 // use the form structure to find out which fields are defined for the kba form...
                 _(form2js(form, ".", false))
-                    .map(function (value, key) {
+                    .map(_.bind(function (value, key) {
                         // omit the "answer" property from any array found there...
                         if (_.isArray(this.data.user[key])) {
                             return [
@@ -255,8 +255,8 @@ define([
                         } else {
                             return [key, this.data.user[key]];
                         }
-                    }, this)
-                    .object()
+                    }, this))
+                    .fromPairs()
                     .value()
             );
 

@@ -16,6 +16,24 @@
   workspace-specific classifier:
   * `forgerock-ui-commons:www:zip -> wrensec-ui-commons:base:zip`
   * `forgerock-ui-user:www:zip -> wrensec-ui-commons:user:zip`
+* Upgraded lodash from 3.x to the newest 4.x version. See breaking changes described in 4.0.0
+  release notes - https://github.com/lodash/lodash/wiki/Changelog#compatibility-warnings.
+  Following regular expression searches can be performed to check for places that need attention:
+  * removed methods -
+    `\b(support|findWhere|where|pluck|first|indexBy|invoke|modArgs|padLeft|pairs|rest|restParam|sortByOrder|trimLeft|trimRight|trunc|sortByAll|isDeep)\(`
+  * removed aliases -
+    `\b(all|any|collect|compose|contains|detect|include|inject|methods|object|select|unique)\(`
+  * dropped boolean options -
+    `\b(debounce|mixin|throttle)\(`
+  * `thisArg` removal (this one is the most tricky) -
+    `(?<!\()\bthis\)`
+* Introduced Underscore.js as its own dependency because Backbone is not compatible with lodash.
+  All custom code should explicitly depend on `lodash` only. Hence replace `underscore` imports
+  with `lodash` and remove module alias in RequireJS configuration (`underscore` and `lodash`
+  are different dependenies from now on).
+* Upgraded Backbone.js wich has few incompatibilities, mainly `View.delegate` property which
+  is being used as alias to `delegateEvents`. This means that `delegate` MUST NOT be used
+  as custom property (see changes in `org/forgerock/commons/ui/user/delegates/AnonymousProcessDelegate`).
 
 
 ## 21.x -> 22.1.x

@@ -15,7 +15,7 @@
  */
 
 define([
-    "underscore",
+    "lodash",
     "jquery",
     "org/forgerock/commons/ui/common/main/AbstractConfigurationAware",
     "org/forgerock/commons/ui/common/main/EventManager",

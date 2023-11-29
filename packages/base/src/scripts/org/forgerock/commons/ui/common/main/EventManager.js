@@ -16,7 +16,7 @@
 
 define([
     "jquery",
-    "underscore"
+    "lodash"
 ], function($, _) {
 
     var obj = {},

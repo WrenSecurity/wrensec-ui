@@ -43,7 +43,7 @@ define([
             all available.
         */
         return $.when.apply($, _.map(configuration.loader, function (mapToLoad) {
-            return $.when.apply($, _.map(_.pairs(mapToLoad), function (loadPair) {
+            return $.when.apply($, _.map(_.toPairs(mapToLoad), function (loadPair) {
                 return ModuleLoader.load(loadPair[1]).then(function (loaded) {
                     return _.extend(configuration[loadPair[0]], loaded);
                 });
