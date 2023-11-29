@@ -12,6 +12,9 @@
             "files": [
                 "gulpfile.js"
             ],
+            "env": {
+                "node": true
+            },
             "parserOptions": {
                 "ecmaVersion": 2021
             }

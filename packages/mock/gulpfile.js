@@ -13,15 +13,17 @@
  *
  * Copyright 2023 Wren Security.
  */
-const babel = require("@babel/core");
+const {
+    useBuildScripts,
+    useEslint,
+    useLocalResources,
+    useModuleResources,
+    useLessStyles,
+    useBuildRequire
+} = require("@wrensecurity/commons-ui-build");
 const gulp = require("gulp");
-const eslint = require("gulp-eslint-new");
-const { cp, mkdir, readFile, writeFile } = require("fs/promises");
-const less = require("less");
 const { runQunitPuppeteer, printResultSummary } = require("node-qunit-puppeteer");
-const { join, basename, dirname } = require("path");
-const { finished } = require("stream/promises");
-var requirejs = require('requirejs');
+const { join } = require("path");
 const { rollup } = require("rollup");
 const { pathToFileURL } = require("url");
 
@@ -29,7 +31,6 @@ const { pathToFileURL } = require("url");
 // was intentionally dropped when migrating from Grunt to Gulp... this will be
 // addressed later on when needed.
 
-const SOURCE_PATH = "src/scripts";
 const TARGET_PATH = "build/www";
 const TESTS_PATH = "build/test";
 
@@ -44,42 +45,20 @@ const TEST_RESOURCES = {
     "../user/tests/qunit/**": "tests/user/"
 };
 
-gulp.task("eslint", () => gulp.src("src/scripts/**/*.js")
-    .pipe(eslint())
-    .pipe(eslint.format())
-    .pipe(eslint.failAfterError()));
+gulp.task("eslint", useEslint());
 
-gulp.task("build:assets", () => gulp.src("src/assets/**")
-    .pipe(gulp.dest(TARGET_PATH)) );
+gulp.task("build:assets", useLocalResources({ "src/assets/**": "" }, { dest: TARGET_PATH }));
 
-gulp.task("build:scripts", () => gulp.src("src/scripts/**")
-    .pipe(gulp.dest(TARGET_PATH)));
+gulp.task("build:scripts", useLocalResources({ "src/scripts/**": "" }, { dest: TARGET_PATH }));
 
-gulp.task("build:compose", () => gulp.src(["../user/dist/**"])
-    .pipe(gulp.dest(TARGET_PATH)));
+gulp.task("build:compose", useLocalResources({ "../user/dist/**": "" }, { dest: TARGET_PATH }));
 
-gulp.task("build:libs", async () => {
-    for (const parent of ["libs", "css"]) {
-        mkdir(join(TARGET_PATH, parent), { recursive: true });
-    }
-    for (const [source, target] of Object.entries(MODULE_RESOURCES)) {
-        await cp(require.resolve(source), join(TARGET_PATH, target));
-    }
-});
+gulp.task("build:libs", useModuleResources(MODULE_RESOURCES, { dest: TARGET_PATH }));
 
-// XXX Add postprocessing previously done by less-plugin-clean-css.
-// XXX Consider going for postcss processing.
-gulp.task("build:styles", async () => {
-    for (const filename of ["structure.less", "theme.less"]) {
-        const source = join(TARGET_PATH, "css", filename);
-        const target = join(TARGET_PATH, "css", `${basename(filename, ".less")}.css`);
-        const output = await less.render(await readFile(source, "utf-8"), {
-            paths: join(TARGET_PATH, "css")
-        });
-        await mkdir(dirname(target), { recursive: true });
-        await writeFile(target, output.css);
-    }
-});
+gulp.task("build:styles", useLessStyles({
+    "build/www/css/structure.less": "css/structure.css",
+    "build/www/css/theme.less": "css/theme.css"
+}, { base: join(TARGET_PATH, "css"), dest: TARGET_PATH }));
 
 gulp.task("build:editor", async () => {
     const bundle = await rollup({
@@ -95,48 +74,24 @@ gulp.task("build:editor", async () => {
     });
 });
 
-gulp.task("build:bundle", () => {
-    return new Promise((resolve, reject) => {
-        requirejs.optimize({
-            baseUrl: TARGET_PATH,
-            mainConfigFile: join(SOURCE_PATH, "main.js"),
-            out: join(TARGET_PATH, "main.js"),
-            include: ["main"],
-            preserveLicenseComments: false,
-            generateSourceMaps: true,
-            optimize: "uglify2",
-            excludeShallow: [
-                // These files are excluded from optimization so that the UI can be customized without having to
-                // repackage it.
-                "config/AppConfiguration",
-                // Exclude mock project dependencies to create a more representative bundle.
-                "mock/Data",
-                "sinon"
-            ]
-        }, resolve, reject);
-    });
-});
+gulp.task("build:bundle", useBuildRequire({
+    base: "build/www",
+    dest: "build/www/main.js",
+    exclude: [
+        // Excluded from optimization so that the UI can be customized without having to repackage it.
+        "config/AppConfiguration",
+        // Exclude mock project dependencies to create a more representative bundle.
+        "mock/Data",
+        "sinon"
+    ]
+}));
 
-gulp.task("test:scripts", async () => {
-    for (const [source, target] of Object.entries(TEST_RESOURCES)) {
-        await finished(gulp
-            .src(source)
-            .pipe(gulp.dest(join(TESTS_PATH, target))));
-    }
-});
+gulp.task("test:scripts", useLocalResources(TEST_RESOURCES, { dest: TESTS_PATH }));
 
-gulp.task("test:libs", async () => {
-    const output = await babel.transformAsync(
-        await readFile(require.resolve("sinon/pkg/sinon.js"), "utf-8"),
-        {
-            presets: ["@babel/preset-env"],
-            sourceMaps: true
-        }
-    );
-    await mkdir(join(TARGET_PATH, "libs"), { recursive: true });
-    await writeFile(join(TARGET_PATH, "libs/sinon.js"), output.code);
-    await writeFile(join(TARGET_PATH, "libs/sinon.map.js"), JSON.stringify(output.map));
-});
+gulp.task("test:sinon", useBuildScripts({
+    src: require.resolve("sinon/pkg/sinon.js"),
+    dest: join(TARGET_PATH, "libs")
+}));
 
 gulp.task("test:qunit", async () => {
     const result = await runQunitPuppeteer({
@@ -156,7 +111,7 @@ gulp.task("build", gulp.series(
         "build:compose",
         "build:editor",
         "build:libs",
-        "test:libs"
+        "test:sinon"
     ),
     gulp.parallel(
         "build:styles",

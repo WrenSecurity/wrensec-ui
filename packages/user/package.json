@@ -8,9 +8,8 @@
     "clean": "rimraf dist"
   },
   "devDependencies": {
-    "@wrensecurity/eslint-config": "^0.2.0",
-    "eslint": "^8.54.0",
-    "gulp": "^4.0.2",
-    "gulp-eslint-new": "^1.8.4"
+    "@wrensecurity/commons-ui-build": "^0.0.0",
+    "@wrensecurity/commons-ui-mock": "*",
+    "@wrensecurity/eslint-config": "^0.2.0"
   }
 }

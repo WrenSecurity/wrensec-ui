@@ -26,11 +26,11 @@ define([
     "org/forgerock/commons/ui/common/main/EventManager",
     "bootstrap"
 ], function($, _, form2js, js2form,
-    AbstractUserProfileTab,
-    AbstractView,
-    Configuration,
-    Constants,
-    EventManager) {
+        AbstractUserProfileTab,
+        AbstractView,
+        Configuration,
+        Constants,
+        EventManager) {
 
     /**
      * Manages the tabs and routing amongst them for the user's profile

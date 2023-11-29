@@ -16,7 +16,7 @@
 
 define([
     "jquery"
-], function($) {
+], function ($) {
     var obj = {
         "required": {
             "name": "Required field",
