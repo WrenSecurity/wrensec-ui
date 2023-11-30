@@ -16,7 +16,7 @@
 
 define([
     "jquery",
-    "underscore",
+    "lodash",
     "form2js",
     "org/forgerock/commons/ui/common/main/AbstractView",
     "org/forgerock/commons/ui/user/delegates/AnonymousProcessDelegate",
@@ -122,7 +122,7 @@ define([
 
             event.preventDefault();
 
-            this.delegate.submit(formContent).then(
+            this.processDelegate.submit(formContent).then(
                 _.bind(this.renderProcessState, this),
                 _.bind(this.renderProcessState, this)
             );
@@ -133,8 +133,8 @@ define([
             var params = Router.convertCurrentUrlToJSON().params;
             this.stateData = {};
 
-            if (!this.delegate || args[0] !== "/continue") {
-                this.setDelegate(Constants.SELF_SERVICE_CONTEXT + this.processType, params.token);
+            if (!this.processDelegate || args[0] !== "/continue") {
+                this.setProcessDelegate(Constants.SELF_SERVICE_CONTEXT + this.processType, params.token);
             }
 
             if (!_.isEmpty(params)) {
@@ -163,27 +163,27 @@ define([
 
         parentRender: function () {
             AbstractView.prototype.parentRender.call(this, _.bind(function () {
-                this.delegate.start().then(_.bind(this.renderProcessState, this));
+                this.processDelegate.start().then(_.bind(this.renderProcessState, this));
             }, this));
         },
 
-        setDelegate: function (endpoint, token, additional) {
-            this.delegate = new AnonymousProcessDelegate(endpoint, token, additional);
+        setProcessDelegate: function (endpoint, token, additional) {
+            this.processDelegate = new AnonymousProcessDelegate(endpoint, token, additional);
         },
 
         submitDelegate: function (params, onSubmit) {
-            this.delegate.submit(_.omit(params, "token")).always(onSubmit);
+            this.processDelegate.submit(_.omit(params, "token")).always(onSubmit);
         },
 
         setTranslationBase: function () {
-            _.each(["title", "completed", "failed", "tryAgain", "return"], function (key) {
+            _.each(["title", "completed", "failed", "tryAgain", "return"], _.bind(function (key) {
                 this.data.i18n[key] = this.i18nBase + "." + key;
-            }, this);
+            }, this));
         },
 
         restartProcess: function (e) {
             e.preventDefault();
-            delete this.delegate;
+            delete this.processDelegate;
             delete this.stateData;
             EventManager.sendEvent(Constants.EVENT_CHANGE_VIEW, {
                 route: _.extend({}, Router.currentRoute, { forceUpdate: true })

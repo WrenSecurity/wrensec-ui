@@ -34,7 +34,7 @@ define([
         var pointerList;
         pointerList = function (obj) {
             return _.chain(obj)
-                .pairs()
+                .toPairs()
                 .filter(function (p) {
                     return p[1] !== undefined;
                 })
@@ -202,7 +202,7 @@ define([
             newPointerMap = obj.toJSONPointerMap(newObject),
             previousPointerMap = obj.toJSONPointerMap(oldObject),
             newValues = _.chain(newPointerMap)
-                .pairs()
+                .toPairs()
                 .filter(function (p) {
                     if (_.isArray(previousPointerMap[p[0]]) && _.isArray(p[1])) {
                         return !obj.isEqualSet(previousPointerMap[p[0]], p[1]);
@@ -252,7 +252,7 @@ define([
                 .uniq(JSON.stringify)
                 .value(),
             removedValues = _.chain(previousPointerMap)
-                .pairs()
+                .toPairs()
                 .filter(function (p) {
                     return obj.getValueFromPointer(newObjectClosure, p[0]) === undefined;
                 })

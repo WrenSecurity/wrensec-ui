@@ -15,7 +15,7 @@
  */
 
 define([
-    "underscore",
+    "lodash",
     "jquery",
     "bootstrap-dialog"
 ], function (_, $, BootstrapDialog) {

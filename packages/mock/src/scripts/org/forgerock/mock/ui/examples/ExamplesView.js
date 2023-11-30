@@ -16,7 +16,7 @@
 
 define([
     "jquery",
-    "underscore",
+    "lodash",
     "org/forgerock/mock/ui/examples/CodeMirror",
     "bootstrap",
     "selectize",

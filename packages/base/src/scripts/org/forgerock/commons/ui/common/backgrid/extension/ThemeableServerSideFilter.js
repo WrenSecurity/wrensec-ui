@@ -29,7 +29,7 @@
  */
 define([
     "jquery",
-    "underscore",
+    "lodash",
     "backgrid-filter",
     "org/forgerock/commons/ui/common/backgrid/Backgrid"
 ], function ($, _, BackgridFilter, Backgrid) {

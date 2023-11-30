@@ -19,12 +19,12 @@ const {
     useLocalResources,
     useModuleResources,
     useLessStyles,
-    useBuildRequire
+    useBuildRequire,
+    useBuildModule
 } = require("@wrensecurity/commons-ui-build");
 const gulp = require("gulp");
 const { runQunitPuppeteer, printResultSummary } = require("node-qunit-puppeteer");
 const { join } = require("path");
-const { rollup } = require("rollup");
 const { pathToFileURL } = require("url");
 
 // XXX There is a missing functionality of watch/sync on parent projects that
@@ -60,19 +60,11 @@ gulp.task("build:styles", useLessStyles({
     "build/www/css/theme.less": "css/theme.css"
 }, { base: join(TARGET_PATH, "css"), dest: TARGET_PATH }));
 
-gulp.task("build:editor", async () => {
-    const bundle = await rollup({
-        input: "src/scripts/org/forgerock/mock/ui/examples/CodeMirror.mjs",
-        plugins: [require("@rollup/plugin-node-resolve").nodeResolve()]
-    });
-    await bundle.write({
-        format: "amd",
-        amd: {
-            id: "org/forgerock/mock/ui/examples/CodeMirror"
-        },
-        file: join(TARGET_PATH, "org/forgerock/mock/ui/examples/CodeMirror.js")
-    });
-});
+gulp.task("build:editor", useBuildModule({
+    id: "org/forgerock/mock/ui/examples/CodeMirror",
+    src: "src/scripts/org/forgerock/mock/ui/examples/CodeMirror.mjs",
+    dest: join(TARGET_PATH, "org/forgerock/mock/ui/examples/CodeMirror.js")
+}));
 
 gulp.task("build:bundle", useBuildRequire({
     base: "build/www",

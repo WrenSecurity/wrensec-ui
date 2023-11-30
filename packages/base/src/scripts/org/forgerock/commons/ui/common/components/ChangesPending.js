@@ -16,7 +16,7 @@
 
 define([
     "jquery",
-    "underscore",
+    "lodash",
     "org/forgerock/commons/ui/common/main/AbstractView"
 
 ], function ($, _, AbstractView) {
@@ -121,9 +121,9 @@ define([
              * Called to check if changes were done
              */
             isChanged: function () {
-                var isChanged = _.some(this.data.watchedProperties, function (prop) {
+                var isChanged = _.some(this.data.watchedProperties, _.bind(function (prop) {
                     return !this.compareObjects(prop, this.data.watchedObj, this.data.changes);
-                }, this);
+                }, this));
 
                 return isChanged;
             },

@@ -16,7 +16,7 @@
 
 define([
     "jquery",
-    "underscore",
+    "lodash",
     "org/forgerock/commons/ui/common/main/AbstractModel",
     "org/forgerock/commons/ui/common/util/Constants",
     "org/forgerock/commons/ui/common/main/EventManager",
@@ -39,7 +39,7 @@ define([
 
                     // if any protected attributes have changed, but the current password is incorrect...
                     if (
-                        _.any(model.getProtectedAttributes(), function (protectedAttribute) {
+                        _.some(model.getProtectedAttributes(), function (protectedAttribute) {
                             return _.has(model.changedAttributes(), protectedAttribute);
                         }) &&
                         // normally this 'currentPassword' check would be done on the backend, of course. In the mock

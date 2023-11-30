@@ -157,7 +157,7 @@ export function useBuildScripts(options = {}) {
 }
 
 /**
- * @typedef {OBject} BuildRequireOptions
+ * @typedef {Object} BuildRequireOptions
  * @property {string} base - base directory for module resolution
  * @property {string} src - main file entry point
  * @property {string} dest - target optimized file path
@@ -184,4 +184,35 @@ export function useBuildRequire(options = {}) {
             }, resolve, reject);
         });
     });
+}
+
+/**
+ * @typedef {Object} BuildModuleOptions
+ * @property {string} id - module identifier
+ * @property {string} src - main file entry point
+ * @property {string} dest - target module file path
+ */
+
+/**
+ * Bundle input ESM script as AMD module.
+ * @param {BuildModuleOptions} options
+ * @returns {TaskFunction}
+ */
+export function useBuildModule(options) {
+    return async () => {
+        const { rollup } = await import("rollup");
+        const bundle = await rollup({
+            input: options.src,
+            plugins: [
+                (await import("@rollup/plugin-node-resolve")).nodeResolve()
+            ]
+        });
+        await bundle.write({
+            format: "amd",
+            amd: {
+                id: options.id
+            },
+            file: options.dest
+        });
+    };
 }

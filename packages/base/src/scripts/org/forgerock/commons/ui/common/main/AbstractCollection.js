@@ -16,7 +16,7 @@
 
 define([
     "jquery",
-    "underscore",
+    "lodash",
     "backbone",
     "backbone.paginator",
     "org/forgerock/commons/ui/common/main/AbstractModel",

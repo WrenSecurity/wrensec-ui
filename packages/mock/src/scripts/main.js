@@ -27,9 +27,7 @@ require.config({
             "LoginDialog": "org/forgerock/commons/ui/common/LoginDialog",
             "RegisterView": "org/forgerock/commons/ui/user/anonymousProcess/SelfRegistrationView",
             "NavigationFilter" : "org/forgerock/commons/ui/common/components/navigation/filters/RoleFilter",
-            "KBADelegate": "org/forgerock/commons/ui/user/delegates/KBADelegate",
-            // TODO: Remove this when there are no longer any references to the "underscore" dependency
-            "underscore": "lodash"
+            "KBADelegate": "org/forgerock/commons/ui/user/delegates/KBADelegate"
         }
     },
     paths: {
@@ -43,6 +41,7 @@ require.config({
         "backgrid-filter": "libs/backgrid-filter",
         "backgrid-paginator": "libs/backgrid-paginator",
         selectize: "libs/selectize",
+        underscore: "libs/underscore",
         lodash: "libs/lodash",
         js2form: "libs/js2form",
         form2js: "libs/form2js",
@@ -61,8 +60,8 @@ require.config({
         sinon: {
             exports: "sinon"
         },
-        underscore: {
-            exports: "_"
+        lodash: {
+            exports: ""
         },
         backbone: {
             deps: ["underscore"],
@@ -143,6 +142,7 @@ require([
     // libraries necessary for forgerock-ui (and thus worth bundling)
     "jquery",
     "underscore",
+    "lodash",
     "backbone",
     "handlebars",
     "i18next",

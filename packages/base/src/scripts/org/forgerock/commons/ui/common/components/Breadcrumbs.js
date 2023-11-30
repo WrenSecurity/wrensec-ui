@@ -16,7 +16,7 @@
 
 define([
     "jquery",
-    "underscore",
+    "lodash",
     "backbone"
 ], function($, _, Backbone) {
     /**
