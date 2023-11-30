@@ -191,6 +191,9 @@ export function useBuildRequire(options = {}) {
  * @property {string} id - module identifier
  * @property {string} src - main file entry point
  * @property {string} dest - target module file path
+ * @property {boolean} [minify] - minify output
+ * @property {boolean} [transpile] - transpile output
+ * @property {import("@rollup/plugin-alias").RollupAliasOptions} [alias] - alias options
  */
 
 /**
@@ -201,11 +204,25 @@ export function useBuildRequire(options = {}) {
 export function useBuildModule(options) {
     return async () => {
         const { rollup } = await import("rollup");
+        const plugins = [
+            (await import("@rollup/plugin-node-resolve")).nodeResolve()
+        ];
+        // FIXME create dedicated module bundler for requirejs optimizer?
+        if (options.transpile) {
+            plugins.push((await import("@rollup/plugin-babel")).babel({
+                babelHelpers: 'bundled', // XXX this is not ideal
+                presets: ["@babel/preset-env"]
+            }));
+        }
+        if (options.minify) {
+            plugins.push((await import("@rollup/plugin-terser")).default());
+        }
+        if (options.alias) {
+            plugins.push((await import("@rollup/plugin-alias")).default(options.alias));
+        }
         const bundle = await rollup({
             input: options.src,
-            plugins: [
-                (await import("@rollup/plugin-node-resolve")).nodeResolve()
-            ]
+            plugins
         });
         await bundle.write({
             format: "amd",

@@ -17,9 +17,11 @@ const {
     useEslint,
     useLessStyles,
     useLocalResources,
-    useModuleResources
+    useModuleResources,
+    useBuildModule
 } = require("@wrensecurity/commons-ui-build");
 const gulp = require("gulp");
+const { join } = require("path");
 
 const MODULE_RESOURCES = {
     "@mstyk/jquery-placeholder": "libs/jquery.placeholder.js",
@@ -50,7 +52,6 @@ const MODULE_RESOURCES = {
     "form2js/src/form2js.js": "libs/form2js.js",
     "form2js/src/js2form.js": "libs/js2form.js",
     "handlebars/dist/handlebars.js": "libs/handlebars.js",
-    "i18next/lib/dep/i18next.min.js": "libs/i18next.js",
     "jquery/dist/jquery.min.js": "libs/jquery.js",
     "lodash": "libs/lodash.js",
     "moment/min/moment.min.js": "libs/moment.js",
@@ -64,7 +65,7 @@ const MODULE_RESOURCES = {
 };
 
 const LOCAL_RESOURCES = {
-    "js/jquery.ba-dotimeout-1.0-min.js": "libs/jquery.ba-dotimeout.js"
+    "libs/js/*": "libs"
 };
 
 gulp.task("eslint", useEslint());
@@ -75,7 +76,21 @@ gulp.task("build:scripts", useLocalResources({ "src/scripts/**": "" }));
 
 gulp.task("build:libs", async () => {
     await useModuleResources(MODULE_RESOURCES, { path: __filename })();
-    await useLocalResources(LOCAL_RESOURCES, { base: "libs" })();
+    await useLocalResources(LOCAL_RESOURCES)();
+    await useBuildModule({
+        id: "i18next",
+        src: "src/modules/i18next.mjs",
+        dest: "dist/libs/i18next.js",
+        alias: {
+            entries: [
+                {
+                    find: "./getFetch.cjs",
+                    replacement: join(__dirname, "src/modules/undefined.mjs")
+                }
+            ]
+        },
+        transpile: true
+    })();
 });
 
 gulp.task("build:styles", useLessStyles({
@@ -85,10 +100,14 @@ gulp.task("build:styles", useLessStyles({
 gulp.task("build", gulp.series(
     gulp.parallel(
         "build:assets",
-        "build:scripts",
-        "build:libs"
+        "build:scripts"
     ),
+    "build:libs",
     "build:styles"
 ));
+
+gulp.task("watch", () => {
+    gulp.watch("src/scripts/**", gulp.parallel("build:scripts"));
+});
 
 gulp.task("default", gulp.series("eslint", "build"));

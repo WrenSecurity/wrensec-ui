@@ -13,22 +13,5 @@
  *
  * Copyright 2023 Wren Security.
  */
-const { useEslint, useLocalResources } = require("@wrensecurity/commons-ui-build");
-const gulp = require("gulp");
-
-gulp.task("eslint", useEslint());
-
-gulp.task("build:assets", useLocalResources({ "src/assets/**": "" }));
-
-gulp.task("build:scripts", useLocalResources({ "src/scripts/**": "" }));
-
-gulp.task("build:compose", useLocalResources({ "../base/dist/**": "" }));
-
-gulp.task("build", gulp.parallel("build:assets", "build:scripts", "build:compose"));
-
-gulp.task("watch", () => {
-    gulp.watch("src/scripts/**", gulp.parallel("build:scripts"));
-    gulp.watch("../base/dist/**", gulp.parallel("build:compose"));
-});
-
-gulp.task("default", gulp.series("eslint", "build"));
+// This file is here to workaround broken imports in RequireJS optimizer
+export default undefined;

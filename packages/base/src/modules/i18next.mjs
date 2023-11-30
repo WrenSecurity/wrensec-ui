@@ -13,22 +13,11 @@
  *
  * Copyright 2023 Wren Security.
  */
-const { useEslint, useLocalResources } = require("@wrensecurity/commons-ui-build");
-const gulp = require("gulp");
+import i18next from "i18next";
+import HttpBackend from "i18next-http-backend";
+import LanguageDetector from "i18next-browser-languagedetector";
 
-gulp.task("eslint", useEslint());
+i18next.HttpBackend = HttpBackend;
+i18next.LanguageDetector = LanguageDetector;
 
-gulp.task("build:assets", useLocalResources({ "src/assets/**": "" }));
-
-gulp.task("build:scripts", useLocalResources({ "src/scripts/**": "" }));
-
-gulp.task("build:compose", useLocalResources({ "../base/dist/**": "" }));
-
-gulp.task("build", gulp.parallel("build:assets", "build:scripts", "build:compose"));
-
-gulp.task("watch", () => {
-    gulp.watch("src/scripts/**", gulp.parallel("build:scripts"));
-    gulp.watch("../base/dist/**", gulp.parallel("build:compose"));
-});
-
-gulp.task("default", gulp.series("eslint", "build"));
+export default i18next;

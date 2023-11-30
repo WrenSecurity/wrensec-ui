@@ -116,4 +116,9 @@ gulp.task("test", gulp.series(
     "test:qunit"
 ));
 
+gulp.task("watch", () => {
+    gulp.watch("src/scripts/**", { ignoreInitial: false }, gulp.parallel("build:scripts"));
+    gulp.watch("../user/dist/**", { ignoreInitial: false }, gulp.parallel("build:compose"));
+});
+
 gulp.task("default", gulp.series("build", "test"));
