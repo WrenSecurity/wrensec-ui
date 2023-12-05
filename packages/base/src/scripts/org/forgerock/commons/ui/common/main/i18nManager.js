@@ -73,14 +73,17 @@ define( "org/forgerock/commons/ui/common/main/i18nManager", [
 
         opts = {
             fallbackLng: locales,
-            detectLngQS: "locale",
-            getAsync: false,
-            useCookie : true,
             lng: options.serverLang,
-            load: Module.config().i18nLoad || "current",
+            partialBundledLanguages: true,
+            load: Module.config().i18nLoad || "currentOnly",
             ns: nameSpace,
-            nsseparator: ":::",
-            resGetPath: require.toUrl("locales/__lng__/__ns__.json")
+            nsSeparator: ":::",
+            detection: {
+                caches: ['cookie']
+            },
+            backend: {
+                loadPath: require.toUrl("locales/{{lng}}/{{ns}}.json")
+            }
         };
 
         /**
@@ -117,18 +120,23 @@ define( "org/forgerock/commons/ui/common/main/i18nManager", [
         */
         Handlebars.registerHelper("mapTranslate", function(map) {
             var fallback;
-            if (_.has(map, i18next.options.lng)) {
-                return new Handlebars.SafeString(map[i18next.options.lng]);
+            if (_.has(map, i18next.language)) {
+                return new Handlebars.SafeString(map[i18next.language]);
             } else {
-                fallback = _.find(i18next.options.fallbackLng, function (lng) {
+                fallback = _.find(i18next.languages, function (lng) {
                     return _.has(map, lng);
                 });
                 return new Handlebars.SafeString(map[fallback]);
             }
         });
 
-        return i18next.init(opts);
+        // Bind to jQuery for backwards compatibility
+        $.t = i18next.t.bind(i18next);
 
+        return i18next
+            .use(i18next.HttpBackend)
+            .use(i18next.LanguageDetector)
+            .init(opts);
     };
 
     return obj;
