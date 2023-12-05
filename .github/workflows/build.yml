@@ -27,5 +27,6 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('pom.xml', 'package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
-      - name: Run the Maven verify phase
-        run: mvn -B verify --file pom.xml
+      - run: mvn -B verify --file pom.xml
+        env:
+          PUPPETEER_CACHE_DIR: ${{ github.workspace }}/node
