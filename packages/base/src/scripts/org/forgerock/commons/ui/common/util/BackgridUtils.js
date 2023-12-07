@@ -53,7 +53,7 @@ define([
      * @example
      * BackgridUtils.sortable({
      *   "containers": [$("#leftContainer")[0], $("#rightContainer")[0]],
-     *   "rows": _.clone(this.model.mappingProperties, true),
+     *   "rows": _.cloneDeep(this.model.mappingProperties),
      *   "handlesClassName": "fa fa-arrows"
      * }, _.bind(this.setMappingProperties, this));
      *

@@ -23,6 +23,8 @@
     `\b(support|findWhere|where|pluck|first|indexBy|invoke|modArgs|padLeft|pairs|rest|restParam|sortByOrder|trimLeft|trimRight|trunc|sortByAll|isDeep)\(`
   * removed aliases -
     `\b(all|any|collect|compose|contains|detect|include|inject|methods|object|select|unique)\(`
+  * split out methods -
+    `\b(assign|assignIn|clone|cloneDeep|indexOf|lastIndexOf|invert|invertBy|isEqual|isEqualWith|isMatch|isMatchWith|max|min|merge|mergeWith|omit|pick|sample|sortedIndex|sortedLastIndex|sum|uniq|zipObject)\(`
   * dropped boolean options -
     `\b(debounce|mixin|throttle)\(`
   * `thisArg` removal (this one is the most tricky) -
