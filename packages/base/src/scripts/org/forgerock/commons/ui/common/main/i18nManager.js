@@ -82,7 +82,11 @@ define( "org/forgerock/commons/ui/common/main/i18nManager", [
                 caches: ['cookie']
             },
             backend: {
-                loadPath: require.toUrl("locales/{{lng}}/{{ns}}.json")
+                loadPath: require.toUrl("locales/__lng__/__ns__.json")
+            },
+            interpolation: {
+                prefix: "__",
+                suffix: "__"
             }
         };
 
