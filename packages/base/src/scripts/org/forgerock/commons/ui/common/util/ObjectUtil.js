@@ -249,7 +249,7 @@ define([
                 .flatten()
                 // Filter out duplicates which might result from adding whole containers
                 // Have to stringify the patch operations to do object comparisons with uniq
-                .uniq(JSON.stringify)
+                .uniqBy(JSON.stringify)
                 .value(),
             removedValues = _.chain(previousPointerMap)
                 .toPairs()
@@ -262,7 +262,7 @@ define([
                 })
                 // Filter out duplicates which might result from deleting whole containers
                 // Have to stringify the patch operations to do object comparisons with uniq
-                .uniq(JSON.stringify)
+                .uniqBy(JSON.stringify)
                 .value();
 
         return newValues.concat(removedValues);
