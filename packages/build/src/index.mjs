@@ -128,25 +128,35 @@ export function useEslint(options = {}) {
 
 /**
  * @typedef {Object} BuildScriptsOptions
- * @property {string} src - source glob pattern (defaults to `src/scripts/**\/*.{js,mjs}`)
+ * @property {string} src - source glob pattern (defaults to `src/scripts/**\/*.{js,jsm}`)
  * @property {string} dest - target path (defaults to `dist/js`)
+ * @property {string[]} presets - array with Babel presets (defaults to `["@babel/preset-env"]`)
+ * @property {string[]} plugins - array with Babel plugins (defaults to `["@babel/plugin-transform-modules-amd"]`)
  */
 
 /**
- * Build scripts (i.e. transpile and copy).
+ * Build ESM based scripts (i.e. transpile and copy).
  * @param {BuildScriptsOptions} [options]
  * @return {TaskFunction}
  */
 export function useBuildScripts(options = {}) {
     return async () => {
         const babel = (await import('@babel/core')).default;
-        await finished(gulp.src(options.src || "src/scripts/**/*.{js,mjs}")
+        await finished(gulp.src(options.src || "src/scripts/**/*.jsm")
             .pipe(new Transform({
                 transform(file, encoding, callback) {
                     const output = babel.transform(file.contents.toString("utf-8"), {
-                        presets: ["@babel/preset-env"],
+                        presets: options.presets ?? [
+                            // transpile new syntax into something that r.js can handle
+                            "@babel/preset-env"
+                        ],
+                        plugins: options.plugins ?? [
+                            // transform ESM into AMD so that it is RequireJS compatible
+                            "@babel/plugin-transform-modules-amd"
+                        ],
                         sourceMaps: false
                     });
+                    file.extname = ".js"; // force JS extension
                     file.contents = Buffer.from(output.code);
                     callback(null, file);
                 },
@@ -197,7 +207,7 @@ export function useBuildRequire(options = {}) {
  */
 
 /**
- * Bundle input ESM script as AMD module.
+ * Bundle single input ESM script as AMD module.
  * @param {BuildModuleOptions} options
  * @returns {TaskFunction}
  */
