@@ -62,7 +62,7 @@ gulp.task("build:styles", useLessStyles({
 
 gulp.task("build:editor", useBuildModule({
     id: "org/forgerock/mock/ui/examples/CodeMirror",
-    src: "src/scripts/org/forgerock/mock/ui/examples/CodeMirror.mjs",
+    src: "src/scripts/org/forgerock/mock/ui/examples/CodeMirror.jsm",
     dest: join(TARGET_PATH, "org/forgerock/mock/ui/examples/CodeMirror.js")
 }));
 
@@ -82,7 +82,8 @@ gulp.task("test:scripts", useLocalResources(TEST_RESOURCES, { dest: TESTS_PATH }
 
 gulp.task("test:sinon", useBuildScripts({
     src: require.resolve("sinon/pkg/sinon.js"),
-    dest: join(TARGET_PATH, "libs")
+    dest: join(TARGET_PATH, "libs"),
+    plugins: []
 }));
 
 gulp.task("test:qunit", async () => {
