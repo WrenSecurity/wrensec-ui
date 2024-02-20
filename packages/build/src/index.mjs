@@ -90,7 +90,9 @@ export function useLessStyles(resources, options = {}) {
         for (const [source, target] of Object.entries(resources)) {
             // Build using Less
             const rendered = await less.render(await readFile(source, "utf-8"), {
-                paths: options.base || "dist"
+                filename: source,
+                paths: options.base || "dist",
+                rewriteUrls: "local"
             });
             // Process using PostCSS (we want to drop Less in the future)
             const processed = await postcss([ minify() ]).process(rendered.css, {
