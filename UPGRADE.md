@@ -1,5 +1,12 @@
 # Upgrade Guide
 
+## 23.0.x -> 23.1.x
+
+* ProcessConfiguration allows defining synchronous event handler when there are no dependencies.
+Downstream projects should prefer using synchronous event handlers as the legacy behavior might
+be removed in later releases.
+
+
 ## 22.1.x -> 23.x
 
 * Library files no longer contain version number in their name. Adding content hash or version
