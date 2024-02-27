@@ -205,6 +205,7 @@ export function useBuildRequire(options = {}) {
  * @property {string} dest - target module file path
  * @property {boolean} [minify] - minify output
  * @property {boolean} [transpile] - transpile output
+ * @property {import("rollup").ExternalOption} [external] - external dependencies
  * @property {import("@rollup/plugin-alias").RollupAliasOptions} [alias] - alias options
  */
 
@@ -234,6 +235,7 @@ export function useBuildModule(options) {
         }
         const bundle = await rollup({
             input: options.src,
+            external: options.external,
             plugins
         });
         await bundle.write({
