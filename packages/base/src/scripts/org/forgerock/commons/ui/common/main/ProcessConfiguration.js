@@ -36,12 +36,18 @@ define([
     });
 
     obj.callRegisterListenerFromConfig = function (config) {
+        var dependencies = _.map(config.dependencies, function (dep) {
+            return ModuleLoader.load(dep);
+        });
         eventManager.registerListener(config.startEvent, function (event) {
-            return $.when.apply($, _.map(config.dependencies, function (dep) {
-                return ModuleLoader.load(dep);
-            })).then(function () {
-                return config.processDescription.apply(this, [event].concat(_.toArray(arguments)));
-            });
+            if (dependencies.length) {
+                // legacy async processing
+                return $.when.apply($, dependencies).then(function () {
+                    return config.processDescription.apply(this, [event].concat(_.toArray(arguments)));
+                });
+            } else {
+                return config.processDescription(event);
+            }
         });
     };
 
