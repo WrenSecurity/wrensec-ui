@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 /**
@@ -20,8 +21,9 @@
 define([
     "lodash",
     "react",
+    "create-react-class",
     "org/forgerock/commons/ui/common/main/Router"
-], function(_, React, Router) {
+], function (_, React, createReactClass, Router) {
     function getDisplayName (WrappedComponent) {
         return WrappedComponent.displayName || WrappedComponent.name || "Component";
     }
@@ -42,8 +44,8 @@ define([
      * export default withRouter(MyReactComponent)
      */
     var exports = function (WrappedComponent) {
-        var WithRouter = React.createClass({
-            render: function render() {
+        var WithRouter = createReactClass({
+            render: function render () {
                 var route = Router.currentRoute,
                     params = Router.extractParameters(route, Router.getURIFragment()),
                     paramsWithDefaults = Router.applyDefaultParameters(route, params),

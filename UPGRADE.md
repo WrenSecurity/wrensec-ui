@@ -1,5 +1,10 @@
 # Upgrade Guide
 
+## 23.1.x -> 23.2.x
+
+* `react` and `react-dom` dependencies have been upgraded to version 16 (see https://legacy.reactjs.org/blog/2017/09/26/react-v16.0.html#breaking-changes).
+
+
 ## 23.0.x -> 23.1.x
 
 * ProcessConfiguration allows defining synchronous event handler when there are no dependencies.
