@@ -12,14 +12,15 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 /**
  * @module org/forgerock/commons/ui/common/components/hoc/withRouterPropType
  */
 define([
-    "react"
-], function(React) {
+    "prop-types"
+], function (PropTypes) {
     /**
      * Prop type for {@link module:org/forgerock/commons/ui/common/components/hoc/withRouter|withRouter}.
      * @example
@@ -29,8 +30,8 @@ define([
      *     router: withRouterPropType
      * };
      */
-    var exports = React.PropTypes.shape({
-        params: React.PropTypes.array.isRequired
+    var exports = PropTypes.shape({
+        params: PropTypes.array.isRequired
     });
 
     return exports;
