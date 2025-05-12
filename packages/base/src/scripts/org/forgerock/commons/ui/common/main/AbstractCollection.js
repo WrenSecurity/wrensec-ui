@@ -171,10 +171,12 @@ define([
             this.state.totalRecords = _.isFinite(resp.totalPagedResults) && resp.totalPagedResults > -1
                 ? resp.totalPagedResults : null;
 
-            if (!this.state.totalPages && this.state.totalRecords) {
+            if (this.state.totalRecords) {
                 this.state.totalPages = Math.ceil(this.state.totalRecords / this.state.pageSize);
+                this.state.lastPage = this.state.totalPages - 1;
             } else {
                 this.state.totalPages = null;
+                this.state.lastPage = null;
             }
         },
         parseRecords: function (resp) {
