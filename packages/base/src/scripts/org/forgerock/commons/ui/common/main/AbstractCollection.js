@@ -75,15 +75,21 @@ define([
             }
         },
 
-        hasPrevious: function () {
+        hasPreviousPage: function () {
             return (this.getPagingType() === "offset" && this.state.currentPage >= 1);
         },
-        hasNext: function () {
+        hasPrevious: function () { // Legacy function to retain backward compatibility
+            return this.hasPreviousPage();
+        },
+        hasNextPage: function () {
             return (this.getPagingType() === "cookie" && this.state.pagedResultsCookie !== null) ||
                 // when we don't have a total, assume there are more results
                 (this.getPagingType() === "offset" && this.state.totalRecords === null) ||
                 (this.getPagingType() === "offset"
                     && this.state.totalRecords >= ((this.state.currentPage+1) * this.state.pageSize));
+        },
+        hasNext: function () { // Legacy function to retain backward compatibility
+            return this.hasNextPage();
         },
         sync: function (method, collection, options) {
             if (method === "read") {
@@ -138,7 +144,7 @@ define([
             return BackbonePaginator.prototype.getNextPage.apply(this, arguments);
         },
         getPreviousPage: function () {
-            if (!this.hasPrevious()) {
+            if (!this.hasPreviousPage()) {
                 return this.getFirstPage();
             }
             // this only works with offset-based paging
