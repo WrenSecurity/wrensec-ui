@@ -63,7 +63,7 @@ define([
             assert.equal(testCollection.length, 2, "collection contains two records from the backend");
             assert.equal(testCollection.where({givenName: "Boaty"}).length, 1,
                 "able to find expected model content in collection");
-            assert.ok(testCollection.hasNext(), "response with cookie indicates that hasNext is true");
+            assert.ok(testCollection.hasNextPage(), "response with cookie indicates that hasNextPage is true");
             assert.equal(testCollection.state.totalRecords, 5, "Total records correctly populated in collection state");
             assert.equal(testCollection.state.totalPages, 3, "Total pages correctly populated in collection state");
             assert.equal(restCallArg.url, "/crestResource", "correct url used to query backend");
