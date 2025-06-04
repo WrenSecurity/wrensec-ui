@@ -36,12 +36,12 @@ define([
     });
 
     obj.callRegisterListenerFromConfig = function (config) {
-        var dependencies = _.map(config.dependencies, function (dep) {
-            return ModuleLoader.load(dep);
-        });
         eventManager.registerListener(config.startEvent, function (event) {
-            if (dependencies.length) {
+            if (config.dependencies && config.dependencies.length) {
                 // legacy async processing
+                var dependencies = _.map(config.dependencies, function (dep) {
+                    return ModuleLoader.load(dep);
+                });
                 return $.when.apply($, dependencies).then(function () {
                     return config.processDescription.apply(this, [event].concat(_.toArray(arguments)));
                 });
