@@ -39,7 +39,7 @@
     "moment": "^2.29.4",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "requirejs": "^2.3.6",
+    "requirejs": "^2.3.7",
     "spin.js": "^2.3.2",
     "titatoggle": "^2.1.2",
     "xdate": "^0.8.2"

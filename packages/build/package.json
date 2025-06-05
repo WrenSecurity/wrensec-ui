@@ -29,7 +29,7 @@
     "less": "^4.2.0",
     "postcss": "^8.4.31",
     "postcss-minify": "^1.1.0",
-    "requirejs": "^2.3.6",
+    "requirejs": "^2.3.7",
     "rimraf": "^5.0.5",
     "rollup": "^4.6.0"
   },
