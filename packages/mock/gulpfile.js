@@ -53,7 +53,7 @@ gulp.task("build:scripts", useLocalResources({ "src/scripts/**": "" }, { dest: T
 
 gulp.task("build:compose", useLocalResources({ "../user/dist/**": "" }, { dest: TARGET_PATH }));
 
-gulp.task("build:libs", useModuleResources(MODULE_RESOURCES, { dest: TARGET_PATH }));
+gulp.task("build:libs", useModuleResources(MODULE_RESOURCES, { path: __filename, dest: TARGET_PATH }));
 
 gulp.task("build:styles", useLessStyles({
     "build/www/css/structure.less": "css/structure.css",

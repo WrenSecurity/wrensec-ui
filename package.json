@@ -13,7 +13,6 @@
   "overrides": {
     "glob-parent": "6.0.2",
     "glob-watcher": "6.0.0",
-    "node-fetch": "2.7.0",
-    "puppeteer": "21.5.2"
+    "node-fetch": "2.7.0"
   }
 }
