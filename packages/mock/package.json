@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "qunit": "^2.20.0",
-    "requirejs": "^2.3.6",
+    "requirejs": "^2.3.7",
     "sinon": "^17.0.1"
   },
   "overrides": {
