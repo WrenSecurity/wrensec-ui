@@ -64,7 +64,10 @@ export function useLocalResources(resources, options = {}) {
     return async () => {
         for (const [source, target] of Object.entries(resources)) {
             await finished(gulp
-                .src(source, { cwd: options.base })
+                .src(source, {
+                    cwd: options.base || process.cwd(),
+                    encoding: false
+                })
                 .pipe(gulp.dest(join(options.dest || "dist", target))));
         }
     };
@@ -144,7 +147,7 @@ export function useEslint(options = {}) {
 export function useBuildScripts(options = {}) {
     return async () => {
         const babel = (await import('@babel/core')).default;
-        await finished(gulp.src(options.src || "src/scripts/**/*.jsm")
+        await finished(gulp.src(options.src || "src/scripts/**/*.jsm", { encoding: false })
             .pipe(new Transform({
                 transform(file, encoding, callback) {
                     const output = babel.transform(file.contents.toString("utf-8"), {
