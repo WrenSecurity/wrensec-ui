@@ -23,8 +23,8 @@
     "@rollup/plugin-terser": "^0.4.4",
     "@wrensecurity/eslint-config": "^0.2.0",
     "eslint": "^8.52.0",
-    "gulp": "^4.0.2",
-    "gulp-eslint-new": "^1.8.4",
+    "gulp": "^5.0.1",
+    "gulp-eslint-new": "^2.4.0",
     "jsdoc": "4.0.2",
     "less": "^4.2.0",
     "postcss": "^8.4.31",
@@ -34,8 +34,6 @@
     "rollup": "^4.41.1"
   },
   "overrides": {
-    "glob-parent": "6.0.2",
-    "glob-watcher": "6.0.0",
     "node-fetch": "2.7.0"
   }
 }

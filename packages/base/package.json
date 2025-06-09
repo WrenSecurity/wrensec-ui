@@ -9,7 +9,7 @@
     "jsdoc": "jsdoc --configure jsdoc.json"
   },
   "devDependencies": {
-    "@wrensecurity/commons-ui-build": "0.0.0",
+    "@wrensecurity/commons-ui-build": "^0.0.0",
     "@wrensecurity/eslint-config": "^0.2.0",
     "jsdoc": "4.0.2",
     "underscore": "^1.13.6"
