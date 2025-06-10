@@ -31,7 +31,7 @@
     "postcss-minify": "^1.1.0",
     "requirejs": "^2.3.7",
     "rimraf": "^5.0.5",
-    "rollup": "^4.41.1"
+    "rollup": "^4.42.0"
   },
   "overrides": {
     "node-fetch": "2.7.0"
