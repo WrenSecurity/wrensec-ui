@@ -26,7 +26,7 @@
 
     <groupId>org.wrensecurity.commons</groupId>
     <artifactId>wrensec-ui-commons</artifactId>
-    <version>23.2.2</version>
+    <version>23.2.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Wren Security UI Commons</name>
@@ -36,7 +36,7 @@
         <url>https://github.com/WrenSecurity/wrensec-ui</url>
         <connection>scm:git:git://github.com/WrenSecurity/wrensec-ui.git</connection>
         <developerConnection>scm:git:git@github.com:WrenSecurity/wrensec-ui.git</developerConnection>
-        <tag>23.2.2</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <repositories>
