@@ -27,11 +27,7 @@ define([
         return $.when.apply($,
 
             _.map(eventRegistry[eventId], function (eventHandler) {
-                var promise = $.Deferred();
-                window.setTimeout(function () {
-                    $.when(eventHandler(event)).always(promise.resolve);
-                });
-                return promise;
+                return eventHandler(event);
             })
 
         ).then(
