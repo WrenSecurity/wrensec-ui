@@ -51,7 +51,7 @@ define([
             node = $(basicNode);
 
         if (node.hasClass("filter-value") && node.val().length > 0) {
-            return node.attr('name') + ' eq "' + node.val().replace('"', '\\"') + '"';
+            return node.attr('name') + ' eq "' + node.val().replaceAll('"', '\\"') + '"';
         } else if (node.hasClass("filter-group")) {
             groupValues = _.chain(node.find(">.form-group>.filter-value, >.filter-group"))
                 .map(walkTreeForFilterStrings)
