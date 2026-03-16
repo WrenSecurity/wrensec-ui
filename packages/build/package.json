@@ -17,10 +17,10 @@
     "@babel/core": "^7.23.3",
     "@babel/plugin-transform-modules-amd": "^7.23.3",
     "@babel/preset-env": "^7.23.3",
-    "@rollup/plugin-alias": "^5.1.1",
-    "@rollup/plugin-babel": "^6.0.4",
-    "@rollup/plugin-node-resolve": "^16.0.1",
-    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-alias": "^6.0.0",
+    "@rollup/plugin-babel": "^7.0.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^1.0.0",
     "@wrensecurity/eslint-config": "^0.2.0",
     "eslint": "^8.52.0",
     "gulp": "^5.0.1",
@@ -31,7 +31,7 @@
     "postcss-minify": "^1.1.0",
     "requirejs": "^2.3.7",
     "rimraf": "^6.1.2",
-    "rollup": "^4.42.0"
+    "rollup": "^4.59.0"
   },
   "overrides": {
     "node-fetch": "2.7.0",
