@@ -77,8 +77,8 @@
                 <version>1.14.2</version>
 
                 <configuration>
-                    <nodeVersion>v20.10.0</nodeVersion>
-                    <npmVersion>10.2.3</npmVersion>
+                    <nodeVersion>v24.14.0</nodeVersion>
+                    <npmVersion>11.9.0</npmVersion>
                     <nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
                     <npmDownloadRoot>https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/npm/-/</npmDownloadRoot>
                 </configuration>
