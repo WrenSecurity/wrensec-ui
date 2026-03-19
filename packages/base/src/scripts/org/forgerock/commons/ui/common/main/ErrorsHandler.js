@@ -33,6 +33,7 @@ define([
         if (error.hasOwnProperty('responseText')) {
             try {
                 error.responseObj = $.parseJSON(error.responseText);
+            // eslint-disable-next-line no-unused-vars
             } catch (parseErr) { /* Must not be JSON */ }
         }
 

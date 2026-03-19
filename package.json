@@ -11,7 +11,6 @@
     "packages/mock"
   ],
   "overrides": {
-    "node-fetch": "2.7.0",
-    "cross-spawn": "7.0.6"
+    "node-fetch": "2.7.0"
   }
 }

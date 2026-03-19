@@ -253,6 +253,7 @@ define([
                             cellWrapper;
 
                         if (_.isObject(col.cell)) {
+                            // eslint-disable-next-line new-cap
                             cellView = new col.cell({ model: this.model, column: col });
                             cellView.$el = $("<span>");
                             cellView.render();

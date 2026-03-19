@@ -21,8 +21,9 @@
     "@rollup/plugin-babel": "^7.0.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^1.0.0",
-    "@wrensecurity/eslint-config": "^0.2.0",
-    "eslint": "^8.52.0",
+    "@wrensecurity/eslint-config": "^0.4.0",
+    "eslint": "^9.39.4",
+    "globals": "^17.4.0",
     "gulp": "^5.0.1",
     "gulp-eslint-new": "^2.4.0",
     "jsdoc": "4.0.2",
@@ -34,7 +35,6 @@
     "rollup": "^4.59.0"
   },
   "overrides": {
-    "node-fetch": "2.7.0",
-    "cross-spawn": "7.0.6"
+    "node-fetch": "2.7.0"
   }
 }
