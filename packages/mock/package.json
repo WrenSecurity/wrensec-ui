@@ -24,6 +24,6 @@
     "sinon": "^18.0.1"
   },
   "overrides": {
-    "puppeteer": "24.36.1"
+    "puppeteer": "24.40.0"
   }
 }
