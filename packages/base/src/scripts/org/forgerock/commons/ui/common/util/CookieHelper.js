@@ -94,11 +94,12 @@ define([
      * @param {String} name - cookie name.
      * @param {String} [path] - cookie path.
      * @param {String|String[]} [domain] - cookie domain(s).
+     * @param {Boolean} [secure] - is cookie secure.
      */
-    obj.deleteCookie = function(name, path, domains) {
+    obj.deleteCookie = function(name, path, domains, secure) {
         var date = new Date();
         date.setTime(date.getTime() + (-1 * 24 * 60 * 60 * 1000));
-        obj.setCookie(name, "", date, path, domains);
+        obj.setCookie(name, "", date, path, domains, secure);
     };
 
     /**
