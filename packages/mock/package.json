@@ -22,8 +22,5 @@
     "qunit": "^2.24.1",
     "requirejs": "^2.3.7",
     "sinon": "^18.0.1"
-  },
-  "overrides": {
-    "puppeteer": "24.40.0"
   }
 }
