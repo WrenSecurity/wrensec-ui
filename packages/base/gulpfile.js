@@ -21,7 +21,6 @@ const {
     useBuildModule
 } = require("@wrensecurity/commons-ui-build");
 const gulp = require("gulp");
-const { join } = require("path");
 
 const MODULE_RESOURCES = {
     "@mstyk/jquery-placeholder": "libs/jquery.placeholder.js",
@@ -82,14 +81,6 @@ gulp.task("build:libs", async () => {
         id: "i18next",
         src: "src/modules/i18next.mjs",
         dest: "dist/libs/i18next.js",
-        alias: {
-            entries: [
-                {
-                    find: "./getFetch.cjs",
-                    replacement: join(__dirname, "src/modules/undefined.mjs")
-                }
-            ]
-        },
         transpile: true
     })();
 });
