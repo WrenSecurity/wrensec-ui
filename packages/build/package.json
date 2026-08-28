@@ -27,7 +27,7 @@
     "gulp": "^5.0.1",
     "gulp-eslint-new": "^2.4.0",
     "jsdoc": "4.0.5",
-    "less": "^4.2.0",
+    "less": "4.9.0",
     "postcss": "8.5.26",
     "postcss-minify": "1.2.0",
     "requirejs": "^2.3.7",
