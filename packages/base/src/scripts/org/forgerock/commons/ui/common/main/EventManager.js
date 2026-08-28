@@ -70,7 +70,8 @@ define([
      *
      * @param {string} eventId
      * @param {*} [event]
-     * @param {{ async?: boolean }} [options]
+     * @param {Object} [options] - dispatch options
+     * @param {boolean} [options.async] - whether the event dispatch should be asynchronous
      * @returns {Promise} resolved once every handler has settled.
      */
     obj.sendEvent = function (eventId, event, options) {
