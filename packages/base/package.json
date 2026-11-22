@@ -17,7 +17,7 @@
   "dependencies": {
     "@mstyk/jquery-placeholder": "2.0.9",
     "@selectize/selectize": "~0.14.0",
-    "backbone": "1.5.0",
+    "backbone": "1.6.1",
     "backbone-relational": "0.10.0",
     "backbone.paginator": "2.0.8",
     "backgrid": "^0.3.8",
@@ -30,18 +30,18 @@
     "dragula": "^3.7.3",
     "font-awesome": "^4.7.0",
     "form2js": "1.0.0",
-    "handlebars": "4.7.9",
-    "i18next": "^23.7.7",
-    "i18next-browser-languagedetector": "^7.2.0",
-    "i18next-http-backend": "4.0.1",
-    "jquery": "^3.7.1",
+    "handlebars": "4.7.10",
+    "i18next": "^23.16.8",
+    "i18next-browser-languagedetector": "^7.2.2",
+    "i18next-http-backend": "4.1.0",
+    "jquery": "^3.8.0",
     "lodash": "4.18.1",
-    "moment": "^2.29.4",
+    "moment": "^2.31.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "requirejs": "^2.3.7",
+    "requirejs": "^2.3.8",
     "spin.js": "^2.3.2",
     "titatoggle": "^2.1.2",
-    "xdate": "^0.8.2"
+    "xdate": "^0.8.3"
   }
 }
