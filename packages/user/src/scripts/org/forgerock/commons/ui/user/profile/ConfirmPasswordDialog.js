@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
  */
 
 define([
@@ -53,7 +54,9 @@ define([
         onshown: function(dialog){
             this.dialog = dialog;
             this.element = dialog.$modal;
-            this.rebind();
+            // Do not use rebind() as it unbinds all handlers including BootstrapDialog's own
+            // (dialog would never be marked as closed and "modal-open" would stay on body).
+            this.setElement(this.element);
             dialog.$modal.find(".modal-body :input:first").val("");
             ValidatorsManager.bindValidators(dialog.$modal);
         },
