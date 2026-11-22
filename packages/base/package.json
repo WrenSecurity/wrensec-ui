@@ -15,7 +15,7 @@
     "underscore": "^1.13.8"
   },
   "dependencies": {
-    "@selectize/selectize": "~0.14.0",
+    "@selectize/selectize": "~0.15.2",
     "backbone": "1.6.1",
     "backbone-relational": "0.10.0",
     "backbone.paginator": "2.0.8",

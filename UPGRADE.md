@@ -4,6 +4,14 @@
 
 * Bundled libraries have been upgraded to their latest minor versions (e.g. jQuery 3.8, Backbone 1.6,
   Handlebars 4.7.10, i18next 23.16).
+* Selectize has been upgraded to 0.15 (see https://github.com/selectize/selectize.js/releases/tag/v0.15.0).
+  Notable behavior changes:
+  * Search matches only at word boundaries by default (e.g. `Name` no longer matches `givenName`). To keep
+    the previous substring matching, set `$.fn.selectize.defaults.respect_word_boundaries = false` after loading
+    the library (or pass `respect_word_boundaries: false` to individual instances).
+  * `change` event is no longer triggered when the value has not changed (e.g. `setValue()` with the current
+    value). Do not rely on it to run `change` handlers for the initial value.
+  * Highlighted dropdown option in the Bootstrap 3 theme uses the primary (blue) color.
 * Removed `delayedkeyup` jQuery special event from `UIUtils`. It has not been working since
   jQuery 1.9 (it relied on removed `$.event.handle`). Use `_.debounce` on a regular `keyup` handler instead.
 * `LoginView` no longer applies the IE9 `placeholder` polyfill.
