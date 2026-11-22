@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2017 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
  */
 
 define([
@@ -223,26 +224,6 @@ define([
                 }
             }
         });
-    };
-
-    $.event.special.delayedkeyup = {
-        setup: function() {
-            $(this).bind("keyup", $.event.special.delayedkeyup.handler);
-        },
-
-        teardown: function() {
-            $(this).unbind("keyup", $.event.special.delayedkeyup.handler);
-        },
-
-        handler: function( event ) {
-            var self = this, args = arguments;
-
-            event.type = "delayedkeyup";
-
-            $.doTimeout("delayedkeyup", 250, function() {
-                $.event.handle.apply(self, args);
-            });
-        }
     };
 
     //map should have format key : value

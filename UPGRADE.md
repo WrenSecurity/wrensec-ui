@@ -1,5 +1,17 @@
 # Upgrade Guide
 
+## 23.4.x -> 23.5.x
+
+* Removed `delayedkeyup` jQuery special event from `UIUtils`. It has not been working since
+  jQuery 1.9 (it relied on removed `$.event.handle`). Use `_.debounce` on a regular `keyup` handler instead.
+* `LoginView` no longer applies the IE9 `placeholder` polyfill.
+* Removed the following libraries. Remove them from RequireJS `paths` / `shim` configuration and from
+  startup module lists, otherwise RequireJS fails to load them:
+  * `libs/jquery.ba-dotimeout.js` (`doTimeout`) - replace `$.doTimeout(...)` with `setTimeout` /
+    `_.debounce` (e.g. Wren AM `CreatedResourcesView`, `StripedListEditingView`).
+  * `libs/jquery.placeholder.js` (`placeholder`) - native `placeholder` attribute is supported by all
+    current browsers (e.g. Wren IDM admin `main.js` startup module list).
+
 ## 23.1.x -> 23.2.x
 
 * `react` and `react-dom` dependencies have been upgraded to version 16 (see https://legacy.reactjs.org/blog/2017/09/26/react-v16.0.html#breaking-changes).

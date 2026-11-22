@@ -12,18 +12,18 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
  */
 
 define([
     "lodash",
-    "placeholder",
     "org/forgerock/commons/ui/common/main/AbstractView",
     "org/forgerock/commons/ui/common/util/ModuleLoader",
     "org/forgerock/commons/ui/common/main/ValidatorsManager",
     "org/forgerock/commons/ui/common/main/EventManager",
     "org/forgerock/commons/ui/common/util/Constants",
     "org/forgerock/commons/ui/common/util/CookieHelper"
-], function(_, placeholder, AbstractView, ModuleLoader, validatorsManager, eventManager, constants, cookieHelper) {
+], function(_, AbstractView, ModuleLoader, validatorsManager, eventManager, constants, cookieHelper) {
     var LoginView = AbstractView.extend({
         template: "templates/common/LoginTemplate.html",
         baseTemplate: "templates/common/LoginBaseTemplate.html",
@@ -56,8 +56,6 @@ define([
         render: function(args, callback) {
             this.parentRender(function() {
                 validatorsManager.bindValidators(this.$el);
-
-                this.$el.find("input").placeholder();
 
                 var login = cookieHelper.getCookie("login");
                 if (login) {

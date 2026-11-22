@@ -48,12 +48,10 @@ require.config({
         spin: "libs/spin",
         jquery: "libs/jquery",
         xdate: "libs/xdate",
-        doTimeout: "libs/jquery.ba-dotimeout",
         handlebars: "libs/handlebars",
         moment: "libs/moment",
         bootstrap: "libs/bootstrap",
-        "bootstrap-dialog": "libs/bootstrap-dialog",
-        placeholder: "libs/jquery.placeholder"
+        "bootstrap-dialog": "libs/bootstrap-dialog"
     },
 
     shim: {
@@ -95,18 +93,11 @@ require.config({
         'bootstrap-dialog': {
             deps: ["jquery", "underscore","backbone", "bootstrap"]
         },
-        placeholder: {
-            deps: ["jquery"]
-        },
         selectize: {
             deps: ["jquery"]
         },
         xdate: {
             exports: "xdate"
-        },
-        doTimeout: {
-            deps: ["jquery"],
-            exports: "doTimeout"
         },
         moment: {
             exports: "moment"

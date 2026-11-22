@@ -23,7 +23,6 @@ const {
 const gulp = require("gulp");
 
 const MODULE_RESOURCES = {
-    "@mstyk/jquery-placeholder": "libs/jquery.placeholder.js",
     "@selectize/selectize/dist/css/selectize.bootstrap3.css": "css/selectize.css",
     "@selectize/selectize/dist/js/selectize.min.js": "libs/selectize.js",
     "backbone-relational/backbone-relational.js": "libs/backbone-relational.js",
@@ -64,10 +63,6 @@ const MODULE_RESOURCES = {
     "xdate/src/xdate.js": "libs/xdate.js"
 };
 
-const LOCAL_RESOURCES = {
-    "libs/js/*": "libs"
-};
-
 gulp.task("eslint", useEslint());
 
 gulp.task("build:assets", useLocalResources({ "src/assets/**": "" }));
@@ -76,7 +71,6 @@ gulp.task("build:scripts", useLocalResources({ "src/scripts/**": "" }));
 
 gulp.task("build:libs", async () => {
     await useModuleResources(MODULE_RESOURCES, { path: __filename })();
-    await useLocalResources(LOCAL_RESOURCES)();
     await useBuildModule({
         id: "i18next",
         src: "src/modules/i18next.mjs",
