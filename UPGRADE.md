@@ -2,11 +2,13 @@
 
 ## 23.4.x -> 23.5.x
 
+* Bundled libraries have been upgraded to their latest minor versions (e.g. jQuery 3.8, Backbone 1.6,
+  Handlebars 4.7.10, i18next 23.16).
 * Removed `delayedkeyup` jQuery special event from `UIUtils`. It has not been working since
   jQuery 1.9 (it relied on removed `$.event.handle`). Use `_.debounce` on a regular `keyup` handler instead.
 * `LoginView` no longer applies the IE9 `placeholder` polyfill.
-* Removed the following libraries. Remove them from RequireJS `paths` / `shim` configuration and from
-  startup module lists, otherwise RequireJS fails to load them:
+* Removed the following libraries. Any module that still depends on them (including startup module lists)
+  fails to load, so replace their usages and remove them from RequireJS `paths` / `shim` configuration:
   * `libs/jquery.ba-dotimeout.js` (`doTimeout`) - replace `$.doTimeout(...)` with `setTimeout` /
     `_.debounce` (e.g. Wren AM `CreatedResourcesView`, `StripedListEditingView`).
   * `libs/jquery.placeholder.js` (`placeholder`) - native `placeholder` attribute is supported by all

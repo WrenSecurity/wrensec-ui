@@ -36,7 +36,8 @@ const TESTS_PATH = "build/test";
 
 const MODULE_RESOURCES = {
     "qunit": "libs/qunit.js",
-    "qunit/qunit/qunit.css": "css/qunit.css"
+    "qunit/qunit/qunit.css": "css/qunit.css",
+    "sinon/pkg/sinon.js": "libs/sinon.js"
 };
 
 const TEST_RESOURCES = {
@@ -74,14 +75,14 @@ gulp.task("build:bundle", useBuildRequire({
         "config/AppConfiguration",
         // Exclude mock project dependencies to create a more representative bundle.
         "mock/Data",
-        "sinon"
+        "nise"
     ]
 }));
 
 gulp.task("test:scripts", useLocalResources(TEST_RESOURCES, { dest: TESTS_PATH }));
 
-gulp.task("test:sinon", useBuildScripts({
-    src: require.resolve("sinon/pkg/sinon.js"),
+gulp.task("test:nise", useBuildScripts({
+    src: require.resolve("nise/nise.js"),
     dest: join(TARGET_PATH, "libs"),
     plugins: []
 }));
@@ -104,7 +105,7 @@ gulp.task("build", gulp.series(
         "build:compose",
         "build:editor",
         "build:libs",
-        "test:sinon"
+        "test:nise"
     ),
     gulp.parallel(
         "build:styles",

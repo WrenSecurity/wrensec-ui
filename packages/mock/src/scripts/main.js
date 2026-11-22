@@ -31,8 +31,8 @@ require.config({
         }
     },
     paths: {
-        // sinon only needed (or available) for Mock project
-        sinon: "libs/sinon",
+        // nise (fake server) only needed (or available) for Mock project
+        nise: "libs/nise",
         i18next: "libs/i18next",
         backbone: "libs/backbone",
         "backbone.paginator": "libs/backbone.paginator",
@@ -55,9 +55,6 @@ require.config({
     },
 
     shim: {
-        sinon: {
-            exports: "sinon"
-        },
         lodash: {
             exports: ""
         },

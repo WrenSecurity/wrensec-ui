@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
  */
 
 /**
@@ -19,19 +20,19 @@
  */
 define([
     "mock/Data",
-    "sinon"
-], function (mockData, sinon) {
+    "nise"
+], function (mockData, nise) {
     var instance = null,
         server;
 
     function init() {
 
-        sinon.FakeXMLHttpRequest.useFilters = true;
-        sinon.FakeXMLHttpRequest.addFilter(function (method, url) {
+        nise.fakeXhr.FakeXMLHttpRequest.useFilters = true;
+        nise.fakeXhr.FakeXMLHttpRequest.addFilter(function (method, url) {
             return (/((\.html)|(\.css)|(\.less)|(\.json))$/).test(url);
         });
 
-        server = sinon.fakeServer.create();
+        server = nise.fakeServer.create();
         server.autoRespond = true;
 
         mockData(server);
