@@ -12,26 +12,22 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
  */
 
 define([
-    "jquery",
-    "spin"
-], function($, Spinner) {
+    "jquery"
+], function($) {
 
     var obj = {};
 
     obj.showSpinner = function(priority) {
-        if (obj.spinner) {
-            obj.hideSpinner();
+        if (!obj.spinner) {
+            // Styled by structure/spinner.less
+            obj.spinner = $('<div class="spinner" role="progressbar"></div>');
         }
 
-        obj.spinner = new Spinner().spin(document.getElementById('wrapper'));
-        $(".spinner").position({
-            of: $(window),
-            my: "center center",
-            at: "center center"
-        });
+        obj.spinner.appendTo(document.getElementById("wrapper") || document.body);
 
         if (priority && (!obj.priority || priority > obj.priority)) {
             obj.priority = priority;
@@ -42,7 +38,7 @@ define([
 
     obj.hideSpinner = function(priority) {
         if (obj.spinner && (!obj.priority || (priority && priority >= obj.priority))) {
-            obj.spinner.stop();
+            obj.spinner.detach();
             delete obj.priority;
         }
 

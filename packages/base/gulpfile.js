@@ -57,7 +57,6 @@ const MODULE_RESOURCES = {
     "react-dom/umd/react-dom.production.min.js": "libs/react-dom.js",
     "react/umd/react.production.min.js": "libs/react.js",
     "requirejs/require.js": "libs/requirejs.js",
-    "spin.js/spin.js": "libs/spin.js",
     "titatoggle/dist/titatoggle-dist-min.css": "css/titatoggle.css",
     "underscore/underscore-umd.js": "libs/underscore.js",
     "xdate/src/xdate.js": "libs/xdate.js"

@@ -45,7 +45,6 @@ require.config({
         lodash: "libs/lodash",
         js2form: "libs/js2form",
         form2js: "libs/form2js",
-        spin: "libs/spin",
         jquery: "libs/jquery",
         xdate: "libs/xdate",
         handlebars: "libs/handlebars",
@@ -80,9 +79,6 @@ require.config({
         },
         form2js: {
             exports: "form2js"
-        },
-        spin: {
-            exports: "spin"
         },
         bootstrap: {
             deps: ["jquery"]
@@ -129,8 +125,7 @@ require([
     "lodash",
     "backbone",
     "handlebars",
-    "i18next",
-    "spin"
+    "i18next"
 ], function (EventManager, Constants, CookieHelper, LocalStorage) {
 
     // Mock project is run without server. Framework requires cookies to be enabled in order to be able to login.

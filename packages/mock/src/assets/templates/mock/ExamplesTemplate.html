@@ -1,4 +1,5 @@
 <!-- Copyright 2015 ForgeRock AS.
+	Portions Copyright 2026 Wren Security.
 	License terms: https://forgerock.org/cddlv1-0/ -->
 <div class="jumbotron styleguide-jumbotron">
     <div class="container">
@@ -560,6 +561,32 @@
                 <div class="example">
                 </div>
             </section>
+            <section class="resource-section">
+                <h1 id="spinner">
+                    Spinner
+                </h1>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4 class="sub-header">
+                            Loading Spinner
+                        </h4>
+                        <p>
+                            Displayed automatically during REST calls (unless the call is made with
+                            <code>suppressSpinner</code>). It can be also controlled with <code>SpinnerManager</code>.
+                        </p>
+<div class="snippet">
+    <button type="button" class="btn btn-default" id="spinnerExample">Show spinner for 2 seconds</button>
+</div>
+                    </div>
+                </div>
+                <div class="example">
+<div class="code">
+    SpinnerManager.showSpinner();
+    // ... when the work is done
+    SpinnerManager.hideSpinner();
+</div>
+                </div>
+            </section>
         </div>
         <div class="col-md-3" id="rightCol">
             <ul class="nav nav-stacked" id="sidebar">
@@ -575,6 +602,7 @@
                 <li><a href="#headers">Headers</a></li>
                 <li><a href="#forms">Forms</a></li>
                 <li><a href="#dialog">Dialog</a></li>
+                <li><a href="#spinner">Spinner</a></li>
             </ul>
         </div>
     </div>

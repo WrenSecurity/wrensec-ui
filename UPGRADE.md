@@ -21,6 +21,9 @@
     `_.debounce` (e.g. Wren AM `CreatedResourcesView`, `StripedListEditingView`).
   * `libs/jquery.placeholder.js` (`placeholder`) - native `placeholder` attribute is supported by all
     current browsers (e.g. Wren IDM admin `main.js` startup module list).
+  * `libs/spin.js` (`spin`) - `SpinnerManager` now renders the loading spinner using CSS (`.spinner` in
+    `common/structure.less`), its API is unchanged. Remove `spin` from RequireJS configuration and startup
+    module lists (Wren IDM admin and enduser, Wren AM and Wren IG `main.js`, Wren IG test configuration).
 
 ## 23.1.x -> 23.2.x
 
