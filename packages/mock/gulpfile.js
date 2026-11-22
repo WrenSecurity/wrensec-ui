@@ -35,7 +35,7 @@ const TARGET_PATH = "build/www";
 const TESTS_PATH = "build/test";
 
 const MODULE_RESOURCES = {
-    "qunit/qunit/qunit.js": "libs/qunit.js",
+    "qunit": "libs/qunit.js",
     "qunit/qunit/qunit.css": "css/qunit.css"
 };
 

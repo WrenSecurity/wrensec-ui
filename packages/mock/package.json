@@ -19,8 +19,8 @@
     "rollup-plugin-amd": "^4.0.0"
   },
   "dependencies": {
-    "qunit": "^2.26.0",
+    "qunit": "^3.0.0",
     "requirejs": "^2.3.8",
-    "sinon": "^18.0.1"
+    "sinon": "^19.0.5"
   }
 }
