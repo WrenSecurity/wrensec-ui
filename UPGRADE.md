@@ -4,6 +4,16 @@
 
 * Bundled libraries have been upgraded to their latest minor versions (e.g. jQuery 3.8, Backbone 1.6,
   Handlebars 4.7.10, i18next 23.16).
+* i18next has been upgraded to 27 (with i18next-browser-languagedetector 8), see the migration guide
+  https://www.i18next.com/misc/migration-guide. `i18nManager` keeps empty translations rendering as empty
+  strings (`returnEmptyString: true`). Notable behavior changes:
+  * Translating a key that contains an object (without `returnObjects`) returns the key instead of the
+    "returned an object instead of string" sentence.
+  * `/` is no longer escaped in interpolated values (`&`, `<`, `>`, `"` and `'` still are).
+  * Language codes from the `locale` query parameter or the `i18next` cookie that do not look like language
+    codes are ignored.
+  * Translation files have to use the i18next v4 JSON format. Keys with the v3 `_plural` suffix have not been
+    used since i18next 21 (use `_one` / `_other`), e.g. `*_plural` keys in Wren AM and Wren IDM translations.
 * Selectize has been upgraded to 0.15 (see https://github.com/selectize/selectize.js/releases/tag/v0.15.0).
   Notable behavior changes:
   * Search matches only at word boundaries by default (e.g. `Name` no longer matches `givenName`). To keep

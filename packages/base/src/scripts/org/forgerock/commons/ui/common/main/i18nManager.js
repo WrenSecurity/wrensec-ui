@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
  */
 
 define( "org/forgerock/commons/ui/common/main/i18nManager", [
@@ -25,6 +26,23 @@ define( "org/forgerock/commons/ui/common/main/i18nManager", [
 ], function($, _, require, Handlebars, i18next, Module, CookieHelper) {
 
     var obj = {};
+
+    /**
+     * Same check as i18next isSafeLanguageCode() (letters, digits, "-", "_", "@" and ".", no "..").
+     * @param {string} code language code
+     * @returns {boolean} true if the code can be used as a language code
+     */
+    function isSafeLanguageCode(code) {
+        return (/^[A-Za-z0-9_@.-]{1,128}$/).test(code) && !code.includes("..");
+    }
+
+    /**
+     * Parse space separated language codes, ignoring codes that do not look like a language code (the value comes
+     * from the user).
+     * @param {string} [value] space separated language codes
+     * @returns {string[]} valid language codes
+     */
+    const parseLocales = (value) => (value ? value.split(" ").filter(isSafeLanguageCode) : []);
 
     /**
      * Initialises the i18next module.
@@ -50,15 +68,15 @@ define( "org/forgerock/commons/ui/common/main/i18nManager", [
      */
     obj.init = function(options) {
 
-        var locales = [],
-            opts = {},
-            overrideLang = {},
+        var opts = {},
             nameSpace = options.nameSpace ? options.nameSpace : "translation";
 
-        overrideLang.locale = options.paramLang.locale || CookieHelper.getCookie("i18next");
-
-        if (overrideLang.locale) {
-            locales = overrideLang.locale.split(" ");
+        // Fall back to the cookie when the parameter has no valid language code
+        let locales = parseLocales(options.paramLang.locale);
+        if (!locales.length) {
+            locales = parseLocales(CookieHelper.getCookie("i18next"));
+        }
+        if (locales.length) {
             options.serverLang = locales.shift();
         }
         if (options.defaultLang) {
@@ -78,6 +96,8 @@ define( "org/forgerock/commons/ui/common/main/i18nManager", [
             load: Module.config().i18nLoad || "currentOnly",
             ns: nameSpace,
             nsSeparator: ":::",
+            // Empty translations are used intentionally to render nothing (i18next >= 27 would render the key)
+            returnEmptyString: true,
             detection: {
                 caches: ['cookie']
             },
