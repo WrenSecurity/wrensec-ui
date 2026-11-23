@@ -13,7 +13,7 @@
    information: "Portions copyright [year] [name of copyright owner]".
 
    Copyright (c) 2011-2016 ForgeRock AS. All Rights Reserved.
-   Portions Copyright 2017-2023 Wren Security.
+   Portions Copyright 2017-2026 Wren Security.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -115,6 +115,21 @@
 
                         <configuration>
                             <arguments>run -ws build</arguments>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>npm test</id>
+                        <phase>test</phase>
+
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+
+                        <configuration>
+                            <arguments>run -ws --if-present test</arguments>
+                            <!-- -DskipTests is handled by the plugin itself (skipTests parameter) -->
+                            <skip>${maven.test.skip}</skip>
                         </configuration>
                     </execution>
                 </executions>

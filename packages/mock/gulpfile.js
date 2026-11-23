@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2023 Wren Security.
+ * Copyright 2023-2026 Wren Security.
  */
 const {
     useBuildScripts,
@@ -23,7 +23,7 @@ const {
     useBuildModule
 } = require("@wrensecurity/commons-ui-build");
 const gulp = require("gulp");
-const { runQunitPuppeteer, printResultSummary } = require("node-qunit-puppeteer");
+const { runQunitPuppeteer, printResultSummary, printFailedTests } = require("node-qunit-puppeteer");
 const { join } = require("path");
 const { pathToFileURL } = require("url");
 
@@ -105,6 +105,10 @@ gulp.task("test:qunit", async () => {
         ]
     });
     printResultSummary(result, console);
+    if (result.stats.failed > 0) {
+        printFailedTests(result, console);
+        throw new Error(`QUnit tests failed (${result.stats.failed} failed assertions)`);
+    }
 });
 
 gulp.task("build", gulp.series(

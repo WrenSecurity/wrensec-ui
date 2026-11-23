@@ -3,7 +3,7 @@
   "description": "Wren Security UI Commons - Mock",
   "private": true,
   "scripts": {
-    "build": "gulp",
+    "build": "gulp build",
     "test": "gulp test",
     "clean": "rimraf build"
   },
