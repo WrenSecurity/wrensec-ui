@@ -25,7 +25,6 @@
     "backgrid-select-all": "^0.3.5",
     "bootstrap": "^3.4.1",
     "bootstrap-dialog": "^1.34.6",
-    "create-react-class": "^15.7.0",
     "dragula": "^3.7.3",
     "font-awesome": "^4.7.0",
     "form2js": "1.0.0",
@@ -36,8 +35,6 @@
     "jquery": "^3.8.0",
     "lodash": "4.18.1",
     "moment": "^2.31.0",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
     "requirejs": "^2.3.8",
     "titatoggle": "^2.1.2",
     "xdate": "^0.8.3"

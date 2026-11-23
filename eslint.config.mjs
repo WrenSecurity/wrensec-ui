@@ -95,10 +95,24 @@ export default [
         }
     },
     {
+        // New components are ES modules (transpiled to AMD by the build) and must use modern language features
         files: ["**/*.jsm"],
         languageOptions: {
             sourceType: "module",
             ecmaVersion: 2021
+        },
+        rules: {
+            "no-restricted-globals": ["error",
+                { name: "define", message: "Use ES module export instead of AMD define()." },
+                { name: "require", message: "Use ES module import instead of AMD require()." }
+            ],
+            "no-var": "error",
+            "object-shorthand": "error",
+            "prefer-arrow-callback": "error",
+            "prefer-const": "error",
+            "prefer-rest-params": "error",
+            "prefer-spread": "error",
+            "prefer-template": "error"
         }
     },
     {

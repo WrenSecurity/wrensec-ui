@@ -12,18 +12,19 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
  */
 
 define([
     "lodash",
     "backbone",
-    "react-dom",
     "react",
     "org/forgerock/commons/ui/common/main/Configuration",
     "org/forgerock/commons/ui/common/main/EventManager",
     "org/forgerock/commons/ui/common/util/Constants",
-    "org/forgerock/commons/ui/common/util/UIUtils"
-], function(_, Backbone, ReactDOM, React, Configuration, EventManager, Constants, UIUtils) {
+    "org/forgerock/commons/ui/common/util/UIUtils",
+    "org/forgerock/commons/ui/common/util/reactify"
+], function(_, Backbone, React, Configuration, EventManager, Constants, UIUtils, reactify) {
     var BASE_TEMPLATE = "templates/common/DefaultBaseTemplate.html";
 
     function throwOnNoInitializationOptions (options) {
@@ -57,7 +58,7 @@ define([
         },
 
         renderReactComponent: function () {
-            ReactDOM.render(React.createElement(this.options.reactView, this.options.reactProps), this.el);
+            reactify(React.createElement(this.options.reactView, this.options.reactProps), this.$el);
         },
 
         render: function() {

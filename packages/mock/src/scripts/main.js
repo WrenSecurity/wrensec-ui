@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2016 ForgeRock AS.
- * Portions Copyright 2018 Wren Security.
+ * Portions Copyright 2018-2026 Wren Security.
  */
 
 require.config({
@@ -33,6 +33,9 @@ require.config({
     paths: {
         // nise (fake server) only needed (or available) for Mock project
         nise: "libs/nise",
+        // React is provided by the application (used by the React example view)
+        react: "libs/react",
+        "react-dom": "libs/react-dom",
         i18next: "libs/i18next",
         backbone: "libs/backbone",
         "backbone.paginator": "libs/backbone.paginator",

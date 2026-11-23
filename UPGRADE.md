@@ -4,6 +4,18 @@
 
 * Bundled libraries have been upgraded to their latest minor versions (e.g. jQuery 3.8, Backbone 1.6,
   Handlebars 4.7.10, i18next 23.16).
+* React is no longer provided (`libs/react.js`, `libs/react-dom.js` and `libs/create-react-class.js` have been
+  removed). Applications using the React related modules (`ReactAdapterView` via `ViewManager`, `reactify`,
+  `withRouter`) have to provide `react` and `react-dom` modules themselves (Wren:AM already does).
+  * `withRouter` is now a function component and no longer needs `create-react-class` (remove it from
+    RequireJS configuration, e.g. Wren:AM `main.js`).
+  * `ReactAdapterView` and `reactify` use the root API (`createRoot`) with React 18 and legacy
+    `ReactDOM.render()` with older versions (React 16–18 UMD builds work as they are). With the root API
+    rendering is asynchronous and `reactify` does not return the rendered component. `ReactDOM.unmountComponentAtNode()`
+    does not unmount root API components, use `reactify.unmount(el)` instead (e.g. in a Backbone view `remove()`).
+  * React 19 has no UMD builds and its `react-dom` module provides neither `createRoot` nor `render`. Applications
+    using React 19 have to build their own AMD `react-dom` module that also exports `createRoot` from
+    `react-dom/client` (e.g. using `useBuildModule`).
 * i18next has been upgraded to 27 (with i18next-browser-languagedetector 8), see the migration guide
   https://www.i18next.com/misc/migration-guide. `i18nManager` keeps empty translations rendering as empty
   strings (`returnEmptyString: true`). Notable behavior changes:
@@ -13,7 +25,7 @@
   * Language codes from the `locale` query parameter or the `i18next` cookie that do not look like language
     codes are ignored.
   * Translation files have to use the i18next v4 JSON format. Keys with the v3 `_plural` suffix have not been
-    used since i18next 21 (use `_one` / `_other`), e.g. `*_plural` keys in Wren AM and Wren IDM translations.
+    used since i18next 21 (use `_one` / `_other`), e.g. `*_plural` keys in Wren:AM and Wren:IDM translations.
 * Selectize has been upgraded to 0.15 (see https://github.com/selectize/selectize.js/releases/tag/v0.15.0).
   Notable behavior changes:
   * Search matches only at word boundaries by default (e.g. `Name` no longer matches `givenName`). To keep
@@ -28,12 +40,12 @@
 * Removed the following libraries. Any module that still depends on them (including startup module lists)
   fails to load, so replace their usages and remove them from RequireJS `paths` / `shim` configuration:
   * `libs/jquery.ba-dotimeout.js` (`doTimeout`) - replace `$.doTimeout(...)` with `setTimeout` /
-    `_.debounce` (e.g. Wren AM `CreatedResourcesView`, `StripedListEditingView`).
+    `_.debounce` (e.g. Wren:AM `CreatedResourcesView`, `StripedListEditingView`).
   * `libs/jquery.placeholder.js` (`placeholder`) - native `placeholder` attribute is supported by all
-    current browsers (e.g. Wren IDM admin `main.js` startup module list).
+    current browsers (e.g. Wren:IDM admin `main.js` startup module list).
   * `libs/spin.js` (`spin`) - `SpinnerManager` now renders the loading spinner using CSS (`.spinner` in
     `common/structure.less`), its API is unchanged. Remove `spin` from RequireJS configuration and startup
-    module lists (Wren IDM admin and enduser, Wren AM and Wren IG `main.js`, Wren IG test configuration).
+    module lists (Wren:IDM admin and enduser, Wren:AM and Wren:IG `main.js`, Wren:IG test configuration).
 
 ## 23.1.x -> 23.2.x
 

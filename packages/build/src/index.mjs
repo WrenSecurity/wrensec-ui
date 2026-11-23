@@ -11,8 +11,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2023 Wren Security.
+ * Copyright 2023-2026 Wren Security.
  */
+import { existsSync } from "fs";
 import { cp, mkdir, readFile, writeFile } from "fs/promises";
 import gulp from "gulp";
 import { createRequire } from "module";
@@ -31,6 +32,34 @@ import { finished } from "stream/promises";
  */
 
 /**
+ * Resolve Node module resource path.
+ * Files that are not exported by the package (`exports` field in package.json, e.g. UMD builds)
+ * are looked up directly in node_modules directories.
+ * @param {NodeJS.Require} require - NodeJS module resolver
+ * @param {string} resource - module resource (e.g. `react/umd/react.production.min.js`)
+ * @return {string} resolved file path
+ */
+function resolveModuleResource(require, resource) {
+    try {
+        return require.resolve(resource);
+    } catch (error) {
+        // Only files within a package can be looked up (not a bare package name)
+        const match = resource.match(/^((?:@[^/]+\/)?[^/]+)\/(.+)$/);
+        if (error.code !== "ERR_PACKAGE_PATH_NOT_EXPORTED" || !match) {
+            throw error;
+        }
+        const [, name, subpath] = match;
+        const source = (require.resolve.paths(name) || [])
+            .map((path) => join(path, name, subpath))
+            .find((path) => existsSync(path));
+        if (!source) {
+            throw error;
+        }
+        return source;
+    }
+}
+
+/**
  * Copy specific Node module resources.
  * @param {Record<string, string>} resources - resource map
  * @param {ModuleResourcesOptions} [options]
@@ -40,7 +69,7 @@ export function useModuleResources(resources, options = {}) {
     const require = createRequire(options.path || import.meta.url);
     return async () => {
         for (const [module, target] of Object.entries(resources)) {
-            const source = require.resolve(module);
+            const source = resolveModuleResource(require, module);
             const destination = join(options.dest || "dist", target);
             await mkdir(dirname(destination), { recursive: true });
             await cp(source, destination);

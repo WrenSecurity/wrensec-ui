@@ -37,6 +37,8 @@ const TESTS_PATH = "build/test";
 const MODULE_RESOURCES = {
     "qunit": "libs/qunit.js",
     "qunit/qunit/qunit.css": "css/qunit.css",
+    "react/umd/react.production.min.js": "libs/react.js",
+    "react-dom/umd/react-dom.production.min.js": "libs/react-dom.js",
     "sinon/pkg/sinon.js": "libs/sinon.js"
 };
 
@@ -46,11 +48,18 @@ const TEST_RESOURCES = {
     "../user/tests/qunit/**": "tests/user/"
 };
 
-gulp.task("eslint", useEslint());
+gulp.task("eslint", useEslint({ src: "src/scripts/**/*.{js,jsm}" }));
 
 gulp.task("build:assets", useLocalResources({ "src/assets/**": "" }, { dest: TARGET_PATH }));
 
 gulp.task("build:scripts", useLocalResources({ "src/scripts/**": "" }, { dest: TARGET_PATH }));
+
+// New components are ES modules that have to be transpiled to AMD modules for RequireJS (and its optimizer)
+gulp.task("build:modules", useBuildScripts({
+    // CodeMirror example is bundled separately by build:editor
+    src: ["src/scripts/**/*.jsm", "!src/scripts/org/forgerock/mock/ui/examples/CodeMirror.jsm"],
+    dest: TARGET_PATH
+}));
 
 gulp.task("build:compose", useLocalResources({ "../user/dist/**": "" }, { dest: TARGET_PATH }));
 
@@ -102,6 +111,7 @@ gulp.task("build", gulp.series(
     gulp.parallel(
         "build:assets",
         "build:scripts",
+        "build:modules",
         "build:compose",
         "build:editor",
         "build:libs",
@@ -119,7 +129,7 @@ gulp.task("test", gulp.series(
 ));
 
 gulp.task("watch", () => {
-    gulp.watch("src/scripts/**", { ignoreInitial: false }, gulp.parallel("build:scripts"));
+    gulp.watch("src/scripts/**", { ignoreInitial: false }, gulp.parallel("build:scripts", "build:modules"));
     gulp.watch("../user/dist/**", { ignoreInitial: false }, gulp.parallel("build:compose"));
 });
 

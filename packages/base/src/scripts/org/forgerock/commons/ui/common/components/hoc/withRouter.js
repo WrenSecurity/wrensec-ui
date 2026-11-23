@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
- * Portions copyright 2024 Wren Security.
+ * Portions copyright 2024-2026 Wren Security.
  */
 
 /**
@@ -21,9 +21,8 @@
 define([
     "lodash",
     "react",
-    "create-react-class",
     "org/forgerock/commons/ui/common/main/Router"
-], function (_, React, createReactClass, Router) {
+], function (_, React, Router) {
     function getDisplayName (WrappedComponent) {
         return WrappedComponent.displayName || WrappedComponent.name || "Component";
     }
@@ -43,30 +42,24 @@ define([
      *
      * export default withRouter(MyReactComponent)
      */
-    var exports = function (WrappedComponent) {
-        var WithRouter = createReactClass({
-            render: function render () {
-                var route = Router.currentRoute,
-                    params = Router.extractParameters(route, Router.getURIFragment()),
-                    paramsWithDefaults = Router.applyDefaultParameters(route, params),
-                    router = {
-                        /**
-                         * TODO: params should be a key/value pair provided by the router, however the router provides
-                         * an array and we must address params in thier position. A router change is required to provide
-                         * named parameters making the views less fragile. http://tiny.cc/8wgk8x
-                         */
-                        params: _.map(paramsWithDefaults, function (param) {
-                            if (!param) { return ""; }
+    const exports = (WrappedComponent) => {
+        const WithRouter = (props) => {
+            const route = Router.currentRoute;
+            const params = Router.extractParameters(route, Router.getURIFragment());
+            const paramsWithDefaults = Router.applyDefaultParameters(route, params);
+            const router = {
+                /**
+                 * TODO: params should be a key/value pair provided by the router, however the router provides
+                 * an array and we must address params in thier position. A router change is required to provide
+                 * named parameters making the views less fragile. http://tiny.cc/8wgk8x
+                 */
+                params: _.map(paramsWithDefaults, (param) => param ? decodeURIComponent(param) : "")
+            };
 
-                            return decodeURIComponent(param);
-                        })
-                    };
+            return React.createElement(WrappedComponent, { ...props, router });
+        };
 
-                return React.createElement(WrappedComponent, _.extend({}, this.props, { router: router }));
-            }
-        });
-
-        WithRouter.displayName = "withRouter(" + getDisplayName(WrappedComponent) + ")";
+        WithRouter.displayName = `withRouter(${getDisplayName(WrappedComponent)})`;
         WithRouter.WrappedComponent = WrappedComponent;
 
         return WithRouter;

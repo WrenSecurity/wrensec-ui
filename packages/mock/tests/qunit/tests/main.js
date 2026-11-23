@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
  */
 
 // add new test modules here:
@@ -24,8 +25,10 @@ define([
     "./commons/OAuth",
     "./commons/ObjectUtil",
     "./commons/Queue",
+    "./commons/React",
     "./commons/Router",
     "./commons/UIUtils",
     "./commons/ValidatorsManager",
-    "./user/AnonymousProcessView"
+    "./user/AnonymousProcessView",
+    "./ReactExampleView"
 ]);

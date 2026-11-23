@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
  */
 
 define([
@@ -21,6 +22,13 @@ define([
             view: "org/forgerock/mock/ui/examples/ExamplesView",
             role: "ui-user",
             url: "examples/"
+        },
+        "reactExample" : {
+            view: "org/forgerock/mock/ui/react/ReactExampleView",
+            role: "ui-user",
+            url: /^react\/?([^/]+)?$/,
+            pattern: "react/?",
+            defaults: ["World"]
         }
     };
 
