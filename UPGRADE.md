@@ -2,8 +2,13 @@
 
 ## 23.4.x -> 23.5.x
 
+* `@wrensecurity/commons-ui-build` (`useEslint`) uses ESLint 10, which supports only flat configuration
+  (`eslint.config.*`). Upgrade `@wrensecurity/eslint-config` to 0.5.0 and `eslint` to 10 (Wren:IDM, Wren:IG).
+  Projects still using `.eslintrc.*` have to migrate to flat configuration (Wren:AM, already required since the
+  ESLint 9 upgrade). React rules (`@wrensecurity/eslint-config/react`) require `eslint-plugin-react`, which does
+  not support ESLint 10 yet.
 * Bundled libraries have been upgraded to their latest minor versions (e.g. jQuery 3.8, Backbone 1.6,
-  Handlebars 4.7.10, i18next 23.16).
+  Handlebars 4.7.10).
 * React is no longer provided (`libs/react.js`, `libs/react-dom.js` and `libs/create-react-class.js` have been
   removed). Applications using the React related modules (`ReactAdapterView` via `ViewManager`, `reactify`,
   `withRouter`) have to provide `react` and `react-dom` modules themselves (Wren:AM already does).

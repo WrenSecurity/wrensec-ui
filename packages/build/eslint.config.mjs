@@ -2,6 +2,7 @@ import globals from "globals";
 import wrensecurityConfig from "@wrensecurity/eslint-config";
 
 export default [
+    { ignores: ["dist/"] },
     wrensecurityConfig,
     {
         languageOptions: {
