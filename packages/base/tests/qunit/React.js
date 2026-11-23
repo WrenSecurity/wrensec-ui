@@ -20,9 +20,16 @@ define([
     "react",
     "react-dom",
     "org/forgerock/commons/ui/common/components/hoc/withRouter",
+    "org/forgerock/commons/ui/common/main/Configuration",
+    "org/forgerock/commons/ui/common/main/ReactAdapterView",
     "org/forgerock/commons/ui/common/main/Router",
-    "org/forgerock/commons/ui/common/util/reactify"
-], function ($, sinon, React, ReactDOM, withRouter, Router, reactify) {
+    "org/forgerock/commons/ui/common/main/ViewManager",
+    "org/forgerock/commons/ui/common/util/ModuleLoader",
+    "org/forgerock/commons/ui/common/util/reactify",
+    "org/forgerock/commons/ui/common/util/UIUtils",
+    "ThemeManager"
+], function ($, sinon, React, ReactDOM, withRouter, Configuration, ReactAdapterView, Router, ViewManager,
+        ModuleLoader, reactify, UIUtils, ThemeManager) {
     const h = React.createElement;
     let $container;
 
@@ -114,6 +121,130 @@ define([
             assert.equal($container.text(), "props:[\"a b\",\"\"]", "props are passed and parameters decoded");
         } finally {
             stubs.forEach((stub) => stub.restore());
+        }
+    });
+
+    QUnit.module("React views", {
+        beforeEach () {
+            this.baseTemplate = Configuration.baseTemplate;
+            const { currentView, currentViewArgs, currentReactAdapter } = ViewManager;
+            this.viewManagerState = { currentView, currentViewArgs, currentReactAdapter };
+            // Base template is already rendered, so that React views render into "#content" right away
+            Configuration.baseTemplate = "templates/common/DefaultBaseTemplate.html";
+            $("#wrapper").html("<div id='content'></div>");
+        },
+        afterEach () {
+            if (ViewManager.currentReactAdapter) {
+                ViewManager.currentReactAdapter.unmount();
+            }
+            Object.assign(ViewManager, this.viewManagerState);
+            Configuration.baseTemplate = this.baseTemplate;
+        }
+    });
+
+    // Wait (up to 1 second) until the condition is met
+    const waitFor = async (condition) => {
+        for (let i = 0; i < 100 && !condition(); i++) {
+            await new Promise((resolve) => setTimeout(resolve, 10));
+        }
+        return condition();
+    };
+
+    // Component that counts its mounted instances
+    const createCounted = (label) => {
+        const Component = () => {
+            React.useEffect(() => {
+                Component.mounted++;
+                return () => Component.mounted--;
+            }, []);
+            return h("span", { className: "view" }, label);
+        };
+        Component.mounted = 0;
+        return Component;
+    };
+
+    QUnit.test("ReactAdapterView.unmount runs cleanup and keeps a static copy of the content", (assert) => {
+        const View = createCounted("first");
+        const adapter = new ReactAdapterView({ reactView: View });
+
+        ReactDOM.flushSync(() => adapter.render());
+        const mountedContent = document.getElementById("content");
+        assert.equal(View.mounted, 1, "view is mounted");
+
+        adapter.unmount();
+
+        assert.equal(View.mounted, 0, "view cleanup is run");
+        assert.notStrictEqual(document.getElementById("content"), mountedContent, "content is replaced");
+        assert.equal($("#content").text(), "first", "static copy of the content is displayed");
+        assert.equal(mountedContent.innerHTML, "", "unmounted content is cleared");
+    });
+
+    QUnit.test("ViewManager unmounts the previous React view", async (assert) => {
+        const First = createCounted("first");
+        const Second = createCounted("second");
+        const views = { first: First, second: Second };
+
+        sinon.stub(ModuleLoader, "load").callsFake((path) => $.Deferred().resolve(views[path]));
+        try {
+            ViewManager.changeView("first", []);
+            assert.true(await waitFor(() => First.mounted === 1), "first view is mounted");
+
+            ViewManager.changeView("second", []);
+            assert.true(await waitFor(() => Second.mounted === 1), "second view is mounted");
+            assert.equal(First.mounted, 0, "first view is unmounted");
+            assert.equal($("#content").text(), "second");
+        } finally {
+            ModuleLoader.load.restore();
+        }
+    });
+
+    QUnit.test("ViewManager rebinds only views that support it", async (assert) => {
+        const ReactView = createCounted("react");
+        const backboneView = { render () {}, rebind: sinon.spy() };
+        const views = { react: ReactView, backbone: backboneView, esm: { __esModule: true, "default": backboneView } };
+
+        sinon.stub(ModuleLoader, "load").callsFake((path) => $.Deferred().resolve(views[path]));
+        try {
+            ViewManager.currentView = "react";
+            ViewManager.currentViewArgs = [];
+            const callback = sinon.spy();
+            ViewManager.changeView("react", [], callback);
+            assert.true(await waitFor(() => callback.calledOnce), "callback is called for unchanged React view");
+
+            await ViewManager.rebindView("backbone");
+            await ViewManager.rebindView("esm");
+            assert.equal(backboneView.rebind.callCount, 2, "Backbone views (also as ES module) are rebound");
+        } finally {
+            ModuleLoader.load.restore();
+        }
+    });
+
+    QUnit.test("ReactAdapterView does not render after unmount while base template loads", async (assert) => {
+        const View = createCounted("late");
+        const template = $.Deferred();
+        // ThemeManager.getTheme is stubbed by the test runner
+        const theme = await ThemeManager.getTheme();
+        const stubs = [sinon.stub(UIUtils, "compileTemplate").returns(template)];
+        const globalData = Configuration.globalData;
+
+        Configuration.globalData = { product: "test" };
+        Configuration.baseTemplate = "templates/common/LoginBaseTemplate.html";
+        try {
+            const adapter = new ReactAdapterView({ reactView: View });
+            adapter.render();
+            assert.true(await waitFor(() => UIUtils.compileTemplate.calledOnce), "base template is compiled");
+            assert.deepEqual(UIUtils.compileTemplate.firstCall.args[1], { product: "test", theme },
+                "base template is compiled with global data and theme");
+
+            adapter.unmount();
+            template.resolve("<div id='content'>base</div>");
+            await waitFor(() => false);
+
+            assert.equal($("#wrapper").text(), "", "base template is not rendered");
+            assert.equal(View.mounted, 0, "view is not mounted");
+        } finally {
+            stubs.forEach((stub) => stub.restore());
+            Configuration.globalData = globalData;
         }
     });
 });

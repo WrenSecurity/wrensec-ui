@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2017 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
  */
 
 define([
@@ -140,16 +141,14 @@ define([
             description: "",
             dependencies: [
                 "org/forgerock/commons/ui/common/main/Configuration",
-                "org/forgerock/commons/ui/common/util/ModuleLoader",
                 "org/forgerock/commons/ui/common/components/Navigation",
                 "org/forgerock/commons/ui/common/main/Router",
                 "org/forgerock/commons/ui/common/main/ViewManager"
             ],
-            processDescription: function(event, Configuration, ModuleLoader, Navigation, Router, ViewManager) {
+            processDescription: function(event, Configuration, Navigation, Router, ViewManager) {
                 ViewManager.currentDialog = null;
                 if (Configuration.baseView) {
-                    ModuleLoader.load(Router.configuration.routes[Configuration.baseView].view).then(function (view) {
-                        view.rebind();
+                    ViewManager.rebindView(Router.configuration.routes[Configuration.baseView].view).then(() => {
                         Router.navigate(Router.getLink(Router.configuration.routes[Configuration.baseView],
                             Configuration.baseViewArgs));
                         Navigation.reload();
