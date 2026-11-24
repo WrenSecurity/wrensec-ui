@@ -35,19 +35,14 @@ export default [
             "max-len": ["error", 120, 4],
             "new-parens": "error",
             "no-alert": "error",
-            "no-duplicate-case": "error",
             "no-empty-character-class": "error",
             "no-extend-native": "error",
             "no-global-assign": "error",
-            "no-invalid-regexp": "error",
-            "no-irregular-whitespace": "error",
-            "no-labels": "error",
             "no-lonely-if": "error",
             "no-mixed-spaces-and-tabs": "error",
             "no-multiple-empty-lines": "error",
             "no-multi-str": "error",
             "no-trailing-spaces": "error",
-            "no-unused-vars": "error",
             "no-void": "error",
 
             /*
@@ -95,10 +90,24 @@ export default [
         }
     },
     {
+        // New components are ES modules (transpiled to AMD by the build) and must use modern language features
         files: ["**/*.jsm"],
         languageOptions: {
             sourceType: "module",
             ecmaVersion: 2021
+        },
+        rules: {
+            "no-restricted-globals": ["error",
+                { name: "define", message: "Use ES module export instead of AMD define()." },
+                { name: "require", message: "Use ES module import instead of AMD require()." }
+            ],
+            "no-var": "error",
+            "object-shorthand": "error",
+            "prefer-arrow-callback": "error",
+            "prefer-const": "error",
+            "prefer-rest-params": "error",
+            "prefer-spread": "error",
+            "prefer-template": "error"
         }
     },
     {

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
  */
 
 (function () {
@@ -32,6 +33,9 @@
             sinon: "libs/sinon"
         }
     });
+
+    // Sinon browser build declares optional Node.js modules as AMD dependencies
+    ["timers", "timers/promises", "fs"].forEach((name) => define(name, [], () => null));
 
     stashedRequire.original(["main"], function () {
         // after main from the app is loaded, restore the require object and start testing

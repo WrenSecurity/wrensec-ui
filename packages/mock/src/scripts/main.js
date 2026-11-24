@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2016 ForgeRock AS.
- * Portions Copyright 2018 Wren Security.
+ * Portions Copyright 2018-2026 Wren Security.
  */
 
 require.config({
@@ -31,8 +31,11 @@ require.config({
         }
     },
     paths: {
-        // sinon only needed (or available) for Mock project
-        sinon: "libs/sinon",
+        // nise (fake server) only needed (or available) for Mock project
+        nise: "libs/nise",
+        // React is provided by the application (used by the React example view)
+        react: "libs/react",
+        "react-dom": "libs/react-dom",
         i18next: "libs/i18next",
         backbone: "libs/backbone",
         "backbone.paginator": "libs/backbone.paginator",
@@ -45,21 +48,15 @@ require.config({
         lodash: "libs/lodash",
         js2form: "libs/js2form",
         form2js: "libs/form2js",
-        spin: "libs/spin",
         jquery: "libs/jquery",
         xdate: "libs/xdate",
-        doTimeout: "libs/jquery.ba-dotimeout",
         handlebars: "libs/handlebars",
         moment: "libs/moment",
         bootstrap: "libs/bootstrap",
-        "bootstrap-dialog": "libs/bootstrap-dialog",
-        placeholder: "libs/jquery.placeholder"
+        "bootstrap-dialog": "libs/bootstrap-dialog"
     },
 
     shim: {
-        sinon: {
-            exports: "sinon"
-        },
         lodash: {
             exports: ""
         },
@@ -86,27 +83,17 @@ require.config({
         form2js: {
             exports: "form2js"
         },
-        spin: {
-            exports: "spin"
-        },
         bootstrap: {
             deps: ["jquery"]
         },
         'bootstrap-dialog': {
             deps: ["jquery", "underscore","backbone", "bootstrap"]
         },
-        placeholder: {
-            deps: ["jquery"]
-        },
         selectize: {
             deps: ["jquery"]
         },
         xdate: {
             exports: "xdate"
-        },
-        doTimeout: {
-            deps: ["jquery"],
-            exports: "doTimeout"
         },
         moment: {
             exports: "moment"
@@ -141,8 +128,7 @@ require([
     "lodash",
     "backbone",
     "handlebars",
-    "i18next",
-    "spin"
+    "i18next"
 ], function (EventManager, Constants, CookieHelper, LocalStorage) {
 
     // Mock project is run without server. Framework requires cookies to be enabled in order to be able to login.

@@ -11,9 +11,10 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2023 Wren Security.
+ * Copyright 2023-2026 Wren Security.
  */
 const {
+    useBuildScripts,
     useEslint,
     useLessStyles,
     useLocalResources,
@@ -23,7 +24,6 @@ const {
 const gulp = require("gulp");
 
 const MODULE_RESOURCES = {
-    "@mstyk/jquery-placeholder": "libs/jquery.placeholder.js",
     "@selectize/selectize/dist/css/selectize.bootstrap3.css": "css/selectize.css",
     "@selectize/selectize/dist/js/selectize.min.js": "libs/selectize.js",
     "backbone-relational/backbone-relational.js": "libs/backbone-relational.js",
@@ -39,7 +39,6 @@ const MODULE_RESOURCES = {
     "bootstrap-dialog/dist/css/bootstrap-dialog.min.css": "css/bootstrap-dialog.css",
     "bootstrap-dialog/dist/js/bootstrap-dialog.min.js": "libs/bootstrap-dialog.js",
     "bootstrap/dist/js/bootstrap.min.js": "libs/bootstrap.js",
-    "create-react-class/create-react-class.min.js": "libs/create-react-class.js",
     "dragula/dist/dragula.min.js": "libs/dragula.js",
     "font-awesome/css/font-awesome.min.css": "css/fontawesome/css/font-awesome.css",
     "font-awesome/fonts/fontawesome-webfont.eot": "css/fontawesome/fonts/fontawesome-webfont.eot",
@@ -55,28 +54,26 @@ const MODULE_RESOURCES = {
     "jquery/dist/jquery.min.js": "libs/jquery.js",
     "lodash": "libs/lodash.js",
     "moment/min/moment.min.js": "libs/moment.js",
-    "react-dom/umd/react-dom.production.min.js": "libs/react-dom.js",
-    "react/umd/react.production.min.js": "libs/react.js",
     "requirejs/require.js": "libs/requirejs.js",
-    "spin.js/spin.js": "libs/spin.js",
     "titatoggle/dist/titatoggle-dist-min.css": "css/titatoggle.css",
     "underscore/underscore-umd.js": "libs/underscore.js",
     "xdate/src/xdate.js": "libs/xdate.js"
 };
 
-const LOCAL_RESOURCES = {
-    "libs/js/*": "libs"
-};
-
-gulp.task("eslint", useEslint());
+gulp.task("eslint", useEslint({ src: "src/scripts/**/*.{js,jsm}" }));
 
 gulp.task("build:assets", useLocalResources({ "src/assets/**": "" }));
 
 gulp.task("build:scripts", useLocalResources({ "src/scripts/**": "" }));
 
+// New components are ES modules that have to be transpiled to AMD modules for RequireJS (and its optimizer)
+gulp.task("build:modules", useBuildScripts({
+    src: "src/scripts/**/*.jsm",
+    dest: "dist"
+}));
+
 gulp.task("build:libs", async () => {
     await useModuleResources(MODULE_RESOURCES, { path: __filename })();
-    await useLocalResources(LOCAL_RESOURCES)();
     await useBuildModule({
         id: "i18next",
         src: "src/modules/i18next.mjs",
@@ -92,14 +89,15 @@ gulp.task("build:styles", useLessStyles({
 gulp.task("build", gulp.series(
     gulp.parallel(
         "build:assets",
-        "build:scripts"
+        "build:scripts",
+        "build:modules"
     ),
     "build:libs",
     "build:styles"
 ));
 
 gulp.task("watch", () => {
-    gulp.watch("src/scripts/**", gulp.parallel("build:scripts"));
+    gulp.watch("src/scripts/**", gulp.parallel("build:scripts", "build:modules"));
 });
 
 gulp.task("default", gulp.series("eslint", "build"));

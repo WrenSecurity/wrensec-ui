@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
  */
 
 define([
@@ -20,17 +21,20 @@ define([
     "org/forgerock/mock/ui/examples/CodeMirror",
     "bootstrap",
     "selectize",
-    "org/forgerock/commons/ui/common/main/AbstractView"
+    "org/forgerock/commons/ui/common/main/AbstractView",
+    "org/forgerock/commons/ui/common/main/SpinnerManager"
 ], function($, _,
         CodeMirror,
         bootstrap,
         selectize,
-        AbstractView) {
+        AbstractView,
+        SpinnerManager) {
 
     var ExamplesView = AbstractView.extend({
         template: "templates/mock/ExamplesTemplate.html",
         events: {
-            "click #sidebar a": "slideNavigation"
+            "click #sidebar a": "slideNavigation",
+            "click #spinnerExample": "showSpinnerExample"
         },
         model: {
             leftNavOffset: 360
@@ -111,6 +115,10 @@ define([
                     scrollTop: target.offset().top
                 }, 1000);
             }
+        },
+        showSpinnerExample () {
+            SpinnerManager.showSpinner();
+            setTimeout(() => SpinnerManager.hideSpinner(), 2000);
         }
     });
 

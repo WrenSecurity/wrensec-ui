@@ -12,18 +12,20 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
  */
 
 define([
     "lodash",
     "backbone",
-    "react-dom",
     "react",
     "org/forgerock/commons/ui/common/main/Configuration",
     "org/forgerock/commons/ui/common/main/EventManager",
     "org/forgerock/commons/ui/common/util/Constants",
-    "org/forgerock/commons/ui/common/util/UIUtils"
-], function(_, Backbone, ReactDOM, React, Configuration, EventManager, Constants, UIUtils) {
+    "ThemeManager",
+    "org/forgerock/commons/ui/common/util/UIUtils",
+    "org/forgerock/commons/ui/common/util/reactify"
+], function(_, Backbone, React, Configuration, EventManager, Constants, ThemeManager, UIUtils, reactify) {
     var BASE_TEMPLATE = "templates/common/DefaultBaseTemplate.html";
 
     function throwOnNoInitializationOptions (options) {
@@ -56,23 +58,55 @@ define([
             EventManager.sendEvent(Constants.EVENT_CHANGE_BASE_VIEW);
         },
 
-        renderReactComponent: function () {
-            ReactDOM.render(React.createElement(this.options.reactView, this.options.reactProps), this.el);
+        renderReactComponent () {
+            reactify(React.createElement(this.options.reactView, this.options.reactProps), this.$el);
         },
 
-        render: function() {
-            var view = this;
+        /**
+         * Render the component into a fresh copy of the "#content" element, so that every rendered view is mounted
+         * from scratch (the content can be replaced by other views in the meantime).
+         */
+        renderIntoContent () {
+            const content = document.getElementById("content");
+            const freshContent = content.cloneNode(false);
 
-            if (this.options.needsBaseTemplate) {
-                this.setBaseTemplate();
+            content.parentNode.replaceChild(freshContent, content);
+            this.setElement(freshContent);
+            this.renderReactComponent();
+        },
 
-                UIUtils.compileTemplate(BASE_TEMPLATE).then(function (template) {
-                    document.getElementById("wrapper").innerHTML = template;
-                    view.setElement("#content");
-                    view.renderReactComponent();
-                });
+        /**
+         * Unmount the rendered component (runs its cleanup). Rendered content that is still displayed is replaced
+         * by its static copy first, so that the page does not go blank until the next view is rendered.
+         */
+        unmount () {
+            // Do not render anymore (base template can still be loading)
+            this.unmounted = true;
+            if (this.el.isConnected) {
+                this.el.parentNode.replaceChild(this.el.cloneNode(true), this.el);
+            }
+            reactify.unmount(this.$el);
+        },
+
+        render () {
+            if (!this.options.needsBaseTemplate) {
+                this.renderReactComponent();
+            } else if (Configuration.baseTemplate === BASE_TEMPLATE) {
+                // Base template is already rendered, replace only the content (as AbstractView does)
+                this.renderIntoContent();
             } else {
-                view.renderReactComponent();
+                // Compiled with the same data as AbstractView compiles base templates
+                ThemeManager.getTheme().then((theme) => UIUtils.compileTemplate(BASE_TEMPLATE,
+                    _.extend({}, Configuration.globalData, { theme }))
+                ).then((template) => {
+                    // Another view has been rendered in the meantime
+                    if (this.unmounted) {
+                        return;
+                    }
+                    document.getElementById("wrapper").innerHTML = template;
+                    this.setBaseTemplate();
+                    this.renderIntoContent();
+                });
             }
         }
     });

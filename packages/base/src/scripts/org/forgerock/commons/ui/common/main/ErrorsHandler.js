@@ -12,15 +12,15 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2012-2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
  */
 
 define([
     "lodash",
-    "jquery",
     "org/forgerock/commons/ui/common/main/AbstractConfigurationAware",
     "org/forgerock/commons/ui/common/main/EventManager",
     "org/forgerock/commons/ui/common/util/Constants"
-], function(_, $, AbstractConfigurationAware, eventManager, constants) {
+], function(_, AbstractConfigurationAware, eventManager, constants) {
     var obj = new AbstractConfigurationAware();
 
     obj.handleError = function(error, handlers) {
@@ -32,7 +32,7 @@ define([
 
         if (error.hasOwnProperty('responseText')) {
             try {
-                error.responseObj = $.parseJSON(error.responseText);
+                error.responseObj = JSON.parse(error.responseText);
             // eslint-disable-next-line no-unused-vars
             } catch (parseErr) { /* Must not be JSON */ }
         }

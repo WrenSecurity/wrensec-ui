@@ -12,6 +12,10 @@
   ],
   "overrides": {
     "node-fetch": "2.7.0",
-    "puppeteer": "25.9.0"
+    "puppeteer": "25.18.1"
+  },
+  "allowScripts": {
+    "puppeteer@25.18.1": true,
+    "fsevents@2.3.3": true
   }
 }

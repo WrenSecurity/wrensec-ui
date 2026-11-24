@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2023 Wren Security.
+ * Copyright 2023-2026 Wren Security.
  */
 const {
     useBuildScripts,
@@ -23,7 +23,7 @@ const {
     useBuildModule
 } = require("@wrensecurity/commons-ui-build");
 const gulp = require("gulp");
-const { runQunitPuppeteer, printResultSummary } = require("node-qunit-puppeteer");
+const { runQunitPuppeteer, printResultSummary, printFailedTests } = require("node-qunit-puppeteer");
 const { join } = require("path");
 const { pathToFileURL } = require("url");
 
@@ -35,8 +35,11 @@ const TARGET_PATH = "build/www";
 const TESTS_PATH = "build/test";
 
 const MODULE_RESOURCES = {
-    "qunit/qunit/qunit.js": "libs/qunit.js",
-    "qunit/qunit/qunit.css": "css/qunit.css"
+    "qunit": "libs/qunit.js",
+    "qunit/qunit/qunit.css": "css/qunit.css",
+    "react/umd/react.production.min.js": "libs/react.js",
+    "react-dom/umd/react-dom.production.min.js": "libs/react-dom.js",
+    "sinon/pkg/sinon.js": "libs/sinon.js"
 };
 
 const TEST_RESOURCES = {
@@ -45,11 +48,18 @@ const TEST_RESOURCES = {
     "../user/tests/qunit/**": "tests/user/"
 };
 
-gulp.task("eslint", useEslint());
+gulp.task("eslint", useEslint({ src: "src/scripts/**/*.{js,jsm}" }));
 
 gulp.task("build:assets", useLocalResources({ "src/assets/**": "" }, { dest: TARGET_PATH }));
 
 gulp.task("build:scripts", useLocalResources({ "src/scripts/**": "" }, { dest: TARGET_PATH }));
+
+// New components are ES modules that have to be transpiled to AMD modules for RequireJS (and its optimizer)
+gulp.task("build:modules", useBuildScripts({
+    // CodeMirror example is bundled separately by build:editor
+    src: ["src/scripts/**/*.jsm", "!src/scripts/org/forgerock/mock/ui/examples/CodeMirror.jsm"],
+    dest: TARGET_PATH
+}));
 
 gulp.task("build:compose", useLocalResources({ "../user/dist/**": "" }, { dest: TARGET_PATH }));
 
@@ -74,14 +84,14 @@ gulp.task("build:bundle", useBuildRequire({
         "config/AppConfiguration",
         // Exclude mock project dependencies to create a more representative bundle.
         "mock/Data",
-        "sinon"
+        "nise"
     ]
 }));
 
 gulp.task("test:scripts", useLocalResources(TEST_RESOURCES, { dest: TESTS_PATH }));
 
-gulp.task("test:sinon", useBuildScripts({
-    src: require.resolve("sinon/pkg/sinon.js"),
+gulp.task("test:nise", useBuildScripts({
+    src: require.resolve("nise/nise.js"),
     dest: join(TARGET_PATH, "libs"),
     plugins: []
 }));
@@ -95,16 +105,21 @@ gulp.task("test:qunit", async () => {
         ]
     });
     printResultSummary(result, console);
+    if (result.stats.failed > 0) {
+        printFailedTests(result, console);
+        throw new Error(`QUnit tests failed (${result.stats.failed} failed assertions)`);
+    }
 });
 
 gulp.task("build", gulp.series(
     gulp.parallel(
         "build:assets",
         "build:scripts",
+        "build:modules",
         "build:compose",
         "build:editor",
         "build:libs",
-        "test:sinon"
+        "test:nise"
     ),
     gulp.parallel(
         "build:styles",
@@ -118,7 +133,7 @@ gulp.task("test", gulp.series(
 ));
 
 gulp.task("watch", () => {
-    gulp.watch("src/scripts/**", { ignoreInitial: false }, gulp.parallel("build:scripts"));
+    gulp.watch("src/scripts/**", { ignoreInitial: false }, gulp.parallel("build:scripts", "build:modules"));
     gulp.watch("../user/dist/**", { ignoreInitial: false }, gulp.parallel("build:compose"));
 });
 

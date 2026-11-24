@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
  */
 
 define([
@@ -116,7 +117,7 @@ define([
 
         server.respondWith(
             "POST",
-            "/mock/selfservice/username?_action=submitRequirements",
+            /^\/mock\/selfservice\/username\?_action=submitRequirements$/,
             function (request) {
                 var requestContent = JSON.parse(request.requestBody),
                     headers = {"Content-Type": "application/json;charset=UTF-8"};
@@ -197,7 +198,7 @@ define([
 
         server.respondWith(
             "POST",
-            "/mock/selfservice/reset?_action=submitRequirements",
+            /^\/mock\/selfservice\/reset\?_action=submitRequirements$/,
             function (request) {
                 var requestContent = JSON.parse(request.requestBody),
                     headers = {"Content-Type": "application/json;charset=UTF-8"};
@@ -495,7 +496,7 @@ define([
 
         server.respondWith(
             "POST",
-            "/mock/selfservice/registration?_action=submitRequirements",
+            /^\/mock\/selfservice\/registration\?_action=submitRequirements$/,
             function (request) {
                 var requestContent = JSON.parse(request.requestBody),
                     headers = {"Content-Type": "application/json;charset=UTF-8"};

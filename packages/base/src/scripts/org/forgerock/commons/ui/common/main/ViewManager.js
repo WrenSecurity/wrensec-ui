@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2012-2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
  */
 
 define([
@@ -28,12 +29,25 @@ define([
             });
         },
         isBackboneView = function(view) { return view.render && !_.isFunction(view); },
-        isReactView = function(view) { return !view.render && _.isFunction(view); };
+        isReactView = function(view) { return !view.render && _.isFunction(view); },
+        // For ES6 modules, we require that the view is the default export.
+        loadView = (viewPath) => ModuleLoader.load(viewPath).then((view) => (view.__esModule ? view.default : view));
 
     obj.currentView = null;
+    obj.currentReactAdapter = null;
     obj.currentDialog = null;
     obj.currentViewArgs = null;
     obj.currentDialogArgs = null;
+
+    /**
+     * Unmount the current React view (if any), so that its cleanup is run before the next view is rendered.
+     */
+    function unmountReactView () {
+        if (obj.currentReactAdapter) {
+            obj.currentReactAdapter.unmount();
+            obj.currentReactAdapter = null;
+        }
+    }
 
     /**
      * Initializes view if it is not equal to current view.
@@ -57,23 +71,21 @@ define([
             obj.currentDialog = null;
 
             msg.messages.hideMessages();
-            ModuleLoader.load(viewPath).then(function (view) {
-                // For ES6 modules, we require that the view is the default export.
-                if (view.__esModule) {
-                    view = view.default;
-                }
-
+            loadView(viewPath).then(function (view) {
                 // TODO: Investigate whether this is required anymore
                 if (view.init) {
                     view.init();
                 }
 
                 if (isBackboneView(view)) {
+                    unmountReactView();
                     view.render(decodedArgs, callback);
                 } else if (isReactView(view)) {
                     // ReactAdapterView (and thus React and React-DOM) are only loaded when a React view is encountered
-                    require(["org/forgerock/commons/ui/common/main/ReactAdapterView"], function(ReactAdapterView) {
-                        (new ReactAdapterView({ reactView: view })).render();
+                    require(["org/forgerock/commons/ui/common/main/ReactAdapterView"], (ReactAdapterView) => {
+                        unmountReactView();
+                        obj.currentReactAdapter = new ReactAdapterView({ reactView: view });
+                        obj.currentReactAdapter.render();
                     });
                 } else {
                     throw new Error("[ViewManager] Unable to determine view type (Backbone or React).");
@@ -81,9 +93,7 @@ define([
             });
 
         } else {
-            ModuleLoader.load(obj.currentView).then(function (view) {
-                view.rebind();
-
+            obj.rebindView(obj.currentView).then(() => {
                 if (callback) {
                     callback();
                 }
@@ -93,6 +103,17 @@ define([
         obj.currentViewArgs = args;
         obj.currentView = viewPath;
     };
+
+    /**
+     * Rebind events of the given view (React views have no events to rebind).
+     * @param {string} viewPath view module path
+     * @returns {Promise} promise resolved when the view is rebound
+     */
+    obj.rebindView = (viewPath) => loadView(viewPath).then((view) => {
+        if (_.isFunction(view.rebind)) {
+            view.rebind();
+        }
+    });
 
     obj.showDialog = function(dialogPath, args, callback) {
         var decodedArgs = decodeArgs(args);
