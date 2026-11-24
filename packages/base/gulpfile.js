@@ -36,8 +36,6 @@ const MODULE_RESOURCES = {
     "backgrid-select-all/backgrid-select-all.min.js": "libs/backgrid-select-all.js",
     "backgrid/lib/backgrid.min.css": "css/backgrid.css",
     "backgrid/lib/backgrid.min.js": "libs/backgrid.js",
-    "bootstrap-dialog/dist/css/bootstrap-dialog.min.css": "css/bootstrap-dialog.css",
-    "bootstrap-dialog/dist/js/bootstrap-dialog.min.js": "libs/bootstrap-dialog.js",
     "bootstrap/dist/js/bootstrap.min.js": "libs/bootstrap.js",
     "dragula/dist/dragula.min.js": "libs/dragula.js",
     "font-awesome/css/font-awesome.min.css": "css/fontawesome/css/font-awesome.css",

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
  */
 
 #dialogs {
@@ -53,6 +54,57 @@
     display:none;
 }
 
+/*
+ * Modal dialog (components/ModalDialog) base styles, adapted from bootstrap-dialog
+ * (https://github.com/nakupanda/bootstrap3-dialog, Copyright nakupanda, MIT License)
+ */
+.bootstrap-dialog {
+
+    .modal-header {
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+    }
+
+    .bootstrap-dialog-title {
+        display: inline-block;
+        font-size: 16px;
+    }
+
+    .bootstrap-dialog-message {
+        font-size: 14px;
+    }
+
+    .bootstrap-dialog-button-icon {
+        margin-right: 3px;
+    }
+
+    .bootstrap-dialog-close-button {
+        font-size: 20px;
+        float: right;
+        opacity: .9;
+
+        &:hover {
+            cursor: pointer;
+            opacity: 1;
+        }
+    }
+
+    &.size-large {
+
+        .bootstrap-dialog-title {
+            font-size: 24px;
+        }
+
+        .bootstrap-dialog-close-button {
+            font-size: 30px;
+        }
+
+        .bootstrap-dialog-message {
+            font-size: 18px;
+        }
+    }
+}
+
 .bootstrap-dialog {
 
     .bootstrap-dialog-header .bootstrap-dialog-title {
@@ -72,7 +124,7 @@
     .modal-header {
         margin-bottom: 0;
         padding-bottom: 5px;
-        // Overriding bootstrap-dialog's background-color.
+        // Dialog type is indicated by the header text color, not by its background
         background-color: transparent !important;
     }
 }

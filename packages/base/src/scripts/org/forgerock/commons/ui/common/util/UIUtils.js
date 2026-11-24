@@ -539,14 +539,14 @@ define([
     obj.confirmDialog = function(message, type, confirmCallback, overrides){
         overrides = overrides || {};
 
-        ModuleLoader.load("bootstrap-dialog").then(function (BootstrapDialog) {
+        ModuleLoader.load("org/forgerock/commons/ui/common/components/ModalDialog").then(function (ModalDialog) {
             var btnType = "btn-" +type;
 
             if (type === "default") {
                 btnType = "btn-primary";
             }
 
-            BootstrapDialog.show({
+            ModalDialog.show({
                 title: overrides.title || $.t('common.form.confirm'),
                 type: "type-" +type,
                 message: message,

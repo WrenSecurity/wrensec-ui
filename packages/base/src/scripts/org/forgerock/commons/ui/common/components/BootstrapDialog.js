@@ -12,13 +12,14 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
  */
 
 define([
     "lodash",
     "jquery",
-    "bootstrap-dialog"
-], function (_, $, BootstrapDialog) {
+    "org/forgerock/commons/ui/common/components/ModalDialog"
+], function (_, $, ModalDialog) {
 
     function forceFocus (dialog) {
         dialog.$modalContent.find("[autofocus]").focus();
@@ -38,43 +39,89 @@ define([
     }
 
     /**
+     * Modal dialog with commons specific enhancements (header text color by dialog type, autofocus support and
+     * initially disabled buttons).
      * @exports org/forgerock/commons/ui/common/components/BootstrapDialog
+     * @see org/forgerock/commons/ui/common/components/ModalDialog
      */
     var obj = {};
 
-    obj.TYPE_DEFAULT = BootstrapDialog.TYPE_DEFAULT;
-    obj.TYPE_INFO = BootstrapDialog.TYPE_INFO;
-    obj.TYPE_PRIMARY = BootstrapDialog.TYPE_PRIMARY;
-    obj.TYPE_SUCCESS = BootstrapDialog.TYPE_SUCCESS;
-    obj.TYPE_WARNING = BootstrapDialog.TYPE_WARNING;
-    obj.TYPE_DANGER = BootstrapDialog.TYPE_DANGER;
-    obj.SIZE_NORMAL = BootstrapDialog.SIZE_NORMAL;
-    obj.SIZE_SMALL = BootstrapDialog.SIZE_SMALL;
-    obj.SIZE_WIDE = BootstrapDialog.SIZE_WIDE;
-    obj.SIZE_LARGE = BootstrapDialog.SIZE_LARGE;
+    obj.TYPE_DEFAULT = ModalDialog.TYPE_DEFAULT;
+    obj.TYPE_INFO = ModalDialog.TYPE_INFO;
+    obj.TYPE_PRIMARY = ModalDialog.TYPE_PRIMARY;
+    obj.TYPE_SUCCESS = ModalDialog.TYPE_SUCCESS;
+    obj.TYPE_WARNING = ModalDialog.TYPE_WARNING;
+    obj.TYPE_DANGER = ModalDialog.TYPE_DANGER;
+    obj.SIZE_NORMAL = ModalDialog.SIZE_NORMAL;
+    obj.SIZE_SMALL = ModalDialog.SIZE_SMALL;
+    obj.SIZE_WIDE = ModalDialog.SIZE_WIDE;
+    obj.SIZE_LARGE = ModalDialog.SIZE_LARGE;
 
-    _.each(["show", "confirm", "warning", "danger", "success"], function (method) {
+    /**
+     * Create and open a dialog.
+     * @param {Object} options dialog options (see ModalDialog)
+     * @param {boolean} [options.buttons[].disabled] whether the button is initially disabled
+     * @returns {ModalDialog} opened dialog
+     */
+    obj.show = function (options) {
+        var dialog = new ModalDialog(options).realize(),
+            type = dialog.options.type;
 
-        obj[method] = function (options) {
+        // Gives the dialog header the native bootstrap text color classes.
+        // The title then inherits from this.
+        dialog.getModalHeader().addClass(type.replace("type", "text"));
 
-            var dialog = new BootstrapDialog[method](options),
-                type = options.type || obj.TYPE_PRIMARY;
+        /**
+         * Workaround for autofocus having no effect in Bootstrap modals
+         * @see http://getbootstrap.com/javascript/#modals
+         */
+        dialog.getModal().on("shown.bs.modal", { dialog: dialog }, onShown);
 
-            // Gives the dialog header the native bootstrap text color classes.
-            // The title then inherits from this.
-            type = type.replace("type", "text");
-            dialog.getModalHeader().addClass(type);
+        return dialog.open();
+    };
 
-            /**
-             * Workaround for autofocus having no effect in Bootstrap modals
-             * @see http://getbootstrap.com/javascript/#modals
-             */
-            dialog.getModal().on("shown.bs.modal", { dialog: dialog }, onShown);
+    /**
+     * Create and open a confirmation dialog with cancel and confirm buttons.
+     * @param {Object} options dialog options
+     * @param {string} [options.type] dialog type (defaults to TYPE_PRIMARY)
+     * @param {string} [options.title] dialog title
+     * @param {string|jQuery} [options.message] dialog message
+     * @param {boolean} [options.closable] whether the dialog can be closed without choosing (defaults to false)
+     * @param {string} [options.btnCancelLabel] cancel button label (defaults to common.form.cancel translation)
+     * @param {string} [options.btnOKLabel] confirm button label (defaults to common.form.ok translation)
+     * @param {string} [options.btnOKClass] confirm button CSS class (defaults to button class by dialog type)
+     * @param {function} [options.callback] called with true when confirmed and false when cancelled
+     * @returns {ModalDialog} opened dialog
+     */
+    obj.confirm = function (options) {
+        var type = options.type || obj.TYPE_PRIMARY;
 
-            return dialog;
-        };
+        function choose (dialog, result) {
+            if (_.isFunction(options.callback)) {
+                options.callback(result);
+            }
+            dialog.close();
+        }
 
-    });
+        return obj.show({
+            type: type,
+            title: options.title,
+            message: options.message,
+            closable: options.closable === true,
+            buttons: [{
+                label: options.btnCancelLabel || $.t("common.form.cancel"),
+                action: function (dialog) {
+                    choose(dialog, false);
+                }
+            }, {
+                label: options.btnOKLabel || $.t("common.form.ok"),
+                cssClass: options.btnOKClass || type.replace("type", "btn"),
+                action: function (dialog) {
+                    choose(dialog, true);
+                }
+            }]
+        });
+    };
 
     return obj;
 });

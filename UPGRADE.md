@@ -1,5 +1,24 @@
 # Upgrade Guide
 
+## 23.x -> 24.0
+
+* `bootstrap-dialog` library has been replaced by the commons module
+  `org/forgerock/commons/ui/common/components/ModalDialog`, which renders the same markup (Bootstrap modal with
+  `bootstrap-dialog*` CSS classes) and supports the subset of bootstrap-dialog API used by Wren Security applications
+  (`ModalDialog.show(options)`, `new ModalDialog(options).open()`, `close()`, `getButton(id)` with `enable()` /
+  `disable()`, `getData()` / `setData()`, `getModal*()` accessors and `onshow` / `onshown` / `onhide` /
+  `onhidden` callbacks):
+  * remove `libs/bootstrap-dialog` from RequireJS paths and shims; code that requires `bootstrap-dialog` directly
+    can keep working with a RequireJS map entry
+    `map: { "*": { "bootstrap-dialog": "org/forgerock/commons/ui/common/components/ModalDialog" } }`,
+  * remove `@import "bootstrap-dialog.css";` from application styles (the necessary styles are part of the commons
+    structure),
+  * not supported: `BootstrapDialog.alert()` / `confirm()` / `warning()` / `danger()` / `success()` /
+    `closeAll()`, the `dialogs` registry, setters (`setTitle()`, `setMessage()`, …), `draggable`, `spinicon`,
+    `btnsOrder`, `closeByBackdrop` / `closeByKeyboard` (use `closable`) and button `autospin`,
+  * the commons wrapper `components/BootstrapDialog` keeps `show()` and `confirm()`, while `warning()`, `danger()`
+    and `success()` have been removed.
+
 ## 23.4.x -> 23.5.x
 
 * `@wrensecurity/commons-ui-build` (`useEslint`) uses ESLint 10, which supports only flat configuration

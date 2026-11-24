@@ -52,8 +52,7 @@ require.config({
         xdate: "libs/xdate",
         handlebars: "libs/handlebars",
         moment: "libs/moment",
-        bootstrap: "libs/bootstrap",
-        "bootstrap-dialog": "libs/bootstrap-dialog"
+        bootstrap: "libs/bootstrap"
     },
 
     shim: {
@@ -85,9 +84,6 @@ require.config({
         },
         bootstrap: {
             deps: ["jquery"]
-        },
-        'bootstrap-dialog': {
-            deps: ["jquery", "underscore","backbone", "bootstrap"]
         },
         selectize: {
             deps: ["jquery"]
