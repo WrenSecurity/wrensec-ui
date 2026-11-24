@@ -29,10 +29,13 @@
     "jsdoc": "4.0.5",
     "less": "4.9.1",
     "postcss": "8.5.33",
+    "postcss-import": "17.0.1",
     "postcss-minify": "1.2.0",
+    "postcss-url": "10.1.4",
     "requirejs": "^2.3.8",
     "rimraf": "^6.1.4",
-    "rollup": "^4.68.8"
+    "rollup": "^4.68.8",
+    "sass": "1.108.2"
   },
   "overrides": {
     "node-fetch": "2.7.0"
