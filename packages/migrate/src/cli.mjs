@@ -209,6 +209,21 @@ function formatReport(reports) {
     return lines.join("\n");
 }
 
+/** Format class collisions grouped by class, with the --rename option that resolves them. */
+function formatCollisions(collisions) {
+    const byClass = Map.groupBy(collisions, (report) => report.text);
+    const lines = ["Application classes in the way of renamed Bootstrap 3 classes (resolve them before --write):"];
+    for (const [name, reports] of byClass) {
+        const sources = renamedFrom(name.slice(1)).map((token) => `.${token}`);
+        lines.push("", `  ${name} (${sources.join(", ")} ${sources.length > 1 ? "become" : "becomes"} ${name})`,
+            ...reports.map((report) => `    ${report.file}:${report.line}:${report.column}`));
+    }
+    const renames = Array.from(byClass.keys(), (name) => `${name.slice(1)}=<new name>`).join(",");
+    lines.push("", `Rename the application classes in the same run: --rename ${renames}`,
+        "Leave out a class whose rules are meant for the Bootstrap 5 classes that replace the Bootstrap 3 ones.");
+    return lines.join("\n");
+}
+
 /** Command line entry point. */
 export async function main(argv) {
     let parsed;
@@ -269,11 +284,17 @@ export async function main(argv) {
                 change.source, change.output, "", "", { context: 2 }).replace(/^=+\n/, ""));
         }
     }
-    if (located.length) {
-        process.stdout.write(`\nNot converted (fix by hand):${formatReport(located)}\n`);
+    const collisions = located.filter((report) => report.rule === "class-collision");
+    const other = located.filter((report) => report.rule !== "class-collision");
+    if (other.length) {
+        process.stdout.write(`\nNot converted (fix by hand):${formatReport(other)}\n`);
+    }
+    if (collisions.length) {
+        process.stdout.write(`\n${formatCollisions(collisions)}\n`);
     }
     const verb = parsed.values.write ? "changed" : "to change";
-    process.stdout.write(`\n${changes.length} file(s) ${verb}, ${located.length} item(s) reported.`
+    const collisionSummary = collisions.length ? `, ${collisions.length} class collision(s) to resolve first` : "";
+    process.stdout.write(`\n${changes.length} file(s) ${verb}, ${other.length} item(s) reported${collisionSummary}.`
         + `${parsed.values.write || !changes.length ? "" : " Run with --write to apply the changes."}\n`);
     return 0;
 }

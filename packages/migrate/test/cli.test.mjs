@@ -80,6 +80,18 @@ describe("cli", () => {
             ["src/card.scss:1 class-collision .card"]);
     });
 
+    it("lists class collisions apart from other reports", () => {
+        writeFileSync(join(directory, "src", "card.scss"), ".card { height: 320px; }\n");
+        writeFileSync(join(directory, "src", "form.html"), "<div class=\"checkbox\"></div>\n");
+        const result = run("bootstrap5", "src");
+        const [other, collisions] = result.stdout.split("Application classes in the way");
+        assert.match(other, /checkbox/);
+        assert.doesNotMatch(other, /class-collision/);
+        assert.match(collisions, /\.card \(\.panel, \.well become \.card\)\n\s+src\/card\.scss:1:1/);
+        assert.match(collisions, /--rename card=<new name>/);
+        assert.match(result.stdout, /1 item\(s\) reported, 1 class collision\(s\) to resolve first/);
+    });
+
     it("renames application classes and refuses to rename them again", () => {
         writeFileSync(join(directory, "src", "card.scss"), ".card { height: 320px; }\n");
         const first = run("bootstrap5", "--write", "--rename", "card=fr-card", "src");
