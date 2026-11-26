@@ -223,6 +223,33 @@ function removeToken(text, token, valueStart, valueEnd, consumed) {
     return { start: token.start, end, text: "" };
 }
 
+/** Edit removing an attribute with the whitespace before it. */
+function removeAttribute(text, attribute) {
+    let start = attribute.nameStart;
+    while (/[ \t]/.test(text[start - 1])) {
+        start--;
+    }
+    const end = attribute.valueEnd ?? attribute.nameEnd;
+    return { start, end: end + (/["']/.test(text[end] ?? "") ? 1 : 0), text: "" };
+}
+
+/** Whether an element is an item of a dropdown menu (in a <li> of the menu, or directly in it). */
+function isInDropdownMenu(element) {
+    const menu = element.parent?.tag === "li" ? element.parent.parent : element.parent;
+    return Boolean(menu?.classes.has("dropdown-menu"));
+}
+
+/** Whether an element contains only icons (<i> or <span> elements without text), no text and no caret. */
+function isIconOnly(text, element) {
+    const close = text.indexOf(`</${element.tag}`, element.end);
+    if (close === -1) {
+        return false;
+    }
+    const content = text.slice(element.end, close);
+    return /<(i|span)\b/.test(content) && !/\bcaret\b/.test(content)
+        && !content.replace(/<(i|span)\b[^>]*>\s*<\/\1>/g, "").replace(/\{\{!(--)?[\s\S]*?\}\}/g, "").trim();
+}
+
 /** Edit removing an empty caret span of a dropdown toggle, with its line if it stands alone. */
 function removeCaret(text, element) {
     const close = /^\s*<\/span\s*>/i.exec(text.slice(element.end));
@@ -249,6 +276,7 @@ function removeCaret(text, element) {
 export function migrateMarkup(text, elements, file) {
     const edits = [];
     const reports = [];
+    const movedStates = new Set();
     for (const element of elements) {
         const tokens = element.classTokens.filter((token) => !token.partial);
         const partial = element.classTokens.filter((token) => token.partial);
@@ -277,15 +305,52 @@ export function migrateMarkup(text, elements, file) {
         });
         const classAttribute = element.attributes.find((attribute) => attribute.name.toLowerCase() === "class");
         const consumed = { until: 0 };
+        let attributeRemoved = false;
         if (tokens.length && result.every((renamed) => renamed && !renamed.length) && !classAttribute.dynamic) {
-            // All classes removed: remove the attribute
-            let start = classAttribute.nameStart;
-            while (/[ \t]/.test(text[start - 1])) {
-                start--;
-            }
-            const quoted = /["']/.test(text[classAttribute.valueEnd] ?? "");
-            edits.push({ start, end: classAttribute.valueEnd + (quoted ? 1 : 0), text: "" });
+            edits.push(removeAttribute(text, classAttribute));
+            attributeRemoved = true;
             result.fill(null);
+        }
+
+        // Items of dropdown menus are dropdown-item links or buttons, with the active and disabled states
+        const menuItem = ["a", "button"].includes(element.tag) && !element.classes.has("dropdown-item")
+            && !element.classes.has("dropdown-toggle") && isInDropdownMenu(element);
+        if (menuItem) {
+            const item = element.parent.tag === "li" ? element.parent : null;
+            const states = item && !movedStates.has(item)
+                ? item.classTokens.filter((token) => !token.partial && ["active", "disabled"].includes(token.text)) : [];
+            movedStates.add(item);
+            // States set by Handlebars expressions can't be moved safely
+            const dynamic = states.length > 0
+                && item.attributes.find((attribute) => attribute.name.toLowerCase() === "class").dynamic;
+            const moved = dynamic ? [] : states;
+            for (const token of dynamic ? states : []) {
+                reports.push({ offset: token.start, rule: "dropdown-item-state", text: token.text,
+                    message: `move ${token.text} from the <li> to its dropdown-item (Bootstrap 5 styles the item)` });
+            }
+            const added = ["dropdown-item", ...moved.map((token) => token.text).filter((name) => !element.classes.has(name))];
+            if (classAttribute?.value != null && !attributeRemoved) {
+                const separator = classAttribute.value.trim() ? " " : "";
+                edits.push({ start: classAttribute.valueStart, end: classAttribute.valueStart, text: added.join(" ") + separator });
+            } else {
+                const position = element.start + 1 + element.tag.length;
+                edits.push({ start: position, end: position, text: ` class="${added.join(" ")}"` });
+            }
+            const itemClass = item?.attributes.find((attribute) => attribute.name.toLowerCase() === "class");
+            if (moved.length && moved.length === item.classTokens.length && !itemClass.dynamic) {
+                edits.push(removeAttribute(text, itemClass));
+            } else {
+                const itemConsumed = { until: 0 };
+                moved.forEach((token) => edits.push(removeToken(text, token, itemClass.valueStart, itemClass.valueEnd,
+                    itemConsumed)));
+            }
+        }
+
+        if (element.classes.has("dropdown-toggle") && isIconOnly(text, element)) {
+            const token = tokens.find((item) => item.text === "dropdown-toggle");
+            reports.push({ offset: token.start, rule: "dropdown-caret", text: token.text,
+                message: "Bootstrap 5 adds a caret to dropdown toggles, remove dropdown-toggle (and update styles that "
+                    + "use it) if this icon toggle should have none" });
         }
         result.forEach((renamed, index) => {
             const token = tokens[index];
