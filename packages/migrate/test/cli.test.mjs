@@ -72,6 +72,34 @@ describe("cli", () => {
         assert.match(result.stdout, /gulpfile\.js\n\s+1:1\s+gulpfile/);
     });
 
+    it("reports application classes in the way of renamed classes", () => {
+        writeFileSync(join(directory, "src", "card.scss"), ".card { height: 320px; }\n");
+        const result = run("bootstrap5", "--json", "src");
+        const reports = JSON.parse(result.stdout).reports;
+        assert.deepEqual(reports.map((report) => `${report.file}:${report.line} ${report.rule} ${report.text}`),
+            ["src/card.scss:1 class-collision .card"]);
+    });
+
+    it("renames application classes and refuses to rename them again", () => {
+        writeFileSync(join(directory, "src", "card.scss"), ".card { height: 320px; }\n");
+        const first = run("bootstrap5", "--write", "--rename", "card=fr-card", "src");
+        assert.equal(first.status, 0);
+        assert.doesNotMatch(first.stdout, /class-collision/);
+        assert.equal(readFileSync(join(directory, "src", "card.scss"), "utf8"), ".fr-card { height: 320px; }\n");
+        assert.equal(readFileSync(join(directory, "src", "page.html"), "utf8"), "<div class=\"card\"></div>\n");
+
+        const second = run("bootstrap5", "--write", "--rename", "card=fr-card", "src");
+        assert.equal(second.status, 1);
+        assert.match(second.stderr, /src\/card\.scss contains fr-card already/);
+        assert.equal(readFileSync(join(directory, "src", "page.html"), "utf8"), "<div class=\"card\"></div>\n");
+    });
+
+    it("rejects invalid renames", () => {
+        const result = run("bootstrap5", "--rename", "card", "src");
+        assert.equal(result.status, 1);
+        assert.match(result.stderr, /Invalid --rename value "card"/);
+    });
+
     it("prints JSON", () => {
         const result = run("bootstrap5", "--json", "src");
         const output = JSON.parse(result.stdout);

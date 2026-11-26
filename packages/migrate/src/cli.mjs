@@ -18,11 +18,12 @@ import { existsSync } from "node:fs";
 import { readdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { extname, join, relative, resolve, sep } from "node:path";
 import { parseArgs } from "node:util";
+import { renamedFrom } from "./bootstrap5/classes.mjs";
 import { EXTENSIONS as BOOTSTRAP5_EXTENSIONS, migrateBootstrap5 } from "./bootstrap5/index.mjs";
 import { EXTENSIONS as SCSS_EXTENSIONS, convertLess, scssPath } from "./scss/index.mjs";
 import { position } from "./text.mjs";
 
-const USAGE = `Usage: wrensec-ui-migrate <command> [--write] [--json] <paths...>
+const USAGE = `Usage: wrensec-ui-migrate <command> [--write] [--json] [--rename <old>=<new>,...] <paths...>
 
 Migrates Wren Security UI applications to commons 24.0. Run the commands in this order:
 
@@ -35,10 +36,32 @@ Without --write, the command prints the changes as unified diffs (a dry run). Bo
 report what they can't convert, with the file, line and Bootstrap 5 replacement.
 
 Options:
-  --write  write the changes (review them with git diff)
-  --json   print the changes and the report as JSON
-  --help   print this help
+  --write   write the changes (review them with git diff)
+  --json    print the changes and the report as JSON
+  --rename  bootstrap5: rename application classes in the same pass, e.g. an application
+            card component in the way of Bootstrap 5 cards (--rename card=fr-card,card-body=fr-card-body);
+            only for sources that have not been migrated yet (repeatable)
+  --help    print this help
 `;
+
+/** A command line error (printed without a stack trace). */
+export class UsageError extends Error {}
+
+/** Parse --rename values (old=new pairs, comma separated). */
+export function parseRenames(values) {
+    const renames = new Map();
+    for (const pair of values.flatMap((value) => value.split(",")).map((item) => item.trim()).filter(Boolean)) {
+        const match = /^(-?[_a-zA-Z][\w-]*)=(-?[_a-zA-Z][\w-]*)$/.exec(pair);
+        if (!match) {
+            throw new UsageError(`Invalid --rename value "${pair}", expected <old class>=<new class>`);
+        }
+        renames.set(match[1], match[2]);
+    }
+    return renames;
+}
+
+/** Whether the text contains a class name as a whole token. */
+const containsClass = (text, name) => new RegExp(`(^|[^\\w-])${name}([^\\w-]|$)`).test(text);
 
 const SKIPPED_DIRECTORIES = new Set(["node_modules", "target", "libs", "build", "dist", ".git"]);
 
@@ -80,12 +103,34 @@ async function gulpfileReports() {
 }
 
 /**
+ * Reports of application styles that define classes which Bootstrap 3 classes of the sources are renamed to (an
+ * application .card component and Bootstrap 3 panels becoming cards).
+ */
+function collisionReports(results, renames) {
+    const used = new Set(results.flatMap((result) => Array.from(result.classes)));
+    const reports = [];
+    for (const { path, source, styleClasses } of results) {
+        for (const [name, offset] of styleClasses) {
+            const sources = renamedFrom(name).filter((token) => used.has(token));
+            if (sources.length && !renames.has(name)) {
+                reports.push({ path, source, offset, rule: "class-collision", text: `.${name}`,
+                    message: `the application styles .${name}, which ${sources.join(" and ")} `
+                        + `${sources.length > 1 ? "become" : "becomes"}; rename the `
+                        + `application class in the same run (--rename ${name}=<new name>) unless the rule is meant `
+                        + `for the renamed ${sources.join(" and ")}` });
+            }
+        }
+    }
+    return reports;
+}
+
+/**
  * Run a command.
  *
  * @returns {Promise<{ changes: object[], reports: object[] }>} changed files ({ path, newPath, source, output })
  *          and reports ({ path, source, offset, rule, text, message })
  */
-export async function run(command, paths, { write = false } = {}) {
+export async function run(command, paths, { write = false, renames = new Map() } = {}) {
     const changes = [];
     const reports = [];
     if (command === "scss") {
@@ -107,14 +152,24 @@ export async function run(command, paths, { write = false } = {}) {
         }
         reports.push(...await gulpfileReports());
     } else if (command === "bootstrap5") {
-        for (const path of await collectFiles(paths, BOOTSTRAP5_EXTENSIONS)) {
-            const source = await readFile(path, "utf8");
-            const result = migrateBootstrap5(path, source);
-            reports.push(...result.reports.map((report) => ({ ...report, path, source })));
-            if (result.output !== source) {
-                changes.push({ path, newPath: path, source, output: result.output });
+        const files = await collectFiles(paths, BOOTSTRAP5_EXTENSIONS);
+        const inputs = await Promise.all(files.map(async (path) => ({ path, source: await readFile(path, "utf8") })));
+        // A second run would rename the Bootstrap 5 classes that took the renamed classes' names
+        for (const [name, target] of renames) {
+            const input = inputs.find((item) => containsClass(item.source, target));
+            if (input) {
+                throw new UsageError(`--rename ${name}=${target}: ${display(input.path)} contains ${target} already, `
+                    + "rename classes only in sources that have not been migrated yet");
             }
         }
+        const results = inputs.map((input) => ({ ...input, ...migrateBootstrap5(input.path, input.source, { renames }) }));
+        for (const { path, source, output, reports: fileReports } of results) {
+            reports.push(...fileReports.map((report) => ({ ...report, path, source })));
+            if (output !== source) {
+                changes.push({ path, newPath: path, source, output });
+            }
+        }
+        reports.push(...collisionReports(results, renames));
     } else {
         throw new Error(`Unknown command: ${command}`);
     }
@@ -163,6 +218,7 @@ export async function main(argv) {
             allowPositionals: true,
             options: {
                 write: { type: "boolean", "default": false },
+                rename: { type: "string", multiple: true, "default": [] },
                 json: { type: "boolean", "default": false },
                 help: { type: "boolean", "short": "h", "default": false }
             }
@@ -181,7 +237,17 @@ export async function main(argv) {
         return 1;
     }
 
-    const { changes, reports } = await run(command, paths, { write: parsed.values.write });
+    let result;
+    try {
+        result = await run(command, paths, { write: parsed.values.write, renames: parseRenames(parsed.values.rename) });
+    } catch (error) {
+        if (error instanceof UsageError) {
+            process.stderr.write(`${error.message}\n`);
+            return 1;
+        }
+        throw error;
+    }
+    const { changes, reports } = result;
     const located = locate(reports);
     if (parsed.values.json) {
         process.stdout.write(`${JSON.stringify({

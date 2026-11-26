@@ -64,7 +64,7 @@ const literalValue = (node) => node?.type === "StringLiteral" ? node.value
  * @returns {{ sites: object[], edits: object[], reports: object[] }|null} sites (segments of the source with their
  *          kind), source edits and reports; null when the script can't be parsed
  */
-export function collectScriptSites(code, { jsx = false } = {}) {
+export function collectScriptSites(code, { jsx = false, renames = new Map() } = {}) {
     let ast;
     try {
         ast = parse(code, {
@@ -77,7 +77,7 @@ export function collectScriptSites(code, { jsx = false } = {}) {
         });
     } catch (error) {
         if (!jsx) {
-            return collectScriptSites(code, { jsx: true });
+            return collectScriptSites(code, { jsx: true, renames });
         }
         return { error };
     }
@@ -126,19 +126,22 @@ export function collectScriptSites(code, { jsx = false } = {}) {
     const literalText = (leaves) => leaves.map((leaf) => leaf.type === "StringLiteral" ? leaf.value
         : leaf.type === "TemplateElement" ? leaf.value.cooked : "{{x}}").join("");
 
+    /** A class that the migration renames (a Bootstrap 3 class or a renamed application class). */
+    const migrated = (token) => isBootstrap3Class(token) || renames.has(token);
+
     /**
-     * Whether text with {{x}} placeholders mentions Bootstrap 3 classes: class tokens of a class list, or class
+     * Whether text with {{x}} placeholders mentions migrated classes: class tokens of a class list, or class
      * selectors and Bootstrap data attributes of a selector.
      */
     const mentionsBootstrap3 = (text, kind) => {
         const parts = text.split("{{x}}");
         if (kind === "classes") {
-            return parts.some((part) => isBootstrap3Prefix(part) || tokenize(part).some((token) => isBootstrap3Class(token.text)));
+            return parts.some((part) => isBootstrap3Prefix(part) || tokenize(part).some((token) => migrated(token.text)));
         }
         return /\[data-(toggle|target|dismiss)/.test(text) || parts.some((part) => {
             const prefix = /\.([\w-]*)$/.exec(part);
             return (prefix && isBootstrap3Prefix(prefix[1]))
-                || Array.from(part.matchAll(/\.([a-zA-Z][\w-]*)/g)).some((match) => isBootstrap3Class(match[1]));
+                || Array.from(part.matchAll(/\.([a-zA-Z][\w-]*)/g)).some((match) => migrated(match[1]));
         });
     };
 
@@ -175,8 +178,8 @@ export function collectScriptSites(code, { jsx = false } = {}) {
             sites.push({ kind: "markup", segment: joinedSegment(leaves) });
         } else if (mentionsBootstrap3(literalText(leaves), kind)) {
             report(node, "concatenated", kind === "classes"
-                ? "class list built by concatenation, rename the Bootstrap 3 classes by hand"
-                : "selector built by concatenation, rename the Bootstrap 3 classes and attributes by hand");
+                ? "class list built by concatenation, rename its classes by hand"
+                : "selector built by concatenation, rename its classes and attributes by hand");
         }
     };
 

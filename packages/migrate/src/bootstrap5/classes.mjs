@@ -158,6 +158,19 @@ export function isBootstrap3Class(token) {
         || /^(hidden|visible)-(xs|sm|md|lg)/.test(token) || token === "control-label";
 }
 
+/** Bootstrap 3 classes by the class they are renamed to (card ← panel, well). */
+const RENAMED_FROM = new Map();
+for (const [source, targets] of RENAMES) {
+    for (const target of targets) {
+        RENAMED_FROM.set(target, [...RENAMED_FROM.get(target) ?? [], source]);
+    }
+}
+
+/** Bootstrap 3 classes that are renamed to the given class (empty when no rename produces it). */
+export function renamedFrom(token) {
+    return RENAMED_FROM.get(token) ?? [];
+}
+
 /** A class that only Bootstrap 3 markup uses (evidence that a file has not been migrated). */
 function isBootstrap3Only(token) {
     return isBootstrap3Class(token) && !AMBIGUOUS_GRID.test(token) && !["hidden", "hide"].includes(token);
@@ -177,9 +190,12 @@ export class FileContext {
     /**
      * @param {Set<string>} classes all classes found in the file
      * @param {boolean} bootstrap5Attributes the file contains data-bs-* attributes
+     * @param {Map<string, string>} renames application classes renamed in the same pass (classes in the way of
+     *        Bootstrap 5 classes, e.g. an application card component)
      */
-    constructor(classes, bootstrap5Attributes = false) {
+    constructor(classes, bootstrap5Attributes = false, renames = new Map()) {
         this.classes = classes;
+        this.renames = renames;
         const markers = Array.from(classes).filter((token) => BOOTSTRAP5_MARKERS.test(token));
         this.bootstrap5 = markers.length > 0 || bootstrap5Attributes;
         this.markers = bootstrap5Attributes ? [...markers, "data-bs-*"] : markers;
@@ -223,7 +239,9 @@ export function migrateClasses(tokens, { file, tag, mode, parent, context = [] }
         const offset = /^col-(xs|sm|md|lg)-offset-(\d{1,2})$/.exec(token);
         const visible = /^visible-(xs|sm|md|lg)-(block|inline|inline-block)$/.exec(token);
         let renamed = null;
-        if (column) {
+        if (file.renames.has(token)) {
+            renamed = [file.renames.get(token)];
+        } else if (column) {
             if (column[1] === "xs") {
                 renamed = [`col-${column[2]}`];
             } else if (file.gridShift) {

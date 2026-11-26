@@ -67,7 +67,7 @@ function collectStyleSites(source, extension) {
             }
             return;
         }
-        sites.push({ kind: "selector", segment: Segment.plain(text, start) });
+        sites.push({ kind: "selector", segment: Segment.plain(text, start), styles: true });
     });
     return { sites, edits: [], reports };
 }
@@ -161,26 +161,31 @@ function dedupeGridGuard(reports) {
  *
  * @param {string} path file path (its extension selects the file type)
  * @param {string} source file content
- * @returns {{ output: string, reports: object[] }} migrated content and reports with source offsets
+ * @param {object} [options]
+ * @param {Map<string, string>} [options.renames] application classes renamed in the same pass
+ * @returns {{ output: string, reports: object[], classes: Set<string>, styleClasses: Map<string, number> }} migrated
+ *          content, reports with source offsets, classes used by the file and classes of style selectors (with the
+ *          offset of their first selector)
  */
-export function migrateBootstrap5(path, source) {
+export function migrateBootstrap5(path, source, { renames = new Map() } = {}) {
     const extension = extname(path).toLowerCase();
     if (/\.min\.[^.]+$/i.test(path)) {
-        return { output: source, reports: /Bootstrap v3|\.col-xs-\d/.test(source) ? [{ offset: 0, rule: "bootstrap3-build",
-            text: "", message: "minified Bootstrap 3 build (e.g. of a custom theme), replace it with a Bootstrap 5 build "
-                + "(see UPGRADE.md, custom themes)" }] : [] };
+        return { output: source, classes: new Set(), styleClasses: new Map(),
+            reports: /Bootstrap v3|\.col-xs-\d/.test(source) ? [{ offset: 0, rule: "bootstrap3-build", text: "",
+                message: "minified Bootstrap 3 build (e.g. of a custom theme), replace it with a Bootstrap 5 build "
+                    + "(see UPGRADE.md, custom themes)" }] : [] };
     }
     let collected;
     if (TEMPLATE_EXTENSIONS.includes(extension)) {
         collected = { sites: [{ kind: "markup", segment: Segment.plain(source, 0) }], edits: [], reports: [] };
     } else if (SCRIPT_EXTENSIONS.includes(extension)) {
-        collected = collectScriptSites(source, { jsx: extension === ".jsx" });
+        collected = collectScriptSites(source, { jsx: extension === ".jsx", renames });
     } else {
         collected = collectStyleSites(source, extension);
     }
     if (collected.error) {
-        return { output: source, reports: [{ offset: collected.error.pos ?? 0, rule: "parse-error", text: "",
-            message: `the file can't be parsed (${collected.error.message}), migrate it by hand` }] };
+        return { output: source, classes: new Set(), styleClasses: new Map(), reports: [{ offset: collected.error.pos ?? 0,
+            rule: "parse-error", text: "", message: `the file can't be parsed (${collected.error.message}), migrate it by hand` }] };
     }
 
     const classes = new Set();
@@ -190,7 +195,17 @@ export function migrateBootstrap5(path, source) {
         usage.classes.forEach((token) => classes.add(token));
         attributes.push(...usage.attributes);
     }
-    const file = new FileContext(classes, hasBootstrap5Attributes(attributes));
+    const file = new FileContext(classes, hasBootstrap5Attributes(attributes), renames);
+
+    // Classes that the file's styles define (application styles in the way of Bootstrap 5 classes)
+    const styleClasses = new Map();
+    for (const site of collected.sites.filter((item) => item.styles && item.root)) {
+        site.root.walkClasses((node) => {
+            if (!styleClasses.has(node.value)) {
+                styleClasses.set(node.value, site.segment.offset(node.sourceIndex));
+            }
+        });
+    }
 
     const edits = [...collected.edits];
     const reports = [...collected.reports];
@@ -212,5 +227,5 @@ export function migrateBootstrap5(path, source) {
         reports.push(...result.reports.map((report) => ({ ...report, offset: site.segment.offset(report.offset) })));
     }
 
-    return { output: applyEdits(source, edits), reports: dedupeGridGuard(reports) };
+    return { output: applyEdits(source, edits), reports: dedupeGridGuard(reports), classes, styleClasses };
 }

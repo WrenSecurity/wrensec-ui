@@ -48,6 +48,27 @@ describe("bootstrap5", () => {
         });
     }
 
+    it("renames application classes in the same pass", () => {
+        const renames = new Map([["card", "fr-card"], ["card-body", "fr-card-body"]]);
+        const html = "<div class=\"panel\"><div class=\"panel-body\"></div></div>\n"
+            + "<div class=\"card\"><div class=\"card-body\"></div></div>\n";
+        assert.equal(migrateBootstrap5("page.html", html, { renames }).output,
+            "<div class=\"card\"><div class=\"card-body\"></div></div>\n"
+            + "<div class=\"fr-card\"><div class=\"fr-card-body\"></div></div>\n");
+
+        const script = "this.$(\".card .card-body, .panel\").addClass(\"card\");\nthis.$(`.card-body[data-name=\"${name}\"]`);\n";
+        const result = migrateBootstrap5("view.js", script, { renames });
+        assert.equal(result.output, "this.$(\".fr-card .fr-card-body, .card\").addClass(\"fr-card\");\n"
+            + "this.$(`.card-body[data-name=\"${name}\"]`);\n");
+        assert.deepEqual(result.reports.map((report) => report.rule), ["concatenated"]);
+    });
+
+    it("returns classes of style selectors", () => {
+        const result = migrateBootstrap5("styles.scss", ".card .title, .panel-body { color: red; }\n");
+        assert.deepEqual(Array.from(result.styleClasses), [["card", 0], ["title", 6], ["panel-body", 14]]);
+        assert.ok(result.classes.has("panel-body"));
+    });
+
     it("reports a minified Bootstrap 3 build", () => {
         const result = migrateBootstrap5("bootstrap.min.css", "/*! Bootstrap v3.4.1 */.col-xs-1{float:left}");
         assert.equal(result.output, "/*! Bootstrap v3.4.1 */.col-xs-1{float:left}");

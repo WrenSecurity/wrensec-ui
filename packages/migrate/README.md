@@ -18,7 +18,7 @@ Run the commands in this order, on the application sources (directories or files
 ```sh
 wrensec-ui-migrate scss src/main/resources/css          # Less → SCSS (dry run)
 wrensec-ui-migrate scss --write src/main/resources/css
-wrensec-ui-migrate bootstrap5 src/main/resources src/main/js
+wrensec-ui-migrate bootstrap5 src/main/resources src/main/js           # check the class-collision reports
 wrensec-ui-migrate bootstrap5 --write src/main/resources src/main/js
 ```
 
@@ -60,8 +60,15 @@ Renames Bootstrap 3 classes and data attributes in templates (`*.html`, `*.hbs`)
 All renames of a class list are made in one pass (`col-sm-6` becomes `col-md-6`, not `col-lg-6`). Renames that
 depend on context use the element (`form-control` on `<select>` → `form-select`), the other classes of the list
 (`in` with `fade` → `show`) or the file (`control-label` → `col-form-label` only when the file contains
-`form-horizontal`). The grid is not tier-shifted in a file that contains Bootstrap 5 classes, so a second run changes
-nothing.
+`form-horizontal`). The grid is not tier-shifted in a file that contains Bootstrap 5 classes. A file whose only
+Bootstrap 5 evidence is its shifted grid (`col-md-6` from `col-sm-6`) can't be told apart from a Bootstrap 3 file,
+so run `bootstrap5 --write` once on a source tree (dry runs are safe to repeat).
+
+Application classes that Bootstrap 3 classes are renamed to are reported as collisions, e.g. an application `.card`
+component (with `.card-body`) that the panels would turn into. Rename them in the same run, so the two renames don't
+mix: `--rename card=fr-card,card-body=fr-card-body`. Each class is renamed once from its original value, so the
+application cards become `fr-card` and the panels become `card`. `--rename` refuses to run on sources that contain
+a new name already (a second run would rename the migrated Bootstrap 5 classes).
 
 Reported: structural markup (checkboxes, switches, input group buttons, navs, navbars, media objects, removed
 components, …), classes built by concatenation, classes of components (react-bootstrap), Bootstrap 3 plugin APIs,
