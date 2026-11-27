@@ -101,7 +101,7 @@ define([
     obj.unregisterListener = function (eventId, callbackToRemove) {
         if (_.has(eventRegistry, eventId)) {
             if (callbackToRemove !== undefined) {
-                eventRegistry[eventId] = _.omitBy(eventRegistry[eventId], function (callback) {
+                eventRegistry[eventId] = _.reject(eventRegistry[eventId], function (callback) {
                     return callback === callbackToRemove;
                 });
             } else {
