@@ -21,6 +21,7 @@ define([
     "./commons/AbstractModel",
     "./commons/Base64",
     "./commons/form2js",
+    "./commons/EventManager",
     "./commons/i18nManager",
     "./commons/LoginDialog",
     "./commons/Bootstrap3Compatibility",

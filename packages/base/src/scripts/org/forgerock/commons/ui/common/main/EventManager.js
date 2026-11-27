@@ -39,8 +39,12 @@ define([
         try {
             $.when(handler(event)).then(
                 function (value) { deferred.resolve(value); },
-                function (error) {
-                    reportError(error);
+                function (reason) {
+                    // Processes reject with a reason (e.g. "authenticationFailed") as normal
+                    // control flow, so only actual errors are reported.
+                    if (reason instanceof Error) {
+                        reportError(reason);
+                    }
                     deferred.resolve();
                 }
             );
@@ -65,8 +69,9 @@ define([
      * Handlers are invoked synchronously by default. Pass `{ async: true }` to defer each
      * handler to the next tick, matching the legacy dispatch behaviour.
      *
-     * A handler that throws (or returns a rejected promise) does not abort dispatch;
-     * the error is re-thrown asynchronously so it reaches `window.onerror`.
+     * A handler that throws (or returns a promise rejected with an `Error`) does not abort
+     * dispatch; the error is re-thrown asynchronously so it reaches `window.onerror`. Promises
+     * rejected with any other reason are treated as a regular outcome and are not reported.
      *
      * @param {string} eventId
      * @param {*} [event]
