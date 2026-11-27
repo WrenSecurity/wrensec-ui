@@ -53,6 +53,8 @@ Renames Bootstrap 3 classes and data attributes in templates (`*.html`, `*.hbs`)
 
 * templates: class attributes (including classes inside Handlebars blocks) and data attributes of start tags,
   `dropdown-item` on links and buttons of dropdown menus (with the `active` and `disabled` states of their `<li>`),
+  titatoggle switches (`checkbox checkbox-slider*` with a `<label>` around the checkbox and an empty `<span>`) to
+  `form-check form-switch` with a `form-check-input` (`.checkbox-slider` selectors become `.form-switch`),
 * scripts: class lists of `addClass` / `removeClass` / `toggleClass` / `hasClass`, `className` and `cssClass`
   properties, selectors of `$()`, `find()`, `closest()`, `on()`, … and Backbone `events`, HTML fragments (also
   concatenated with expressions), `className` of JSX elements and `whiteList` options,
@@ -71,7 +73,7 @@ mix: `--rename card=fr-card,card-body=fr-card-body`. Each class is renamed once 
 application cards become `fr-card` and the panels become `card`. `--rename` refuses to run on sources that contain
 a new name already (a second run would rename the migrated Bootstrap 5 classes).
 
-Reported: structural markup (checkboxes, switches, input group buttons, navs, navbars, media objects, icon-only
+Reported: structural markup (checkboxes, switches in other markup, input group buttons, navs, navbars, media objects, icon-only
 dropdown toggles that get a Bootstrap 5 caret, removed
 components, …), classes built by concatenation, classes of components (react-bootstrap), Bootstrap 3 plugin APIs,
 jQuery 4 removed APIs and removed RequireJS modules.

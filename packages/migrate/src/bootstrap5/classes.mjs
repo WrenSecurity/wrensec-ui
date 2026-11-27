@@ -266,7 +266,10 @@ export function migrateClasses(tokens, { file, tag, mode, parent, context = [] }
             report(index, "responsive-visibility",
                 "d-none d-md-block and similar (tiers shift like the grid); the display type depends on the element");
         } else if (/^checkbox-slider/.test(token)) {
-            if (!list.has("form-switch")) {
+            // titatoggle switches: markup is converted by the markup migration (the structure changes)
+            if (mode !== "markup") {
+                renamed = token === "checkbox-slider" ? ["form-switch"] : [];
+            } else if (!list.has("form-switch")) {
                 report(index, "switch", "form-check form-switch with the input before its label");
             }
         } else if (token === "label") {

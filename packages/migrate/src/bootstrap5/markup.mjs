@@ -250,22 +250,115 @@ function isIconOnly(text, element) {
         && !content.replace(/<(i|span)\b[^>]*>\s*<\/\1>/g, "").replace(/\{\{!(--)?[\s\S]*?\}\}/g, "").trim();
 }
 
+/** Edit removing a range with the whitespace before it, and with its line if it stands alone. */
+function removeRange(text, start, end) {
+    let whitespace = start;
+    while (whitespace > 0 && /[ \t]/.test(text[whitespace - 1])) {
+        whitespace--;
+    }
+    const lineStart = whitespace === 0 || text[whitespace - 1] === "\n";
+    const rest = /^[ \t]*\r?\n/.exec(text.slice(end));
+    if (lineStart && rest) {
+        return { start: whitespace, end: end + rest[0].length, text: "" };
+    }
+    // Other content stays on the line: keep its indentation
+    return { start: lineStart ? start : whitespace, end, text: "" };
+}
+
+/** Indentation of the line of an offset (when only whitespace precedes the offset on its line). */
+function indentationAt(text, offset) {
+    const lineStart = text.lastIndexOf("\n", offset - 1) + 1;
+    const before = text.slice(lineStart, offset);
+    return /^[ \t]*$/.test(before) ? before : null;
+}
+
+/** Offset after an empty element (its end tag following only whitespace), null when it is not empty. */
+function emptyElementEnd(text, element) {
+    const close = new RegExp(`^\\s*</${element.tag}\\s*>`, "i").exec(text.slice(element.end));
+    return close ? element.end + close[0].length : null;
+}
+
 /** Edit removing an empty caret span of a dropdown toggle, with its line if it stands alone. */
 function removeCaret(text, element) {
-    const close = /^\s*<\/span\s*>/i.exec(text.slice(element.end));
+    const end = emptyElementEnd(text, element);
+    return end === null ? null : removeRange(text, element.start, end);
+}
+
+/**
+ * Parts of a titatoggle switch in its usual markup: the element with checkbox-slider classes starts with a <label>
+ * without attributes, which holds only a checkbox and an empty <span> (the label text is elsewhere). Content after
+ * the label (help text) stays.
+ *
+ * @returns {?{ label: object, labelClose: number[], input: object, span: ?number[] }} the label with the range of its
+ *          end tag, the input and the range of the span (with a Handlebars comment that follows it), null for other
+ *          markup
+ */
+function switchParts(text, wrapper, elements) {
+    const label = elements.find((element) => element.parent === wrapper);
+    if (label?.tag !== "label" || label.attributes.length || text.slice(wrapper.end, label.start).trim()) {
+        return null;
+    }
+    const inner = elements.filter((element) => element.parent === label);
+    const input = inner.find((element) => element.tag === "input");
+    const type = input?.attributes.find((attribute) => attribute.name.toLowerCase() === "type")?.value;
+    const others = inner.filter((element) => element !== input);
+    const span = others[0];
+    if (type?.toLowerCase() !== "checkbox" || others.length > 1
+            || (span && (span.tag !== "span" || span.attributes.length || emptyElementEnd(text, span) === null))) {
+        return null;
+    }
+    const close = /<\/label\s*>/i.exec(text.slice(input.end));
     if (!close) {
         return null;
     }
-    let start = element.start;
-    let end = element.end + close[0].length;
-    while (start > 0 && /[ \t]/.test(text[start - 1])) {
-        start--;
+    const labelClose = [input.end + close.index, input.end + close.index + close[0].length];
+    let spanRange = null;
+    if (span) {
+        const end = emptyElementEnd(text, span);
+        const comment = /^[ \t]*\{\{!(?:--[\s\S]*?--|[^}]*)\}\}/.exec(text.slice(end));
+        spanRange = [span.start, end + (comment?.[0].length ?? 0)];
     }
-    const rest = /^[ \t]*\r?\n/.exec(text.slice(end));
-    if ((start === 0 || text[start - 1] === "\n") && rest) {
-        end += rest[0].length;
+    const rest = text.slice(label.end, labelClose[0]).replace(text.slice(input.start, input.end), "")
+        .replace(spanRange ? text.slice(...spanRange) : "", "");
+    if (rest.trim()) {
+        return null;
     }
-    return { start, end, text: "" };
+    return { label, labelClose, input, span: spanRange };
+}
+
+/** Edits converting a titatoggle switch to a Bootstrap 5 switch (the wrapper classes are migrated separately). */
+function convertSwitch(text, parts) {
+    const { label, labelClose, input, span } = parts;
+    const edits = [removeRange(text, label.start, label.end), removeRange(text, ...labelClose)];
+    if (span) {
+        edits.push(removeRange(text, ...span));
+    }
+    // The label content moves one level up: dedent its lines by the indentation the input has over the label
+    const labelIndent = indentationAt(text, label.start);
+    const inputIndent = indentationAt(text, input.start);
+    if (labelIndent !== null && inputIndent?.startsWith(labelIndent) && inputIndent.length > labelIndent.length) {
+        const step = inputIndent.slice(labelIndent.length);
+        for (let lineStart = text.indexOf("\n", label.end) + 1; lineStart > 0 && lineStart < labelClose[0];
+            lineStart = text.indexOf("\n", lineStart) + 1) {
+            const position = lineStart + labelIndent.length;
+            const removed = edits.some((edit) => edit.start <= position && position < edit.end);
+            if (!removed && text.startsWith(labelIndent + step, lineStart)) {
+                edits.push({ start: position, end: position + step.length, text: "" });
+            }
+        }
+    }
+    const inputClass = input.attributes.find((attribute) => attribute.name.toLowerCase() === "class");
+    const afterName = input.start + 1 + input.tag.length;
+    if (inputClass?.value != null) {
+        const separator = inputClass.value.trim() ? " " : "";
+        edits.push({ start: inputClass.valueStart, end: inputClass.valueStart, text: `form-check-input${separator}` });
+    } else {
+        edits.push({ start: afterName, end: afterName, text: " class=\"form-check-input\"" });
+    }
+    if (!input.attributes.some((attribute) => attribute.name.toLowerCase() === "role")) {
+        edits.push({ start: afterName, end: afterName, text: " role=\"switch\"" });
+    }
+    return edits;
 }
 
 /**
@@ -296,13 +389,35 @@ export function migrateMarkup(text, elements, file) {
             }
         }
 
-        const { result, reports: classReports } = migrateClasses(tokens.map((token) => token.text), {
+        const classMigration = migrateClasses(tokens.map((token) => token.text), {
             file,
             tag: element.tag,
             mode: "markup",
             parent: element.parent?.classes,
             context: partial.map((token) => token.text)
         });
+        const { result } = classMigration;
+        let classReports = classMigration.reports;
+
+        // titatoggle switches in their usual markup become Bootstrap 5 switches
+        const titatoggle = (token) => token === "checkbox" || /^checkbox-slider/.test(token);
+        const switchMarkup = tokens.some((token) => /^checkbox-slider/.test(token.text))
+            ? switchParts(text, element, elements) : null;
+        if (switchMarkup) {
+            const replaced = tokens.findIndex((token) => titatoggle(token.text));
+            tokens.forEach((token, index) => {
+                if (titatoggle(token.text)) {
+                    result[index] = index === replaced
+                        ? ["form-check", "form-switch"].filter((name) => !element.classes.has(name)) : [];
+                }
+            });
+            classReports = classReports.filter((report) => !titatoggle(tokens[report.index].text));
+            edits.push(...convertSwitch(text, switchMarkup));
+        } else if (classReports.some((report) => report.rule === "switch")) {
+            // One report per switch that is not converted
+            const first = classReports.find((report) => report.rule === "switch");
+            classReports = classReports.filter((report) => !titatoggle(tokens[report.index].text) || report === first);
+        }
         const classAttribute = element.attributes.find((attribute) => attribute.name.toLowerCase() === "class");
         const consumed = { until: 0 };
         let attributeRemoved = false;

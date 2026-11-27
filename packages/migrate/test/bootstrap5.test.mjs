@@ -63,6 +63,16 @@ describe("bootstrap5", () => {
         assert.deepEqual(result.reports.map((report) => report.rule), ["concatenated"]);
     });
 
+    it("renames titatoggle switch selectors", () => {
+        const script = "View.extend({ events: { \"change .checkbox-slider input[type='checkbox']\": \"toggle\" } });";
+        assert.equal(migrateBootstrap5("view.js", script).output,
+            "View.extend({ events: { \"change .form-switch input[type='checkbox']\": \"toggle\" } });");
+        const styles = ".checkbox-slider.checkbox-slider--b label, .checkbox-slider-md { margin: 0; }\n";
+        const result = migrateBootstrap5("styles.scss", styles);
+        assert.equal(result.output, ".form-switch label, .checkbox-slider-md { margin: 0; }\n");
+        assert.deepEqual(result.reports.map((report) => report.rule), ["removed-class"]);
+    });
+
     it("returns classes of style selectors", () => {
         const result = migrateBootstrap5("styles.scss", ".card .title, .panel-body { color: red; }\n");
         assert.deepEqual(Array.from(result.styleClasses), [["card", 0], ["title", 6], ["panel-body", 14]]);
