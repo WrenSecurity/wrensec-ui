@@ -18,6 +18,8 @@
 require.config({
     map: {
         "*" : {
+            // Commons ThemeablePaginator refers to the backgrid paginator as "backgrid.paginator"
+            "backgrid.paginator": "backgrid-paginator",
             "Footer": "org/forgerock/mock/ui/common/components/Footer",
             "ThemeManager": "org/forgerock/mock/ui/common/util/ThemeManager",
             "LoginView": "org/forgerock/commons/ui/common/LoginView",
@@ -52,8 +54,7 @@ require.config({
         xdate: "libs/xdate",
         handlebars: "libs/handlebars",
         moment: "libs/moment",
-        bootstrap: "libs/bootstrap",
-        "bootstrap-dialog": "libs/bootstrap-dialog"
+        bootstrap: "libs/bootstrap"
     },
 
     shim: {
@@ -82,12 +83,6 @@ require.config({
         },
         form2js: {
             exports: "form2js"
-        },
-        bootstrap: {
-            deps: ["jquery"]
-        },
-        'bootstrap-dialog': {
-            deps: ["jquery", "underscore","backbone", "bootstrap"]
         },
         selectize: {
             deps: ["jquery"]

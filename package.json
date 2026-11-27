@@ -12,10 +12,12 @@
   ],
   "overrides": {
     "node-fetch": "2.7.0",
-    "puppeteer": "25.18.1"
+    "puppeteer": "25.18.1",
+    "jquery": "^4.1.0"
   },
   "allowScripts": {
     "puppeteer@25.18.1": true,
-    "fsevents@2.3.3": true
+    "fsevents@2.3.3": true,
+    "@parcel/watcher@2.6.0": false
   }
 }

@@ -20,6 +20,7 @@ import { createRequire } from "module";
 import { dirname, join } from "path";
 import { Transform } from "stream";
 import { finished } from "stream/promises";
+import { fileURLToPath } from "url";
 
 /**
  * @typedef {import("gulp").TaskFunction} TaskFunction
@@ -110,12 +111,15 @@ export function useLocalResources(resources, options = {}) {
 
 /**
  * Build Less styles.
+ * @deprecated Less support will be removed in 25.0, use {@link useScssStyles} instead.
  * @param {Record<string, string>} resources - resource map
  * @param {LessStylesOptions} [options]
  * @returns {TaskFunction}
  */
 export function useLessStyles(resources, options = {}) {
     return async () => {
+        console.warn("[commons-ui-build] useLessStyles is deprecated and will be removed in 25.0, "
+            + "use useScssStyles instead.");
         const less = (await import("less")).default;
         const postcss = (await import("postcss")).default;
         const minify = (await import("postcss-minify")).default;
@@ -131,6 +135,54 @@ export function useLessStyles(resources, options = {}) {
                 from: source
             });
             const destination = join(options.dest || "dist", target);
+            await mkdir(dirname(destination), { recursive: true });
+            await writeFile(destination, processed.css);
+        }
+    };
+}
+
+/**
+ * @typedef {Object} ScssStylesOptions
+ * @property {string} base - base path for resolving imports (defaults to `dist`)
+ * @property {string} dest - target path (defaults to `dist`)
+ */
+
+/**
+ * Build SCSS styles using Sass. Modules are resolved from the base path, `pkg:` URLs from Node packages installed
+ * with this package (which brings Bootstrap and Font Awesome used by commons styles) or by the application.
+ * Plain CSS imports (`@import "library.css";`) are inlined with their relative URLs rebased to the target file.
+ * Other relative URLs are relative to the target file. Warnings of dependencies (stylesheets loaded through the base
+ * path or Node packages) are not reported. The result is minified.
+ * @param {Record<string, string>} resources - resource map
+ * @param {ScssStylesOptions} [options]
+ * @returns {TaskFunction}
+ */
+export function useScssStyles(resources, options = {}) {
+    return async () => {
+        const sass = await import("sass");
+        const postcss = (await import("postcss")).default;
+        const postcssImport = (await import("postcss-import")).default;
+        const postcssUrl = (await import("postcss-url")).default;
+        const minify = (await import("postcss-minify")).default;
+        const base = options.base || "dist";
+        const processor = postcss([
+            postcssImport({ path: [base] }),
+            postcssUrl({ url: "rebase" }),
+            minify()
+        ]);
+        for (const [source, target] of Object.entries(resources)) {
+            const destination = join(options.dest || "dist", target);
+            const compiled = await sass.compileAsync(source, {
+                loadPaths: [base],
+                // Node packages of commons (e.g. Bootstrap) are resolved from this package, which depends on them
+                importers: [new sass.NodePackageImporter(dirname(fileURLToPath(import.meta.url)))],
+                // Deprecation warnings of dependencies (e.g. Bootstrap) cannot be fixed by the application
+                quietDeps: true
+            });
+            const processed = await processor.process(compiled.css, {
+                from: destination,
+                to: destination
+            });
             await mkdir(dirname(destination), { recursive: true });
             await writeFile(destination, processed.css);
         }

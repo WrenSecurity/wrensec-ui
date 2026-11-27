@@ -23,7 +23,7 @@ define([
 
     obj.showSpinner = function(priority) {
         if (!obj.spinner) {
-            // Styled by structure/spinner.less
+            // Styled by structure/_spinner.scss
             obj.spinner = $('<div class="spinner" role="progressbar"></div>');
         }
 

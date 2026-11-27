@@ -1,5 +1,164 @@
 # Upgrade Guide
 
+## 23.x -> 24.0
+
+* Commons packages are always named `*-0.0.0.tgz`, so `package-lock.json` tells versions apart only by their
+  integrity hashes: `npm ci` and `npm install` keep installing the cached tarball of the previous version (or fail
+  with an integrity error without the cache). After changing `wrensec-ui.version` (including between 24.0
+  milestones), refresh the lock file entries with `npm update @wrensecurity/commons-ui-build` (and the other commons
+  packages the application depends on).
+* Supported browsers are Chrome and Edge 111, Firefox 114 and Safari 16.4 or newer (see `README.md`); commons
+  styles and scripts use features of these browsers (e.g. CSS custom properties and `color-mix()`).
+* Commons styles are SCSS instead of Less (`css/common/**/*.scss`, the `*.less` files have been removed). They are
+  Sass modules to be built by applications (Less stylesheets can no longer import them):
+  * `@use "common/common";` is a single entry point for the structure and the theme (replaces
+    `common/structure.less` and `common/theme.less` imported together),
+  * `@use "common/structure";` and `@use "common/theme";` are entry points for applications that build the
+    structure and the theme as separate stylesheets,
+  * `common/list`, `common/structure/backgrid` and `common/structure/notification` are optional partials not
+    included in the structure (replace `@import "common/list.less";` with `@use "common/list";`, …).
+* Build styles with `useScssStyles` of `@wrensecurity/commons-ui-build` (Sass with modules resolved from the base
+  path and `pkg:` URLs from Node packages). Library CSS can be imported with plain CSS imports after the `@use`
+  rules (`@import "selectize.css";`), which are inlined with relative URLs rebased. Other relative URLs are relative
+  to the built stylesheet. `useLessStyles` is deprecated and will be removed in 25.0.
+* Less variables of the former `common/forgerock-variables.less` (remove its import) are CSS custom properties, so
+  themes can change them at runtime: `@base-theme-color` → `var(--wrensec-base-theme-color)`, … Their defaults are
+  Sass variables of the `common/variables` module, which can be configured when the module is loaded for the first
+  time: `@use "common/variables" with ($base-theme-color: #123456);`. `darken(@base-theme-color, 5%)` →
+  `var(--wrensec-base-theme-color-dark)` (new property derived from the accent color). Other color functions need
+  the Sass variables (`variables.$base-theme-color`, resolved at build time) or CSS `color-mix()`.
+* Media query breakpoints are mixins of the `common/mixins` module (`@use "common/mixins";`), named by Bootstrap 5
+  grid tiers: `@media (min-width: @screen-sm)` → `@include mixins.media-up(md)` (768px), `@screen-md` →
+  `media-up(lg)` (992px), `@screen-lg` → `media-up(xl)` (1200px), `@screen-xs` → `media-up(xs)` (480px) and
+  `@media (max-width: @screen-sm)` → `@include mixins.media-max(md)`. `media-down(md)` matches Bootstrap 5
+  `media-breakpoint-down(md)` (narrower than 768px, e.g. where a navigation bar expanded from `md` is collapsed).
+* Mixins of the former `common/helpers.less`: `.fa-icon();` → `@include mixins.fa-icon;`, `.icon-circle(20px);` →
+  `@include mixins.icon-circle(20px);`, `.ellipsis;` → `@extend .ellipsis;` and `.transition(color, .1s, linear);`
+  → `transition: color .1s linear;` (vendor prefixes are not needed). `.arrow-*()`, `.multi-column-layout()` and
+  `.nocache-background-image()` have been removed.
+* Bootstrap has been upgraded from 3.4.1 to 5.3 (see https://getbootstrap.com/docs/5.3/migration/):
+  * commons no longer ships a built `css/bootstrap.css`; applications build Bootstrap with the Wren Security theme from
+    `@use "common/bootstrap";` (by `useScssStyles`), which can override any Bootstrap variable including the Wren
+    defaults (`@use "common/bootstrap" with ($primary: #123456);`); the Bootstrap sources are a dependency of
+    `@wrensecurity/commons-ui-build`, applications do not install them,
+  * custom themes (e.g. stylesheets of Wren:IDM themes in `ui-themeconfig.json`) written for Bootstrap 3 do not
+    apply any more: a stylesheet compiled from Bootstrap 3 Less has to be replaced by the application's
+    `css/bootstrap.css` and overrides of Bootstrap 3 selectors have to be ported. Colors are best changed by
+    custom properties in a stylesheet loaded after the application styles (`:root { --bs-primary: #123456;
+    --bs-primary-rgb: 18, 52, 86; --wrensec-base-theme-color: #123456; --wrensec-base-theme-color-dark: #0e2b48; }`,
+    derived colors are not computed at runtime). Colors compiled into components (e.g. `btn-primary` backgrounds)
+    need component properties (`.btn-primary { --bs-btn-bg: #123456; … }`) or a Bootstrap build with a configured
+    `$primary`,
+  * `libs/bootstrap.js` is Bootstrap 5 with Popper as an AMD module (`bootstrap`, depending on `jquery`), remove
+    the `bootstrap` RequireJS shim; the jQuery plugin interface (`$(element).modal(…)`, `tooltip`, `popover`, …)
+    remains available, but options, events and `data-bs-*` attributes follow Bootstrap 5.
+* Commons templates use Bootstrap 5 markup; applications that override them have to migrate their copies:
+  * the navigation (`#mainNavHolder`) is a `navbar navbar-expand-md` with `data-bs-theme="dark"`, its items are
+    `nav-item` / `nav-link` and `dropdown-item`, and the `navigation/_NavigationLink` partial takes the link class
+    as the `linkClass` parameter,
+  * panels are cards, profile tabs are `nav-item` / `nav-link` elements, horizontal form groups are rows with
+    `col-form-label` labels and selects are `form-select`,
+  * the default button class is `btn-outline-primary` instead of `btn-default`, dialog buttons without a class
+    (dismissing the dialog in `ModalDialog`, `BootstrapDialog`, `BootstrapDialogView` and `Dialog`) are
+    `btn-outline-secondary`.
+* Commons styles keep providing classes that Bootstrap 5 removed and that commons validation and templates rely on:
+  `form-group` (with validation states `has-feedback`, `has-error`, `has-warning`, `has-success` and
+  `form-control-feedback` icons), `page-header` and `caret`. Labels are bold (except `form-check-label`).
+* The page background is `--wrensec-background-color`; Bootstrap components (cards, dialogs, inputs, …) are white.
+* Wren Security logos are SVG images, update theme configurations and templates that refer to them (Wren:IDM
+  `conf/ui-themeconfig.json`, error pages and `InstallTemplate.html`, Wren:AM `ThemeConfiguration.js`, Wren:IG
+  `ThemeManager.js`):
+  * `images/logo-horizontal.png` → `images/logo-horizontal.svg` (navigation logo),
+  * `images/login-logo.png` → `images/login-logo.svg` (login page logo),
+  * SVG images scale to the space they get, so set the logo size by the `height` / `width` theme settings (the mock
+    application uses `"height": "48px"` for the navigation logo and `"width": "300px"` for the login logo).
+* `favicon.ico` contains 16, 32 and 48 px icons (instead of a single 24 px icon) and `favicon.svg` is its scalable
+  variant for browsers that support SVG icons (`<link rel="icon" type="image/svg+xml" href="favicon.svg">`).
+* Unused images `images/datatable/*` (DataTables sorting icons) and `images/passphrase/*` have been removed.
+* Bootstrap 3 markup in application templates (including customer template overrides) keeps basic styling with the
+  deprecated Bootstrap 3 compatibility (will be removed in 25.0):
+  * `@use "common/bootstrap3";` (in the stylesheet that uses `common/bootstrap`) provides panels, wells, media
+    objects, `btn-default` / `btn-xs` / `btn-block`, `close`, `control-label` and horizontal form groups as rows,
+    `help-block`, `checkbox` / `radio` / `*-inline`, `form-inline`, `input-group-addon` / `input-group-btn`,
+    `input-lg` / `input-sm`, dropdown and nav items without `dropdown-item` / `nav-link`, `divider`,
+    `dropdown-menu-right`, `pull-left` / `pull-right`, `center-block`, `hidden` / `hide`, `hidden-*` / `visible-*`,
+    `sr-only`, `text-left` / `text-right`, `img-responsive`, the `in` state class, dropdown arrows of selects with
+    `form-control`, validation state colors of `control-label` and `help-block`, titatoggle sliders
+    (`checkbox-slider*`) as switches and positioned columns, which are floated, so that they are laid out also outside
+    of rows (columns in rows are not affected),
+  * `libs/bootstrap.js` handles Bootstrap 3 data attributes (`data-toggle`, `data-target`, `data-dismiss`, …) of
+    dropdowns, collapsible elements, tabs and alerts, accepts `"true"` / `"false"` strings as boolean tooltip and
+    popover options (Bootstrap 5 rejects them) and provides a minimal `$.fn.affix` (affix and affix-top classes by
+    the scroll position),
+  * the grid (`col-xs-*`, `col-*-offset-*` and the shifted breakpoints) and complex components (modals, navbars,
+    tooltip and popover placement, …) are not covered.
+* Bootstrap 3 markup in application templates should be migrated (see the Bootstrap migration guide), e.g.:
+  grid tiers shift by one (`col-xs-*` → `col-*`, `col-sm-*` → `col-md-*`, `col-md-*` → `col-lg-*`,
+  `col-lg-*` → `col-xl-*`, `col-sm-offset-*` → `offset-md-*`, …), `panel*` → `card*`, `pull-left` / `pull-right` →
+  `float-start` / `float-end`, `text-left` / `text-right` → `text-start` / `text-end`, `sr-only` →
+  `visually-hidden`, `help-block` → `form-text`, `control-label` → `col-form-label`, `input-lg` →
+  `form-control-lg`, `btn-block` → `w-100`, `btn-default` → `btn-outline-primary`, `hidden` → `d-none`,
+  `checkbox` → `form-check`, `data-toggle` / `data-target` / `data-dismiss` → `data-bs-*` and dropdown carets
+  are added by Bootstrap (remove `<span class="caret"></span>` from dropdown toggles, and the `dropdown-toggle` class
+  from icon only toggles that should have no caret).
+* `css/selectize.css` is the Selectize Bootstrap 5 theme (commons structure adapts it to the Bootstrap theme colors)
+  and the backgrid paginator (`ThemeablePaginator`) renders Bootstrap 5 pagination (`page-item` / `page-link`).
+* Sortable backgrid column headers are buttons (as rendered by backgrid 0.3.8) instead of links, which makes sorting
+  work again and the headers keyboard accessible; styles of `th.sortable > a` have to target `th.sortable > button`.
+* Links and buttons with the `form-control-feedback` class (e.g. clearing a search) are clickable, and search inputs
+  have no native clear button (as in Bootstrap 3).
+* titatoggle has been removed (remove `@import "titatoggle.css";`), use Bootstrap 5 switches instead:
+  `<div class="checkbox checkbox-slider-primary checkbox-slider checkbox-slider--b"><label><input type="checkbox">
+  <span>Label</span></label></div>` → `<div class="form-check form-switch"><input class="form-check-input"
+  type="checkbox" role="switch" id="active"><label class="form-check-label" for="active">Label</label></div>`.
+* Font Awesome has been upgraded from 4.7 to 7 Free (see https://docs.fontawesome.com/web/setup/upgrade/):
+  * commons structure includes Font Awesome (module `common/fontawesome`), remove imports of
+    `fontawesome/css/font-awesome.css` and `fontawesome/less/variables.less`; the fonts are provided in
+    `css/fontawesome/webfonts` and loaded relative to the built stylesheet, which can be configured with
+    `@use "common/fontawesome" with ($font-path: "…");` (the Font Awesome sources are a dependency of
+    `@wrensecurity/commons-ui-build`, applications do not install them),
+  * Font Awesome 4 class names (`fa fa-*`, including renamed icons) keep working through the Font Awesome v4 shims,
+    and so does the `FontAwesome` font family with Font Awesome 4 code points,
+  * styles can use `@include mixins.fa-icon(solid);` (or `regular`, `brands`) with named glyphs:
+    `content: fontawesome.fa-content(fontawesome.$var-circle-check);` (`@use "common/fontawesome";`),
+  * icons are fixed width by default (`fa-fw` is not needed any more, `fa-width-auto` restores the natural width).
+* jQuery has been upgraded from 3 to 4 (see https://jquery.com/upgrade-guide/4.0/):
+  * removed APIs have native replacements: `$.trim(s)` → `s.trim()`, `$.isArray(a)` → `Array.isArray(a)`,
+    `$.parseJSON(s)` → `JSON.parse(s)`, `$.isFunction(f)` → `typeof f === "function"`, `$.now()` → `Date.now()`,
+    `.size()` → `.length`, … (also `$.type`, `$.isNumeric`, `$.isWindow`, `$.camelCase`, `$.nodeName`,
+    `$.unique` and `.toggleClass(boolean)` have been removed),
+  * Selectize declares jQuery 3 as its peer dependency, so applications have to override the jQuery version in their
+    `package.json` to install a single jQuery: `"overrides": { "jquery": "^4.1.0" }`.
+* New commons module `org/forgerock/commons/ui/common/components/ModalDialog` shows modal dialogs using the
+  Bootstrap 5 modal component with its standard markup and events (`show.bs.modal`, `shown.bs.modal`,
+  `hide.bs.modal`, `hidden.bs.modal`):
+  * `ModalDialog.show({ title, body, variant, size, closable, buttons: [{ id, label, className, action }] })`
+    creates and shows a dialog, `show()` and `hide()` return promises and hidden dialogs are removed from the page,
+  * buttons without `className` are `btn-outline-secondary` (buttons dismissing the dialog),
+  * `ModalDialog.confirm({ title, body, variant, confirmLabel })` returns a promise resolved with the choice,
+  * commons dialogs use it: `UIUtils.confirmDialog()` (the dialog and button identifiers are kept), `LoginDialog`
+    and `ConfirmPasswordDialog`,
+  * `components/BootstrapDialogView` is deprecated and will be removed in 25.0 (migrate to `ModalDialog`),
+  * `components/ConfirmationDialog` has been removed (use `ModalDialog.confirm()` or `UIUtils.confirmDialog()`).
+* `bootstrap-dialog` library has been replaced by the deprecated commons module
+  `org/forgerock/commons/ui/common/components/BootstrapDialog` (to be removed in 25.0, migrate to `ModalDialog`),
+  which renders the same markup (Bootstrap modal with `bootstrap-dialog*` CSS classes, the close button is
+  Bootstrap 5 `.btn-close`) and supports the subset of bootstrap-dialog API used by Wren Security applications
+  (`BootstrapDialog.show(options)`, `new BootstrapDialog(options).open()`, `close()`, `getButton(id)` with
+  `enable()` / `disable()`, `getData()` / `setData()`, `getModal*()` accessors and `onshow` / `onshown` /
+  `onhide` / `onhidden` callbacks):
+  * remove `libs/bootstrap-dialog` from RequireJS paths and shims; code that requires `bootstrap-dialog` directly
+    can keep working with a RequireJS map entry
+    `map: { "*": { "bootstrap-dialog": "org/forgerock/commons/ui/common/components/BootstrapDialog" } }`,
+  * remove `@import "bootstrap-dialog.css";` from application styles (the necessary styles are part of the commons
+    structure),
+  * `BootstrapDialog.show()` adds the commons enhancements (header text color by dialog type, `autofocus` and
+    initially disabled buttons) and `BootstrapDialog.confirm()` is kept, while `warning()`, `danger()` and
+    `success()` have been removed,
+  * not supported: `BootstrapDialog.alert()` / `warning()` / `danger()` / `success()` / `closeAll()`, the
+    `dialogs` registry, setters (`setTitle()`, `setMessage()`, …), `draggable`, `spinicon`, `btnsOrder`,
+    `closeByBackdrop` / `closeByKeyboard` (use `closable`) and button `autospin`.
+
 ## 23.4.x -> 23.5.x
 
 * `@wrensecurity/commons-ui-build` (`useEslint`) uses ESLint 10, which supports only flat configuration
