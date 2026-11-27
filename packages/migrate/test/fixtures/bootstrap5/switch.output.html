@@ -1,0 +1,36 @@
+<div class="form-group">
+    <label for="toggle-{{property}}" class="col-md-3 control-label">{{t label}}</label>
+    <div class="col-md-6">
+        <div class="form-check form-switch">
+            <input class="form-check-input" role="switch" id="toggle-{{property}}" {{#unless noForm2js}}name="{{property}}"{{/unless}} type="checkbox" {{#if enabled}}checked{{/if}} value="true">
+        </div>
+    </div>
+</div>
+<div class="form-check form-switch">
+    <input role="switch" class="form-check-input toggleBoolean advancedMappingParam"
+        id="{{this.name}}"
+        type="checkbox"
+        name="{{this.name}}">
+</div>
+<div class="form-check form-switch active-control">
+    <input class="form-check-input" role="switch" name="{{name}}" type="checkbox" {{#if value}}checked{{/if}} >
+</div>
+<div class="checkbox checkbox-slider checkbox-slider--b">
+    <label><input type="checkbox" name="remember"><span>Remember me</span></label>
+</div>
+<div class="form-check form-switch">
+    <input class="form-check-input" role="switch" type="checkbox" name="defaultDashboard" id="DefaultDashboard"/>
+    <span class="form-text">{{t "dashboard.new.defaultDesc"}}</span>
+</div>
+<div class="form-check form-switch">
+    <input class="form-check-input" role="switch" type="checkbox" id="oathStatus" {{#if authNeeded}} checked {{/if}}>
+</div>
+<div class="checkbox checkbox-slider-primary checkbox-slider checkbox-slider--b checkbox-slider-md">
+{{#if canDisable}}
+    <label>
+        <input id="enabled" name="enabled" type="checkbox" {{#if enabled}}checked{{/if}}><span></span>
+    </label>
+{{else}}
+    <p class="text-body-secondary">Can't disable</p>
+{{/if}}
+</div>

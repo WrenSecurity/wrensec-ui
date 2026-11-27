@@ -26,7 +26,7 @@
 
     <groupId>org.wrensecurity.commons</groupId>
     <artifactId>wrensec-ui-commons</artifactId>
-    <version>23.5.1-SNAPSHOT</version>
+    <version>24.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Wren Security UI Commons</name>
@@ -141,6 +141,7 @@
                 <configuration>
                     <descriptors>
                         <descriptor>packages/build/assembly.xml</descriptor>
+                        <descriptor>packages/migrate/assembly.xml</descriptor>
                         <descriptor>packages/base/assembly.xml</descriptor>
                         <descriptor>packages/user/assembly.xml</descriptor>
                     </descriptors>

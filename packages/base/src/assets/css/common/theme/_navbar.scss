@@ -1,0 +1,328 @@
+/**
+ * The contents of this file are subject to the terms of the Common Development and
+ * Distribution License (the License). You may not use this file except in compliance with the
+ * License.
+ *
+ * You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the
+ * specific language governing permission and limitations under the License.
+ *
+ * When distributing Covered Software, include this CDDL Header Notice in each file and include
+ * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
+ * Header, with the fields enclosed by brackets [] replaced by your own identifying
+ * information: "Portions copyright [year] [name of copyright owner]".
+ *
+ * Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
+ */
+
+@use "../mixins";
+
+/*
+ * Navbar and SubNav
+ */
+#mainNavHolder {
+    --bs-navbar-padding-y: 0;
+    --bs-navbar-nav-link-padding-x: 15px;
+    --bs-navbar-toggler-padding-y: 6px;
+    --bs-navbar-toggler-padding-x: 10px;
+    --bs-navbar-toggler-font-size: 1rem;
+    background-color: #1f2223;
+    border-bottom: 1px solid #070808;
+    font-size: 12px;
+
+    .navbar-nav .nav-link {
+        line-height: 50px;
+        padding-top: 0;
+        padding-bottom: 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
+        transition: color 0.1s linear;
+
+        i {
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* Active item and open dropdown toggle */
+        &.active, &.show {
+            background-color: #070808;
+            color: #fff;
+        }
+    }
+
+    .navbar-toggler {
+        border-color: #1f2223;
+        color: var(--wrensec-navbar-toggle-color);
+        margin: 20px 0;
+
+        &:hover, &:focus {
+            background-color: #2a2f32;
+        }
+
+        /* Focus ring is shown for keyboard focus only */
+        &:focus:not(:focus-visible) {
+            box-shadow: none;
+        }
+    }
+
+    /* Dropdown menus are attached to the bottom of the navigation bar */
+    .dropdown-menu {
+        --bs-dropdown-spacer: 1px;
+        --bs-dropdown-bg: #000;
+        /* No light border of the dark theme between the navigation bar and its menus */
+        --bs-dropdown-border-color: #000;
+        --bs-dropdown-divider-bg: #333;
+        --bs-dropdown-link-color: #999;
+        --bs-dropdown-link-hover-color: #fff;
+        --bs-dropdown-link-hover-bg: transparent;
+        --bs-dropdown-link-active-color: #fff;
+        --bs-dropdown-link-active-bg: transparent;
+        --bs-dropdown-header-color: #999;
+        padding-bottom: 10px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+
+        small {
+            display: block;
+            font-weight: 400;
+        }
+
+        .dropdown-header {
+            text-transform: uppercase;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .dropdown-item {
+            letter-spacing: 1px;
+            transition: none;
+            text-transform: uppercase;
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 30px;
+
+            [class^="icon-"], .fa {
+                padding-right: 3px;
+                min-width: 22px;
+            }
+
+            i {
+                font-size: 14px;
+            }
+        }
+
+        .dropdown-sub > .dropdown-item {
+            text-transform: none;
+            font-weight: 400;
+        }
+    }
+
+    #navDropdownMenu .dropdown-header {
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+}
+
+/* Collapsed navigation (small devices) spans the whole window width, including its dropdown menus */
+@include mixins.media-down(md) {
+    #mainNavHolder {
+        .navbar-collapse {
+            margin: 0 calc(var(--bs-gutter-x) * -.5);
+            border-top: 1px solid #070808;
+        }
+
+        .navbar-nav .nav-link {
+            padding-left: calc(var(--bs-gutter-x) * .5);
+            padding-right: calc(var(--bs-gutter-x) * .5);
+        }
+
+        /* Menu items are indented under their toggle (as in Bootstrap 3) */
+        .dropdown-menu {
+            --bs-dropdown-item-padding-x: 25px;
+            --bs-dropdown-header-padding-x: 25px;
+            margin-top: 0;
+            border: 0;
+            border-radius: 0;
+        }
+    }
+}
+
+#mainNavBar {
+    padding-left: 0;
+    padding-right: 0;
+
+    .subnav {
+        padding-bottom: 10px;
+
+        .container {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .nav-subnav li a {
+            color: #777;
+            padding-left: 40px;
+        }
+
+        .nav-subnav li a:hover {
+            background-color:transparent;
+            color:var(--wrensec-subnav-small-device-active-color);
+        }
+
+        .nav-subnav li.active a,
+        .nav-subnav li.active a:hover {
+            padding-left: 40px;
+            background-color:var(--wrensec-subnav-small-device-active-background);
+            color:var(--wrensec-subnav-small-device-active-color);
+        }
+    }
+}
+
+#subNavHolder {
+    display:none;
+}
+
+.navbar-nav {
+    margin: 0;
+}
+
+/* Medium devices (desktops, 768px and up)*/
+@include mixins.media-up(md) {
+
+    #mainNavBar .subnav {
+        display: none;
+    }
+
+    #mainNavHolder .navbar-brand {
+        margin: -1px 15px 0 0;
+    }
+
+    #mainNavHolder .navbar-nav .nav-link {
+        line-height: 70px;
+        padding-top: 5px;
+    }
+
+    #mainNavHolder .dropdown-menu .dropdown-item {
+        line-height: 20px;
+        padding-top: 6px;
+        padding-bottom: 6px;
+    }
+
+    .navbar .dropdown-menu {
+        margin-left: 0;
+        margin-right: 0;
+        min-width: 250px;
+
+        .dropdown-header {
+            letter-spacing: 1px;
+        }
+    }
+
+    .nav.navbar-subnav {
+        margin-bottom: 30px;
+    }
+
+    #subNavHolder {
+        z-index:10;
+        display:block;
+    }
+
+    #subNavBar {
+        .nav-subnav>li.active>a {
+            background-color: transparent;
+            color: var(--wrensec-base-theme-color);
+            background-image: none;
+            box-shadow:none;
+        }
+
+        .nav-subnav>li.active>a:before,
+        .nav-subnav>li.active>a:after {
+            position: absolute;
+
+        }
+
+        .nav-subnav>li.active>a:after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 6px solid #E7E7E7;
+            bottom: -1px;
+            left: 46%;
+        }
+
+        .nav-subnav>li.active>a:before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 6px solid #ccc;
+            bottom: 0;
+            left: 46%;
+        }
+
+        .subnav {
+            width: 100%;
+            position: absolute;
+            left: 0;
+            padding-bottom: 0;
+
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+
+            .nav-subnav li {
+                float: left;
+
+                a {
+                    padding-left: 15px;
+                    padding-right: 15px;
+                    padding-top: 12px;
+                    color: #666;
+                }
+            }
+
+            .nav-subnav>li>a:hover,
+            .nav-subnav>li>a:focus {
+                color: var(--wrensec-base-theme-color);
+            }
+
+            .nav-subnav li.active {
+                float: left;
+            }
+        }
+
+        .subnav:after {
+            content: '';
+        }
+
+        .navbar-subnav>li {
+            position: initial;
+        }
+    }
+}
+
+/* Medium devices (desktops, 992px and up)*/
+@include mixins.media-up(lg) {
+    #mainNavHolder .navbar-admin .nav-link > i {
+        display: none;
+    }
+}
+
+/* Medium devices (desktops, 992px and up)*/
+@include mixins.media-up(xl) {
+    #mainNavHolder .navbar-admin .nav-link > i {
+        display: inline-block;
+    }
+
+    #mainNavHolder {
+        font-size: 14px;
+    }
+}

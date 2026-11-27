@@ -16,15 +16,21 @@
 const {
     useBuildScripts,
     useEslint,
-    useLessStyles,
     useLocalResources,
     useModuleResources,
     useBuildModule
 } = require("@wrensecurity/commons-ui-build");
 const gulp = require("gulp");
 
+// Font Awesome font files, loaded by the commons Font Awesome styles from css/fontawesome/webfonts
+const FONTAWESOME_WEBFONTS = ["fa-brands-400", "fa-regular-400", "fa-solid-900", "fa-v4compatibility"];
+
 const MODULE_RESOURCES = {
-    "@selectize/selectize/dist/css/selectize.bootstrap3.css": "css/selectize.css",
+    ...Object.fromEntries(FONTAWESOME_WEBFONTS.map((font) => [
+        `@fortawesome/fontawesome-free/webfonts/${font}.woff2`,
+        `css/fontawesome/webfonts/${font}.woff2`
+    ])),
+    "@selectize/selectize/dist/css/selectize.bootstrap5.css": "css/selectize.css",
     "@selectize/selectize/dist/js/selectize.min.js": "libs/selectize.js",
     "backbone-relational/backbone-relational.js": "libs/backbone-relational.js",
     "backbone.paginator/lib/backbone.paginator.min.js": "libs/backbone.paginator.js",
@@ -36,18 +42,7 @@ const MODULE_RESOURCES = {
     "backgrid-select-all/backgrid-select-all.min.js": "libs/backgrid-select-all.js",
     "backgrid/lib/backgrid.min.css": "css/backgrid.css",
     "backgrid/lib/backgrid.min.js": "libs/backgrid.js",
-    "bootstrap-dialog/dist/css/bootstrap-dialog.min.css": "css/bootstrap-dialog.css",
-    "bootstrap-dialog/dist/js/bootstrap-dialog.min.js": "libs/bootstrap-dialog.js",
-    "bootstrap/dist/js/bootstrap.min.js": "libs/bootstrap.js",
     "dragula/dist/dragula.min.js": "libs/dragula.js",
-    "font-awesome/css/font-awesome.min.css": "css/fontawesome/css/font-awesome.css",
-    "font-awesome/fonts/fontawesome-webfont.eot": "css/fontawesome/fonts/fontawesome-webfont.eot",
-    "font-awesome/fonts/fontawesome-webfont.svg": "css/fontawesome/fonts/fontawesome-webfont.svg",
-    "font-awesome/fonts/fontawesome-webfont.ttf": "css/fontawesome/fonts/fontawesome-webfont.ttf",
-    "font-awesome/fonts/fontawesome-webfont.woff": "css/fontawesome/fonts/fontawesome-webfont.woff",
-    "font-awesome/fonts/fontawesome-webfont.woff2": "css/fontawesome/fonts/fontawesome-webfont.woff2",
-    "font-awesome/fonts/FontAwesome.otf": "css/fontawesome/fonts/FontAwesome.otf",
-    "font-awesome/less/variables.less": "css/fontawesome/less/variables.less",
     "form2js/src/form2js.js": "libs/form2js.js",
     "form2js/src/js2form.js": "libs/js2form.js",
     "handlebars/dist/handlebars.js": "libs/handlebars.js",
@@ -55,7 +50,6 @@ const MODULE_RESOURCES = {
     "lodash": "libs/lodash.js",
     "moment/min/moment.min.js": "libs/moment.js",
     "requirejs/require.js": "libs/requirejs.js",
-    "titatoggle/dist/titatoggle-dist-min.css": "css/titatoggle.css",
     "underscore/underscore-umd.js": "libs/underscore.js",
     "xdate/src/xdate.js": "libs/xdate.js"
 };
@@ -80,11 +74,16 @@ gulp.task("build:libs", async () => {
         dest: "dist/libs/i18next.js",
         transpile: true
     })();
+    // Bootstrap with Popper, transpiled so that the RequireJS optimizer is able to parse it
+    await useBuildModule({
+        id: "bootstrap",
+        src: "src/modules/bootstrap.mjs",
+        dest: "dist/libs/bootstrap.js",
+        external: ["jquery"],
+        transpile: true,
+        minify: true
+    })();
 });
-
-gulp.task("build:styles", useLessStyles({
-    "dist/css/bootstrap/bootstrap.less": "css/bootstrap.css"
-}));
 
 gulp.task("build", gulp.series(
     gulp.parallel(
@@ -92,8 +91,7 @@ gulp.task("build", gulp.series(
         "build:scripts",
         "build:modules"
     ),
-    "build:libs",
-    "build:styles"
+    "build:libs"
 ));
 
 gulp.task("watch", () => {

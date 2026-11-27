@@ -1,0 +1,189 @@
+/**
+ * The contents of this file are subject to the terms of the Common Development and
+ * Distribution License (the License). You may not use this file except in compliance with the
+ * License.
+ *
+ * You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the
+ * specific language governing permission and limitations under the License.
+ *
+ * When distributing Covered Software, include this CDDL Header Notice in each file and include
+ * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
+ * Header, with the fields enclosed by brackets [] replaced by your own identifying
+ * information: "Portions copyright [year] [name of copyright owner]".
+ *
+ * Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
+ */
+
+/*
+ * Form groups with validation feedback (Bootstrap 3 form-group, has-feedback, form-control-feedback and validation
+ * states, which Bootstrap 5 does not provide; adapted from Bootstrap 3.4.1, Copyright Twitter, Inc., MIT License)
+ */
+.form-group {
+    margin-bottom: 15px;
+
+    /* Grid columns of horizontal form groups contain the absolutely positioned feedback */
+    > [class*="col-"] {
+        position: relative;
+    }
+}
+
+.has-feedback {
+    position: relative;
+
+    .form-control {
+        padding-right: 42.5px;
+    }
+}
+
+.form-control-feedback {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    display: block;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+    pointer-events: none;
+}
+
+/* Feedback links and buttons (e.g. clearing a search) are actions */
+a.form-control-feedback,
+button.form-control-feedback {
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.form-horizontal .form-control-feedback {
+    right: calc(var(--bs-gutter-x) * .5);
+}
+
+/* Read-only inputs look disabled (as in Bootstrap 3) */
+.form-control[readonly] {
+    background-color: var(--bs-secondary-bg);
+}
+
+.has-error {
+    --wrensec-feedback-color: var(--wrensec-failure-color);
+}
+
+.has-warning {
+    --wrensec-feedback-color: var(--wrensec-warning-color);
+}
+
+.has-success {
+    --wrensec-feedback-color: var(--bs-success-text-emphasis);
+}
+
+.has-error, .has-warning, .has-success {
+    .form-text,
+    .form-label,
+    .col-form-label,
+    .form-check,
+    .form-check-label,
+    .form-control-feedback {
+        color: var(--wrensec-feedback-color);
+    }
+
+    .form-control, .form-select {
+        border-color: var(--wrensec-feedback-color);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+
+        &:focus {
+            border-color: var(--wrensec-feedback-color);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075),
+                0 0 6px color-mix(in srgb, var(--wrensec-feedback-color) 60%, #fff);
+        }
+    }
+}
+
+.field-rule {
+    margin-bottom: 5px;
+
+    .validation-icon {
+        margin-right: 5px;
+    }
+}
+
+
+.form-group {
+    input[type='password'],
+    input[type='text'] {
+        padding-right: 30px;
+    }
+
+    textarea{
+        width:100%;
+        resize: vertical;
+    }
+}
+
+.form-group.required .col-form-label:after {
+    content: "*";
+    color: var(--wrensec-failure-color);
+}
+
+.form-section {
+    h3 {
+        margin-top: 10px;
+    }
+
+    .col-form-label {
+        text-transform: capitalize;
+    }
+}
+
+.form-text-header {
+    margin-bottom:15px;
+
+    h3{
+        margin-top:0;
+    }
+}
+
+
+.form-horizontal {
+    .has-feedback.no-right-padding .form-control-feedback {
+        right: 0;
+    }
+
+    .form-group-large.has-feedback .form-control-feedback {
+        right: 0;
+        line-height: 44px;
+    }
+
+    .form-group-header {
+        margin-left: 0;
+        margin-right: 0;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+
+        .col-form-label {
+            font-weight: 600;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .form-control {
+            display: inline-block;
+            margin-right: 5px;
+            max-width: 300px;
+            width: auto;
+        }
+
+        .form-text {
+            display: inline-block;
+            margin-right: 5px;
+        }
+    }
+}
+
+.form-control-feedback-lg,
+.form-control-lg + .form-control-feedback {
+    width: 46px;
+    height: 46px;
+    line-height: 46px;
+}

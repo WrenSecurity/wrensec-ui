@@ -1,0 +1,16 @@
+<div class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Menu <span class="caret"></span></a>
+    <ul class="dropdown-menu">
+        <li class="dropdown-header">Header</li>
+        <li class="active"><a href="#one">One</a></li>
+        <li class="disabled js-item"><a href="#two" class="text-muted">Two</a></li>
+        <li><button type="button" class="btn-link">Three</button></li>
+        <li class="divider"></li>
+    </ul>
+</div>
+<div class="btn-group">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-ellipsis-v"></i>
+    </button>
+    <ul class="dropdown-menu pull-right"><li><a href="#">Edit</a></li><li class="{{#if gone}}disabled{{/if}}"><a href="#">Delete</a></li></ul>
+</div>
